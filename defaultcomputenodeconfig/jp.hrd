@@ -1,0 +1,3 @@
+ubuntu.packages=libvirt-bin,python-libvirt,virtinst
+platform.supported=ubuntu64,
+
