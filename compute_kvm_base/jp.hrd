@@ -1,0 +1,3 @@
+ubuntu.packages=qemu-kvm,libvirt-bin,virtinst,qemu,openvswitch-datapath-dkms,openvswitch-common,openvswitch-switch,genisoimage
+platform.supported=ubuntu64,
+
