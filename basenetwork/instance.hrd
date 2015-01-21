@@ -1,0 +1,13 @@
+netconfig.backplanes.names=@ASK
+netconfig.backplanes.backplane1.backplaneipconfig=@ASK
+netconfig.backplanes.backplane1.backplaneinterface=@ASK
+netconfig.mgmt_backplane.interfacename=@ASK
+netconfig.public_backplane.interfacename=@ASK
+netconfig.gw_mgmt_backplane.interfacename=@ASK
+netconfig.vxbackend.interfacename=@ASK
+netconfig.gw_mgmt.vlanid=@ASK
+netconfig.mgmt.vlanid=@ASK
+netconfig.vxbackend.vlanid=@ASK
+netconfig.public.vlanid=@ASK
+netconfig.vxbackend.ipaddr=@ASK
+

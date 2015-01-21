@@ -1,0 +1,3 @@
+ubuntu.packages=ethtool
+platform.supported=ubuntu64,
+
