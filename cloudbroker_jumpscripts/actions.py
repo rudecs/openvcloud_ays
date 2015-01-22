@@ -20,5 +20,6 @@ class Actions(ActionsBase):
     """
 
     def configure(self, **kwargs):
-        jp = j.packages.find('jumpscale', 'osis')[0].getInstance('main')
+        jp = j.packages.find('jumpscale', 'agentcontroller')[0].getInstance('main')
         jp.restart()
+
