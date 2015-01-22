@@ -19,15 +19,6 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def prepare(self,**args):
-        """
-        this gets executed before the files are downloaded & installed on appropriate spots
-        """
-        dest="$(system.paths.base)/apps/portals/$(portal.instance)"
-        if not j.system.fs.exists(dest):
-            j.events.inputerror_critical("Could not find portal instance with name: $(portal.instance), please install")
-        return True
-
     def configure(self, **kwargs):
         jp = j.packages.find('jumpscale', 'portal')[0].getInstance('main')
         jp.restart()
