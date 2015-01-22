@@ -1,0 +1,9 @@
+git.url='http://github.com/0-complexity/mothership1.git'
+git.export.1=
+    url:$(git.url),
+    source:'libs/CloudscalerLibcloud/CloudscalerLibcloud',
+    dest:'$(system.paths.python.lib.ext)/CloudscalersLibCloud/',
+    link:True,
+
+platform.supported=generic
+

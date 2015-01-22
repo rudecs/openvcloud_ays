@@ -1,0 +1,9 @@
+git.url='http://github.com/0-complexity/mothership1.git'
+git.export.1=
+    url:$(git.url),
+    source:'apps/billingengine/billingenginelib/',
+    dest:'$(system.paths.python.lib.ext)/billingenginelib/',
+    link:True,
+
+platform.supported=generic
+
