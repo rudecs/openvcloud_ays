@@ -1,0 +1,21 @@
+git.export.1=
+    url:'http://git.aydo.com/binary/routeros.git',
+    source:'root/routeros-small-NETWORK-ID.qcow2',
+    dest:'$(system.paths.base)/apps/routeros/template/',
+    link:False,
+
+git.export.2=
+    url:'http://github.com/0-complexity/mothership1.git',
+    source:'apps/routeros/configs/',
+    dest:'$(system.paths.base)/apps/routeros/configs',
+    link:True,
+
+git.export.3=
+    url:'http://github.com/0-complexity/mothership1.git',
+    source:'apps/routeros/template/*',
+    dest:'$(system.paths.base)/apps/routeros/template/',
+    link:True,
+
+
+platform.supported=geneirc,
+
