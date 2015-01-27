@@ -1,0 +1,18 @@
+git.url='http://github.com/0-complexity/mothership1.git'
+git.export.1=
+    url:$(git.url),
+    source:'apps/cbportal/base/*',
+    dest:'$(system.paths.base)/apps/portals/$(portal.instance)/base/',
+    link:True,
+
+
+dependencies.1 =
+    name:'portal',
+
+dependencies.2 =
+    name:'portal_client',
+    instnace:'cloudbroker',
+
+
+platform.supported=generic,
+
