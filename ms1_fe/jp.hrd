@@ -9,5 +9,5 @@ git.export.1=
 dependencies.1 =
     name:'portal',
 
-platform.supported=geneirc,
+platform.supported=generic,
 

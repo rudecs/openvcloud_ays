@@ -29,6 +29,6 @@ class Actions(ActionsBase):
         return True
 
     def configure(self, **kwargs):
-        jp = j.packages.find('jumpscale', 'portal')[0].getInstance('main')
+        jp = j.packages.find('jumpscale', 'portal')[0].getInstance('$(portal.instance)')
         jp.restart()
 

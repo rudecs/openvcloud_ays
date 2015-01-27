@@ -17,5 +17,5 @@ git.export.3=
     link:True,
 
 
-platform.supported=geneirc,
+platform.supported=generic,
 

@@ -1,0 +1,10 @@
+dependencies.1                 =
+    name:'portal_client',
+    instance:'cloudbroker',
+
+dependencies.2                 =
+    name:'osis_client',
+    instance:'main',
+
+platform.supported=generic
+
