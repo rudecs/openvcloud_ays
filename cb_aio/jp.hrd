@@ -1,9 +1,4 @@
 git.url='http://github.com/0-complexity/mothership1.git'
-git.export.1=
-    url:$(git.url),
-    source:'apps/cbportal/base/*',
-    dest:'$(system.paths.base)/apps/portals/$(portal.instance)/base/',
-    link:True,
 
 dependencies.1               =
     args:'dep.args.basenetwork',
@@ -21,6 +16,10 @@ dep.args.basenetwork         =
     netconfig.mgmt.vlanid:201,
     netconfig.vxbackend.vlanid:200,
     netconfig.public.vlanid:0,
+
+dependencies.2 =
+    name:'compute_kvm_base',
+    domain:'mothership1',
 
 platform.supported=generic,
 

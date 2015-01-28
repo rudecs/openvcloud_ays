@@ -20,7 +20,6 @@ class Actions(ActionsBase):
     """
 
     def configure(self, **kwargs):
-        import ipdb; ipdb.set_trace()
         import JumpScale.lib.ovsnetconfig
         j.system.ovsnetconfig.initNetworkInterfaces()
         hrd = self.jp_instance.hrd
