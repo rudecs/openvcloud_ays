@@ -1,13 +1,13 @@
-netconfig.backplanes.names=@ASK type:string
-netconfig.backplanes.backplane1.backplaneipconfig=@ASK type:string
-netconfig.backplanes.backplane1.backplaneinterface=@ASK type:string
-netconfig.mgmt_backplane.interfacename=@ASK type:string
-netconfig.public_backplane.interfacename=@ASK type:string
-netconfig.gw_mgmt_backplane.interfacename=@ASK type:string
-netconfig.vxbackend.interfacename=@ASK type:string
-netconfig.gw_mgmt.vlanid=@ASK type:string
-netconfig.mgmt.vlanid=@ASK type:string
-netconfig.vxbackend.vlanid=@ASK type:string
-netconfig.public.vlanid=@ASK type:string
-netconfig.vxbackend.ipaddr=@ASK type:string
+netconfig.backplanes.names=@ASK type:str
+netconfig.backplanes.backplane1.backplaneipconfig=@ASK type:dict descr:'Enter gateway and address for backplane1'
+netconfig.backplanes.backplane1.backplaneinterface=@ASK type:str
+netconfig.mgmt_backplane.interfacename=@ASK type:str
+netconfig.public_backplane.interfacename=@ASK type:str
+netconfig.gw_mgmt_backplane.interfacename=@ASK type:str
+netconfig.vxbackend.interfacename=@ASK type:str
+netconfig.gw_mgmt.vlanid=@ASK type:str
+netconfig.mgmt.vlanid=@ASK type:str
+netconfig.vxbackend.vlanid=@ASK type:str
+netconfig.public.vlanid=@ASK type:str
+netconfig.vxbackend.ipaddr=@ASK type:str default:240.0.0.1/16
 

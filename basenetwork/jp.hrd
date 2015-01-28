@@ -1,3 +1,3 @@
-ubuntu.packages=ethtool
+ubuntu.packages=ethtool,openvswitch-datapath-dkms,openvswitch-common,openvswitch-switch
 platform.supported=ubuntu64,
 

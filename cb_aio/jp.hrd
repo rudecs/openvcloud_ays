@@ -1,0 +1,26 @@
+git.url='http://github.com/0-complexity/mothership1.git'
+git.export.1=
+    url:$(git.url),
+    source:'apps/cbportal/base/*',
+    dest:'$(system.paths.base)/apps/portals/$(portal.instance)/base/',
+    link:True,
+
+dependencies.1               =
+    args:'dep.args.basenetwork',
+    name:'basenetwork',
+    domain:'mothership1',
+
+dep.args.basenetwork         =
+    netconfig.backplanes.names:backplane1,
+    netconfig.backplanes.backplane1.backplaneinterface:eth0,
+    netconfig.mgmt_backplane.interfacename:backplane1,
+    netconfig.public_backplane.interfacename:backplane1,
+    netconfig.gw_mgmt_backplane.interfacename:backplane1,
+    netconfig.vxbackend.interfacename:backplane1,
+    netconfig.gw_mgmt.vlanid:103,
+    netconfig.mgmt.vlanid:201,
+    netconfig.vxbackend.vlanid:200,
+    netconfig.public.vlanid:0,
+
+platform.supported=generic,
+
