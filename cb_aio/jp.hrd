@@ -72,5 +72,14 @@ dependencies.13 =
     args:'dep.args.portal',
     domain:'mothership1',
 
+dependencies.14 =
+    name:'vfwnode',
+    args:'dep.args.vfwnode',
+    domain:'mothership1',
+
+dep.args.vfwnode =
+    param.gw_mgmt_ip:'10.199.0.2/22',
+
+
 platform.supported=generic,
 

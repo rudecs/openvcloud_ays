@@ -17,4 +17,13 @@ class Actions(ActionsBase):
     step7: do check_uptime_local to see if process starts
     step7b: do monitor_local to see if package healthy installed & running
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
+
     """
+
+    def configure(self, *args, **kwargs):
+        import netaddr
+        import JumpScale.baselib.netconfig
+        ipaddr = "$(param.gw_mgmt_ip)"
+        j.system.netconfig.addIpToInterface('gw_mgmt', ipaddr, start=True)
+
+
