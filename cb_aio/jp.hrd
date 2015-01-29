@@ -17,8 +17,55 @@ dep.args.basenetwork         =
     netconfig.vxbackend.vlanid:200,
     netconfig.public.vlanid:0,
 
+dep.args.portal         =
+    portal.instance:'main',
+
 dependencies.2 =
     name:'compute_kvm_base',
+    domain:'mothership1',
+
+dependencies.3 =
+    name:'portal_local_all',
+    domain:'jumpscale',
+
+dependencies.4 =
+    name:'cloudbroker_model',
+    domain:'mothership1',
+
+dependencies.5 =
+    name:'cloudbroker_jumpscripts',
+    domain:'mothership1',
+
+dependencies.6 =
+    name:'billingenginelib',
+    domain:'mothership1',
+
+dependencies.7 =
+    name:'billingengine',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.8 =
+    name:'cloudbrokerlib',
+    domain:'mothership1',
+
+dependencies.9 =
+    name:'libcloudlibvirt',
+    domain:'mothership1',
+
+dependencies.10 =
+    name:'cloudbroker',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.11 =
+    name:'ms1_fe',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.12 =
+    name:'cbportal',
+    args:'dep.args.portal',
     domain:'mothership1',
 
 platform.supported=generic,
