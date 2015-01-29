@@ -26,7 +26,6 @@ class Actions(ActionsBase):
 
         jpd = j.packages.find('mothership1', 'basenetwork')[0]
         basenetwork = jpd.getInstance('main')
-        basenetwork._load()
         hrd = basenetwork.hrd
 
 

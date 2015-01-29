@@ -6,16 +6,16 @@ dependencies.1               =
     domain:'mothership1',
 
 dep.args.basenetwork         =
-    netconfig.backplanes.names:backplane1,
-    netconfig.backplanes.backplane1.backplaneinterface:eth0,
-    netconfig.mgmt_backplane.interfacename:backplane1,
-    netconfig.public_backplane.interfacename:backplane1,
-    netconfig.gw_mgmt_backplane.interfacename:backplane1,
-    netconfig.vxbackend.interfacename:backplane1,
-    netconfig.gw_mgmt.vlanid:103,
-    netconfig.mgmt.vlanid:201,
-    netconfig.vxbackend.vlanid:200,
-    netconfig.public.vlanid:0,
+    netconfig.backplanes.names:'backplane1',
+    netconfig.backplanes.backplane1.backplaneinterface:'eth0',
+    netconfig.mgmt_backplane.interfacename:'backplane1',
+    netconfig.public_backplane.interfacename:'backplane1',
+    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
+    netconfig.vxbackend.interfacename:'backplane1',
+    netconfig.gw_mgmt.vlanid:'103',
+    netconfig.mgmt.vlanid:'201',
+    netconfig.vxbackend.vlanid:'200',
+    netconfig.public.vlanid:'0',
 
 dep.args.portal         =
     portal.instance:'main',
@@ -25,45 +25,49 @@ dependencies.2 =
     domain:'mothership1',
 
 dependencies.3 =
+    name:'defaultcomputenodeconfig',
+    domain:'mothership1',
+
+dependencies.4 =
     name:'portal_local_all',
     domain:'jumpscale',
 
-dependencies.4 =
+dependencies.5 =
     name:'cloudbroker_model',
     domain:'mothership1',
 
-dependencies.5 =
+dependencies.6 =
     name:'cloudbroker_jumpscripts',
     domain:'mothership1',
 
-dependencies.6 =
+dependencies.7 =
     name:'billingenginelib',
     domain:'mothership1',
 
-dependencies.7 =
+dependencies.8 =
     name:'billingengine',
     args:'dep.args.portal',
     domain:'mothership1',
 
-dependencies.8 =
+dependencies.9 =
     name:'cloudbrokerlib',
     domain:'mothership1',
 
-dependencies.9 =
+dependencies.10 =
     name:'libcloudlibvirt',
     domain:'mothership1',
 
-dependencies.10 =
+dependencies.11 =
     name:'cloudbroker',
     args:'dep.args.portal',
     domain:'mothership1',
 
-dependencies.11 =
+dependencies.12 =
     name:'ms1_fe',
     args:'dep.args.portal',
     domain:'mothership1',
 
-dependencies.12 =
+dependencies.13 =
     name:'cbportal',
     args:'dep.args.portal',
     domain:'mothership1',
