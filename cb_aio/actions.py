@@ -22,7 +22,7 @@ class Actions(ActionsBase):
     def configure(self, **kwargs):
         import JumpScale.grid
         import JumpScale.portal
-        ccl = j.core.osis.getClientForNamespace('cloudbroker')
+        ccl = j.clients.osis.getNamespace('cloudbroker')
         # set location
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
             loc = ccl.location.new()
@@ -32,7 +32,7 @@ class Actions(ActionsBase):
             loc.locationCode = 'dev'
             ccl.location.set(loc)
 
-        j.core.portal.getClientByInstance('main')
+        j.clients.portal.getByInstance('main')
         # register networks
         start = 201
         end = 250

@@ -22,10 +22,10 @@ class Actions(ActionsBase):
 
     def configure(self, **kwargs):
         import JumpScale.portal
-        cl = j.core.portal.getClientByInstance('cloudbroker')
-        osiscl = j.core.osis.getClientByInstance('main')
-        osis_size = j.core.osis.getClientForCategory(osiscl, 'cloudbroker', 'size')
-        osis_lsize = j.core.osis.getClientForCategory(osiscl, 'libvirt', 'size')
+        cl = j.clients.portal.getByInstance('cloudbroker')
+        osiscl = j.clients.osis.getByInstance('main')
+        osis_size = j.clients.osis.getCategory(osiscl, 'cloudbroker', 'size')
+        osis_lsize = j.clients.osis.getCategory(osiscl, 'libvirt', 'size')
         cl.getActor('libcloud', 'libvirt')
         cl.getActor('cloudapi','accounts')
         cl.getActor('cloudapi','cloudspaces')
