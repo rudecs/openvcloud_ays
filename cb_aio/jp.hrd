@@ -73,9 +73,20 @@ dependencies.13 =
     domain:'mothership1',
 
 dependencies.14 =
+    name:'gridportal',
+    args:'dep.args.portal',
+    domain:'jumpscale',
+
+dependencies.15 =
+    name:'vfwmanager',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.16 =
     name:'vfwnode',
     args:'dep.args.vfwnode',
     domain:'mothership1',
+
 
 dep.args.vfwnode =
     param.gw_mgmt_ip:'10.199.0.2/22',
