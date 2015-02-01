@@ -57,3 +57,4 @@ class Actions(ActionsBase):
                 size['memory'] = sizecb[1]
                 size['name'] = '%i-%i' % (sizecb[1], i)
                 size['vcpus'] = sizecb[2]
+                osis_lsize.set(size)
