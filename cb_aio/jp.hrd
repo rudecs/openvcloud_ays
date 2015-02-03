@@ -87,10 +87,20 @@ dependencies.16 =
     args:'dep.args.vfwnode',
     domain:'mothership1',
 
-
 dep.args.vfwnode =
     param.gw_mgmt_ip:'10.199.0.2/22',
 
+dependencies.17 =
+    name:'compute_node',
+    domain:'mothership1',
+
+dependencies.18 =
+    name:'image_openwrt',
+    domain:'mothership1',
+
+dependencies.19 =
+    name:'libvirtsizes',
+    domain:'mothership1',
 
 platform.supported=generic,
 
