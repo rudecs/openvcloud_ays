@@ -41,6 +41,6 @@ class Actions(ActionsBase):
                 group = scl.group.new()
                 group.gid = j.application.whoAmI.gid
                 group.id = groupname
-                group.users = []
+                group.users = ['admin']
                 scl.group.set(group)
 
