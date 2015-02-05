@@ -1,0 +1,41 @@
+
+process.1=
+    cmd:'jspython',
+    args: 'websockify_cs --web $(system.paths.base)/apps/vncproxy --portal-client $(param.portal.connection) 8091',
+    prio:100,
+    cwd:'$(system.paths.base)/apps/vncproxy/utils/',
+    timeout_start:20,
+    timeout_stop:20,
+    ports:8091,
+    startupmanager:tmux,
+    filterstr:'websockify_cs',
+
+env.procces.1 =
+    PYTHONPATH:$(system.paths.base)/apps/vncproxy/utils,
+
+git.export.1=
+    url:'http://github.com/0-complexity/noVNC',
+    source:'vnc_auto.html',
+    dest:'$(system.paths.app)/vncproxy/',
+    link:False,
+
+git.export.2=
+    url:'http://github.com/0-complexity/noVNC',
+    source:'images',
+    dest:'$(system.paths.app)/vncproxy/images',
+    link:False,
+
+git.export.3=
+    url:'http://github.com/0-complexity/noVNC',
+    source:'utils',
+    dest:'$(system.paths.app)/vncproxy/utils',
+    link:False,
+
+git.export.4=
+    url:'http://github.com/0-complexity/mothership1',
+    source:'/apps/vncproxy/utils/*',
+    dest:'$(system.paths.app)/vncproxy/utils/',
+    link:True,
+
+platform.supported=generic
+

@@ -1,0 +1,2 @@
+param.vncproxy.publichostport = @ASK type:str
+param.portal.connection = @ASK typ:str default:main
