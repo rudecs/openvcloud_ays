@@ -25,5 +25,9 @@ class Actions(ActionsBase):
         import JumpScale.baselib.netconfig
         ipaddr = "$(param.gw_mgmt_ip)"
         j.system.netconfig.addIpToInterface('gw_mgmt', ipaddr, start=True)
-
+        roles = j.application.config.getList('grid.node.roles')
+        if 'fw' not in roles:
+            roles.append('fw')
+            j.application.config.set('grid.node.roles', roles)
+            j.packages.get(name='jsagent', instance='main').restart()
 
