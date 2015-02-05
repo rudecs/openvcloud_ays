@@ -37,5 +37,25 @@ class Actions(ActionsBase):
         start = 201
         end = 250
         j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start,end)
+        # sync images
+        j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
+        # register public ips
+        import netaddr
+        netmask = self.jp_instance.hrd.get('param.publicip.netmask')
+        start = self.jp_instance.hrd.get('param.publicip.start')
+        end = self.jp_instance.hrd.get('param.publicip.end')
+        gateway = self.jp_instance.hrd.get('param.publicip.gateway')
+        netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
+        network = str(netip.cidr)
+        if not ccl.publicipv4pool.exists(network):
+            pool = ccl.publicipv4pool.new()
+            pool.gid = j.application.whoAmI.gid
+            pool.id = network
+            pool.subnetmask = netmask
+            pool.gateway = gateway
+            pubips = [ str(ip) for ip in netaddr.IPRange(start, end) ]
+            pool.pubips = pubips
+            pool.network = str(netip.network)
+            ccl.publicipv4pool.set(pool)
 
 

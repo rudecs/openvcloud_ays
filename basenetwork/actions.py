@@ -47,6 +47,7 @@ class Actions(ActionsBase):
                 backplane_hasip = True
             if backplane_hasip:
                 if backplane_interface:
+                    j.system.process.execute('ifdown %s' % backplane_interface)
                     j.system.ovsnetconfig.setBackplane(backplane_interface,  backplane_name, ipaddr=backplane_ip_config['address'],gw=backplane_ip_config['gateway'])
                 else:
                     j.system.ovsnetconfig.setBackplaneWithBond(backplane_bondname, backplane_bondinterfaces, backplane_name, ipaddr=backplane_ip_config['address'],gw=backplane_ip_config['gateway'])
