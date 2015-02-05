@@ -1,8 +1,3 @@
-web.export.1=
-    url:'ftp://pub:pub1234@ftp.aydo.com',
-    source:'/images_ms1/linux/openwrt/openwrt1407.qcow2',
-    checkmd5: 'true',
-    dest:'/mnt/vmstor/templates/openwrt1407.qcow',
 
 platform.supported=generic
 
