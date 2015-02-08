@@ -23,8 +23,6 @@ class Actions(ActionsBase):
     def configure(self, *args, **kwargs):
         import netaddr
         import JumpScale.baselib.netconfig
-        ipaddr = "$(param.gw_mgmt_ip)"
-        j.system.netconfig.addIpToInterface('gw_mgmt', ipaddr, start=True)
         roles = j.application.config.getList('grid.node.roles')
         if 'fw' not in roles:
             roles.append('fw')

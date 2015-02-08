@@ -21,15 +21,14 @@ class Actions(ActionsBase):
 
     def configure(self, **kwargs):
         import JumpScale.lib.ovsnetconfig
-        j.system.ovsnetconfig.initNetworkInterfaces()
         hrd = self.jp_instance.hrd
-        for bc in hrd.getList('netconfig.backplanes.names'):
-            backplanehrd = 'netconfig.backplanes.%s' % bc
-            backplane_name = bc
+
+        backplanes = hrd.getList('netconfig.backplanes.names')
+        def getBackplaneInfo(backplane):
+            backplanehrd = 'netconfig.backplanes.%s' % backplane
             backplane_bondinterfaces = None
             backplane_bondname = None
             backplane_interface = None
-            backplane_hasip = False
             bondkey = backplanehrd + '.bond' + '.name'
             if hrd.exists(bondkey):
                 backplane_bondinterfaces = hrd.getList(backplanehrd + '.bond' + '.interfaces')
@@ -38,7 +37,24 @@ class Actions(ActionsBase):
                 backplaneinterfacekey = backplanehrd + '.backplaneinterface'
                 if hrd.exists(backplaneinterfacekey):
                      backplane_interface = hrd.get(backplaneinterfacekey)
+            return backplane_interface, backplane_bondinterfaces, backplane_bondname
 
+        # unconfigure existing network interfaces first
+        for backplane_name in backplanes:
+            backplanehrd = 'netconfig.backplanes.%s' % backplane_name
+            backplane_interface, backplane_bondinterfaces, backplane_bondname = getBackplaneInfo(backplane_name)
+            if backplane_interface:
+                j.system.process.execute('ifdown %s' % backplane_interface)
+            elif backplane_bondinterfaces:
+                for interface in backplane_bondinterfaces:
+                    j.system.process.execute('ifdown %s' % backplane_interface)
+
+        # configure network erases /etc/network/interfaces
+        j.system.ovsnetconfig.initNetworkInterfaces()
+        for backplane_name in backplanes:
+            backplanehrd = 'netconfig.backplanes.%s' % backplane_name
+            backplane_interface, backplane_bondinterfaces, backplane_bondname = getBackplaneInfo(backplane_name)
+            backplane_hasip = False
             if not (backplane_interface or backplane_bondname):
                 raise  Exception("Incorrect config there should be a backplaneinterface or a bond defined in the backplane config")
             ipconfighrd = backplanehrd + '.backplaneipconfig'
@@ -47,7 +63,6 @@ class Actions(ActionsBase):
                 backplane_hasip = True
             if backplane_hasip:
                 if backplane_interface:
-                    j.system.process.execute('ifdown %s' % backplane_interface)
                     j.system.ovsnetconfig.setBackplane(backplane_interface,  backplane_name, ipaddr=backplane_ip_config['address'],gw=backplane_ip_config['gateway'])
                 else:
                     j.system.ovsnetconfig.setBackplaneWithBond(backplane_bondname, backplane_bondinterfaces, backplane_name, ipaddr=backplane_ip_config['address'],gw=backplane_ip_config['gateway'])

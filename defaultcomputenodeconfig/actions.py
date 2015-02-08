@@ -39,13 +39,12 @@ class Actions(ActionsBase):
         vxbackend_vlan = hrd.get('netconfig.vxbackend.vlanid')
         public_vlan= hrd.get('netconfig.public.vlanid')
 
-        if hrd.exists('netconfig.mgmt.ipaddr'):
-            mgmt_ip = hrd.get('netconfig.mgmt.ipaddr')
-            j.system.ovsnetconfig.configureStaticAddress('mgmt', mgmt_ip)
-
-        if hrd.exists('netconfig.vxbackend.ipaddr'):
-            vxbackend_ip = hrd.get('netconfig.vxbackend.ipaddr')
-            j.system.ovsnetconfig.configureStaticAddress('vxbackend', vxbackend_ip)
+        for network in ('mgmt', 'vxbackend', 'gw_mgmt'):
+            key = 'netconfig.%s.ipaddr' % network
+            if hrd.exists(key):
+                ip = hrd.get(key).strip()
+                if ip:
+                    j.system.ovsnetconfig.configureStaticAddress(network, ip)
 
         j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newVlanBridge('gw_mgmt', gw_mgmt_backplane, gw_mgmt_vlan)

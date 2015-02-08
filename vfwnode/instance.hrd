@@ -2,6 +2,5 @@ vfw.netrange.internal=10.199.0.0/22
 vfw.admin.passwd=Dct007
 vfw.admin.login=vscalers
 vfw.default.ip=10.199.3.254
-param.gw_mgmt_ip=@ASK default:10.199.0.2/22 type:str
 
 
