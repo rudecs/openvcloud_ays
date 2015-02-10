@@ -38,15 +38,6 @@ class Actions(ActionsBase):
                  ('10GB at SSD Speed, Unlimited Transfer - 70 USD/month', 8192, 4),
                  ('10GB at SSD Speed, Unlimited Transfer - 140 USD/month', 16384, 8)]
 
-        for sizecb in sizecbs:
-            if osis_size.search({'description': sizecb[0]})[0]:
-                continue
-            sizecbobj = dict()
-            sizecbobj['description'] = sizecb[0]
-            sizecbobj['memory'] = sizecb[1]
-            sizecbobj['vcpus'] = sizecb[2]
-            osis_size.set(sizecbobj)
-
         disksizes = [10,15,20,25,30,40,50,60,70,80,90,100]
         for i in disksizes:
             for sizecb in sizecbs:

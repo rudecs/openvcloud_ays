@@ -39,6 +39,7 @@ class Actions(ActionsBase):
         j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start,end)
         # sync images
         j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
+        j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
         # register public ips
         import netaddr
         netmask = self.jp_instance.hrd.get('param.publicip.netmask')
