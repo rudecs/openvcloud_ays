@@ -66,8 +66,8 @@ server {
 
 }
         '''
-        j.system.fs.createDir('/opt/nginx/sites-enabled/')
-        j.system.fs.writeFile('/opt/nginx/sites-enabled/ms1_fe', nginxcfg)
+        j.system.fs.createDir('/opt/nginx/cfg/sites-enabled')
+        j.system.fs.writeFile('/opt/nginx/cfg/sites-enabled/ms1_fe', nginxcfg)
 
         jp = j.packages.find('jumpscale', 'nginx')[0].getInstance('main')
         jp.restart()
