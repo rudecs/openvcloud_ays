@@ -32,3 +32,42 @@ class Actions(ActionsBase):
         jp = j.packages.find('jumpscale', 'portal')[0].getInstance('main')
         jp.restart()
 
+        nginxcfg = '''
+server {
+    listen 80 default_server;
+    gzip on;
+    gzip_static always;
+
+    location / {
+        proxy_pass http://127.0.0.1:82;
+        proxy_set_header        X-Real-IP       $remote_addr;
+    }
+
+    location ~ /rest(ext|extmachine|machine)*/libcloud {
+        return 404;
+    }
+
+    location /jslib {
+        expires 5m;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        rewrite /jslib/(.*) /$1 break;
+        root $base/apps/portals/jslib/;
+    }
+
+
+    location /wiki_gcb/.files {
+        expires 5m;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        rewrite /wiki_gcb/.files/(.*) /$1 break;
+        root $base/apps/portals/main/base/wiki_gcb/.files/;
+    }
+
+}
+        '''
+        j.system.fs.createDir('/opt/nginx/sites-enabled/')
+        j.system.fs.writeFile('/opt/nginx/sites-enabled/ms1_fe', nginxcfg)
+
+        jp = j.packages.find('jumpscale', 'nginx')[0].getInstance('main')
+        jp.restart()
