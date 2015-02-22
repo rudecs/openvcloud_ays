@@ -52,7 +52,7 @@ server {
         add_header Pragma public;
         add_header Cache-Control "public, must-revalidate, proxy-revalidate";
         rewrite /jslib/(.*) /$1 break;
-        root $base/apps/portals/jslib/;
+        root $(system.paths.base)/apps/portals/jslib/;
     }
 
 
@@ -61,7 +61,7 @@ server {
         add_header Pragma public;
         add_header Cache-Control "public, must-revalidate, proxy-revalidate";
         rewrite /wiki_gcb/.files/(.*) /$1 break;
-        root $base/apps/portals/main/base/wiki_gcb/.files/;
+        root $(system.paths.base)/apps/portals/main/base/wiki_gcb/.files/;
     }
 
 }
