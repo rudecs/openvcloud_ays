@@ -7,14 +7,30 @@ git.export.1=
 git.export.2=
     url:'http://github.com/0-complexity/mothership1.git',
     source:'apps/routeros/configs/',
+    branch:'openwrt',
     dest:'$(system.paths.base)/apps/routeros/configs',
     link:True,
 
 git.export.3=
     url:'http://github.com/0-complexity/mothership1.git',
     source:'apps/routeros/template/*',
+    branch:'openwrt',
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:True,
+
+git.export.4=
+    url:'http://github.com/0-complexity/mothership1.git',
+    source:'apps/openwrt/template/*',
+    branch:'openwrt',
+    dest:'$(system.paths.base)/apps/openwrt/template/',
+    link:True,
+
+git.export.5=
+    url:'http://git.aydo.com/binary/openwrt.git',
+    source:'openwrt-x86-kvm_guest-combined-ext4.qcow2',
+    branch:'master',
+    dest:'$(system.paths.base)/apps/openwrt/template/',
+    link:False,
 
 
 platform.supported=generic,
