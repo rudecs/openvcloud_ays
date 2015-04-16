@@ -20,6 +20,10 @@ class Actions(ActionsBase):
 
     """
 
+    def prepare(self, *args, **kwargs):
+        openwrt_manager = j.packages.get('mothership1', 'openwrt-remote-manager')
+        openwrt_manager.build()
+
     def configure(self, *args, **kwargs):
         import netaddr
         import JumpScale.baselib.netconfig

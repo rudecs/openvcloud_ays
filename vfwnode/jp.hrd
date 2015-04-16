@@ -27,7 +27,7 @@ git.export.4=
 
 git.export.5=
     url:'http://git.aydo.com/binary/openwrt.git',
-    source:'openwrt-x86-kvm_guest-combined-ext4.qcow2',
+    source:'vfw_openwrt.qcow2',
     branch:'master',
     dest:'$(system.paths.base)/apps/openwrt/template/',
     link:False,
