@@ -1,4 +1,4 @@
-git.url='http://github.com/0-complexity/mothership1.git'
+git.url='https://git.aydo.com/0-complexity/openvcloud.git'
 
 dependencies.1               =
     args:'dep.args.basenetwork',
@@ -24,7 +24,7 @@ dep.args.portal         =
 dep.args.portal_client       =
     param.addr:'localhost',
     param.port:82,
-    param.secret:'$(param.rootpasswd)',
+    param.secret:'$(instance.param.rootpasswd)',
 
 dep.args.vncproxy =
     param.portal.connection:'main',
@@ -77,7 +77,7 @@ dependencies.12 =
     domain:'mothership1',
 
 dependencies.13 =
-    name:'ms1_fe',
+    name:'ms1_frontend',
     args:'dep.args.portal',
     domain:'mothership1',
 

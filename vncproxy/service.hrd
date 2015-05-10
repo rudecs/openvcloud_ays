@@ -1,7 +1,7 @@
 
 process.1=
     cmd:'jspython',
-    args: 'websockify_cs --web $(system.paths.base)/apps/vncproxy --portal-client $(param.portal.connection) 8091',
+    args: 'websockify_cs --web $(system.paths.base)/apps/vncproxy --portal-client $(instance.param.portal.connection) 8091',
     prio:100,
     cwd:'$(system.paths.base)/apps/vncproxy/utils/',
     timeout_start:20,

@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -20,7 +20,7 @@ class Actions(ActionsBase):
     """
 
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         from JumpScale import j
         import JumpScale.grid.osis
 

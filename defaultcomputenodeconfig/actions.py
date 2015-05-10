@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,28 +19,28 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         from JumpScale.lib import ovsnetconfig
         import libvirt
         #configure the package
 
-        jpd = j.packages.find('mothership1', 'basenetwork')[0]
-        basenetwork = jpd.getInstance('main')
+        basenetwork = j.atyoutservice.findServices('mothership1', 'basenetwork')[0]
+        # basenetwork = jpd.getInstance('main')
         hrd = basenetwork.hrd
 
 
-        mgmt_backplane  = hrd.get('netconfig.mgmt_backplane.interfacename')
-        public_backplane = hrd.get('netconfig.public_backplane.interfacename')
-        gw_mgmt_backplane = hrd.get('netconfig.gw_mgmt_backplane.interfacename')
-        vxbackend_backplane = hrd.get('netconfig.vxbackend.interfacename')
+        mgmt_backplane  = hrd.get('instance.netconfig.mgmt_backplane.interfacename')
+        public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
+        gw_mgmt_backplane = hrd.get('instance.netconfig.gw_mgmt_backplane.interfacename')
+        vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
 
-        mgmt_vlan = hrd.get('netconfig.mgmt.vlanid')
-        gw_mgmt_vlan = hrd.get('netconfig.gw_mgmt.vlanid')
-        vxbackend_vlan = hrd.get('netconfig.vxbackend.vlanid')
-        public_vlan= hrd.get('netconfig.public.vlanid')
+        mgmt_vlan = hrd.get('instance.netconfig.mgmt.vlanid')
+        gw_mgmt_vlan = hrd.get('instance.netconfig.gw_mgmt.vlanid')
+        vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
+        public_vlan= hrd.get('instance.netconfig.public.vlanid')
 
         for network in ('mgmt', 'vxbackend', 'gw_mgmt'):
-            key = 'netconfig.%s.ipaddr' % network
+            key = 'instance.netconfig.%s.ipaddr' % network
             if hrd.exists(key):
                 ip = hrd.get(key).strip()
                 if ip:

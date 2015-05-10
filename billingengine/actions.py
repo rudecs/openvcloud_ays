@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,7 +19,7 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def configure(self, **kwargs):
-        jp = j.packages.find('jumpscale', 'portal')[0].getInstance('main')
-        jp.restart()
+    def configure(self, serviceObj):
+        service = j.atyoutservice.findServices('jumpscale', 'portal', 'main')[0]
+        service.restart()
 

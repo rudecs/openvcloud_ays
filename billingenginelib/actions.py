@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """

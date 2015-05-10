@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -20,10 +20,10 @@ class Actions(ActionsBase):
     """
 
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'OpenWRT 14.07'
         imagename = 'openwrt1407.qcow2'
-        registerImage(self.jp_instance, name, imagename, 'Linux', 10)
+        registerImage(serviceObj, name, imagename, 'Linux', 10)
 
 

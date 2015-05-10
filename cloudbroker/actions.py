@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,16 +19,16 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def prepare(self,**args):
+    def prepare(self,serviceObj):
         """
         this gets executed before the files are downloaded & installed on appropriate spots
         """
-        dest="$(system.paths.base)/apps/portals/$(portal.instance)"
+        dest="$(system.paths.base)/apps/portals/$(instance.portal.instance)"
         if not j.system.fs.exists(dest):
-            j.events.inputerror_critical("Could not find portal instance with name: $(portal.instance), please install")
+            j.events.inputerror_critical("Could not find portal instance with name: $(instance.portal.instance), please install")
         return True
 
-    def configure(self, **kwargs):
-        jp = j.packages.find('jumpscale', 'portal')[0].getInstance('$(portal.instance)')
-        jp.restart()
+    def configure(self, serviceObj):
+        service = j.atyoutservice.findServices('jumpscale', 'portal', '$(instance.portal.instance)')[0]
+        service.restart()
 

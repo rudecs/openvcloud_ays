@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,7 +19,7 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         import JumpScale.grid
         import JumpScale.portal
         ccl = j.clients.osis.getNamespace('cloudbroker')
@@ -42,10 +42,10 @@ class Actions(ActionsBase):
         j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
         # register public ips
         import netaddr
-        netmask = self.jp_instance.hrd.get('param.publicip.netmask')
-        start = self.jp_instance.hrd.get('param.publicip.start')
-        end = self.jp_instance.hrd.get('param.publicip.end')
-        gateway = self.jp_instance.hrd.get('param.publicip.gateway')
+        netmask = serviceObj.hrd.get('instance.param.publicip.netmask')
+        start = serviceObj.hrd.get('instance.param.publicip.start')
+        end = serviceObj.hrd.get('instance.param.publicip.end')
+        gateway = serviceObj.hrd.get('instance.param.publicip.gateway')
         netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
         network = str(netip.cidr)
         if not ccl.publicipv4pool.exists(network):

@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,13 +19,13 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         import JumpScale.lib.ovsnetconfig
-        hrd = self.jp_instance.hrd
+        hrd = serviceObj.hrd
 
-        backplanes = hrd.getList('netconfig.backplanes.names')
+        backplanes = hrd.getList('instance.netconfig.backplanes.names')
         def getBackplaneInfo(backplane):
-            backplanehrd = 'netconfig.backplanes.%s' % backplane
+            backplanehrd = 'instance.netconfig.backplanes.%s' % backplane
             backplane_bondinterfaces = None
             backplane_bondname = None
             backplane_interface = None
@@ -41,7 +41,7 @@ class Actions(ActionsBase):
 
         # unconfigure existing network interfaces first
         for backplane_name in backplanes:
-            backplanehrd = 'netconfig.backplanes.%s' % backplane_name
+            backplanehrd = 'instance.netconfig.backplanes.%s' % backplane_name
             backplane_interface, backplane_bondinterfaces, backplane_bondname = getBackplaneInfo(backplane_name)
             if backplane_interface:
                 j.system.process.execute('ifdown %s' % backplane_interface)
@@ -52,7 +52,7 @@ class Actions(ActionsBase):
         # configure network erases /etc/network/interfaces
         j.system.ovsnetconfig.initNetworkInterfaces()
         for backplane_name in backplanes:
-            backplanehrd = 'netconfig.backplanes.%s' % backplane_name
+            backplanehrd = 'instance.netconfig.backplanes.%s' % backplane_name
             backplane_interface, backplane_bondinterfaces, backplane_bondname = getBackplaneInfo(backplane_name)
             backplane_hasip = False
             if not (backplane_interface or backplane_bondname):

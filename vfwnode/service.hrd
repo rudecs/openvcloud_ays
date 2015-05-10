@@ -1,3 +1,7 @@
+dependencies.1               =
+    name:'openwrt-remote-manager',
+    domain:'mothership1',
+
 git.export.1=
     url:'http://git.aydo.com/binary/routeros.git',
     source:'root/routeros-small-NETWORK-ID.qcow2',
@@ -5,23 +9,23 @@ git.export.1=
     link:False,
 
 git.export.2=
-    url:'http://github.com/0-complexity/mothership1.git',
+    url:'https://git.aydo.com/0-complexity/ays_ms1.git',
     source:'apps/routeros/configs/',
-    branch:'openwrt',
+    branch:'master',
     dest:'$(system.paths.base)/apps/routeros/configs',
     link:True,
 
 git.export.3=
-    url:'http://github.com/0-complexity/mothership1.git',
+    url:'https://git.aydo.com/0-complexity/ays_ms1.git',
     source:'apps/routeros/template/*',
-    branch:'openwrt',
+    branch:'master',
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:True,
 
 git.export.4=
-    url:'http://github.com/0-complexity/mothership1.git',
+    url:'https://git.aydo.com/0-complexity/ays_ms1.git',
     source:'apps/openwrt/template/*',
-    branch:'openwrt',
+    branch:'master',
     dest:'$(system.paths.base)/apps/openwrt/template/',
     link:True,
 

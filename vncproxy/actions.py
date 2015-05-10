@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -20,10 +20,10 @@ class Actions(ActionsBase):
     """
 
 
-    def configure(self, **kwargs):
+    def configure(self, serviceObj):
         from JumpScale import j
         import JumpScale.portal
-        cl = j.clients.portal.getByInstance("$(param.portal.connection)")
+        cl = j.clients.portal.getByInstance("$(instance.param.portal.connection)")
         actor = cl.getActor('libcloud', 'libvirt')
         myurl = "http://$(param.vncproxy.publichostport)/vnc_auto.html?token="
         gid = "$(grid.id)"

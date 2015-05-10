@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.packages.getActionsBaseClass()
+ActionsBase=j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -20,16 +20,16 @@ class Actions(ActionsBase):
 
     """
 
-    def prepare(self, *args, **kwargs):
-        openwrt_manager = j.packages.get('mothership1', 'openwrt-remote-manager')
+    def prepare(self, serviceObj):
+        openwrt_manager = j.atyourservice.get('mothership1', 'openwrt-remote-manager')
         openwrt_manager.build()
 
-    def configure(self, *args, **kwargs):
+    def configure(self,  serviceObj):
         import netaddr
         import JumpScale.baselib.netconfig
         roles = j.application.config.getList('grid.node.roles')
         if 'fw' not in roles:
             roles.append('fw')
             j.application.config.set('grid.node.roles', roles)
-            j.packages.get(name='jsagent', instance='main').restart()
+            j.atyourservice.get(name='jsagent', instance='main').restart()
 

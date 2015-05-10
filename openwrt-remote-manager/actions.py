@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase = j.packages.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
 
 
 class Actions(ActionsBase):
@@ -21,7 +21,7 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def build(self, **kwargs):
+    def build(self, serviceObj):
         import zipfile
 
         BUILD_BASE = '/opt/build/openwrt-remote-manager'

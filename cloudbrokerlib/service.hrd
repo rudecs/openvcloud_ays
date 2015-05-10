@@ -1,4 +1,4 @@
-git.url='http://github.com/0-complexity/mothership1.git'
+git.url='https://git.aydo.com/0-complexity/openvcloud.git'
 git.export.1=
     url:$(git.url),
     source:'apps/cloudbroker/cloudbrokerlib/',
