@@ -24,7 +24,7 @@ class Actions(ActionsBase):
         import libvirt
         #configure the package
 
-        basenetwork = j.atyoutservice.findServices('mothership1', 'basenetwork')[0]
+        basenetwork = j.atyourtservice.findServices('mothership1', 'basenetwork')[0]
         # basenetwork = jpd.getInstance('main')
         hrd = basenetwork.hrd
 
