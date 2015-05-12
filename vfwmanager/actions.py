@@ -29,6 +29,6 @@ class Actions(ActionsBase):
         return True
 
     def configure(self, serviceObj):
-        service = j.atyoutservice.findServices('jumpscale', 'portal','$(instance.portal.instance)')[0]
+        service = j.atyourservice.findServices('jumpscale', 'portal','$(instance.portal.instance)')[0]
         service.restart()
 

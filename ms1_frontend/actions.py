@@ -29,7 +29,7 @@ class Actions(ActionsBase):
         return True
 
     def configure(self, serviceObj):
-        service = j.atyoutservice.findServices('jumpscale', 'portal', 'main')[0]
+        service = j.atyourservice.findServices('jumpscale', 'portal', 'main')[0]
         service.restart()
 
         nginxcfg = '''
@@ -69,5 +69,5 @@ server {
         j.system.fs.createDir('/opt/nginx/cfg/sites-enabled')
         j.system.fs.writeFile('/opt/nginx/cfg/sites-enabled/ms1_fe', nginxcfg)
 
-        service = j.atyoutservice.findServices('jumpscale', 'nginx', 'main')[0]
+        service = j.atyourservice.findServices('jumpscale', 'nginx', 'main')[0]
         service.restart()
