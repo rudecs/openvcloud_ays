@@ -1,5 +1,16 @@
 param.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
-param.publicip.gateway = @ASK type:str
-param.publicip.netmask = @ASK type:str
-param.publicip.start = @ASK type:str
-param.publicip.end = @ASK type:str
+
+#portal client
+param.addr=@ASK default:localhost  descr:'PORTAL_CLIENT: Address'
+param.port=@ASK default:82 type:int descr:'PORTAL_CLIENT: port'
+
+#agentcontroller
+agentcontroller.client.addr=@ASK default:localhost  descr:'AgentCONTROLLER_CLIENT: Address'
+agentcontroller.client.port=@ASK default:4444 descr:'AgentCONTROLLER_CLIENT: PORT'
+agentcontroller.client.login=@ASK default:node descr:'AgentCONTROLLER_CLIENT: User name'
+
+#osis client
+param.osis.client.addr=@ASK default:localhost  descr:'OSIS CLIENT: OSIS SERVER address'
+param.osis.client.port=5544
+param.osis.client.login=@ASK default:root descr:'OSIS CLIENT: OSIS SERVER username'
+param.osis.client.passwd=@ASK default: descr:'OSIS CLIENT: OSIS SERVER password'

@@ -1,10 +1,5 @@
 git.url='https://git.aydo.com/0-complexity/openvcloud.git'
 
-dependencies.1               =
-    args:'dep.args.basenetwork',
-    name:'basenetwork',
-    domain:'mothership1',
-
 dep.args.basenetwork         =
     netconfig.backplanes.names:'backplane1',
     netconfig.backplanes.backplane1.backplaneinterface:'eth0',
@@ -18,22 +13,33 @@ dep.args.basenetwork         =
     netconfig.vxbackend.vlanid:'200',
     netconfig.public.vlanid:'0',
 
-
 dep.args.portal_client       =
-    param.port:82,
     param.secret:'$(instance.param.rootpasswd)',
+    param.addr:'$(instance.portal_client.addr)',
+    param.port:'$(instance.portal_client.port)',
+
+dep.args.osis_client =
+    param.osis.client.addr:'$(instance.param.osis.client.addr)',
+    param.osis.client.port:$(instance.param.osis.client.port),
+    param.osis.client.login:'$(instance.param.osis.client.login)',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
 
 dep.args.redis =
     param.disk:0,
+    param.passwd :'$(instance.param.rootpasswd)',
     param.mem : 100,
     param.port:9999,
     param.unixsocket:0,
 
-dep.args.jsagent = 
+dep.args.jsagent =
     grid.id:1,
     grid.node.roles:'node,
     agentcontroller.connection:'main',
 
+dependencies.1               =
+    args:'dep.args.basenetwork',
+    name:'basenetwork',
+    domain:'mothership1',
 
 dependencies.2 =
     name:'redis',
@@ -65,6 +71,7 @@ dependencies.7 =
 
 dependencies.8 =
     name:'osis_client',
+    args:'dep.args.osis_client',
     instance:'main',
 
 dependencies.9 =
