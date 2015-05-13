@@ -1,0 +1,68 @@
+# OpenvCloud installation
+
+## Master
+
+### Install Jumpscale
+```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+
+### Add openvcloud domain
+edit ```/opt/jumscpale7/hrd/system/atyourservice.hrd```
+```
+metadata.jumpscale             =
+    url:'https://github.com/Jumpscale/ays_jumpscale7',
+
+# add this domain
+metadata.mothership1           =
+    url:'https://git.aydo.com/0-complexity/ays_ms1',
+
+```
+
+### Install singlenode_grid service
+```ays install -n singlenode_grid```
+
+### Install cb_aio
+
+```
+ays install -n cb_aio
+Please provide value for param.publicip.gateway of type str
+: 192.168.57.254
+Please provide value for param.publicip.netmask of type str
+: 255.255.255.0
+Please provide value for param.publicip.start of type str
+: 192.168.57.200
+Please provide value for param.publicip.end of type str
+: 192.168.57.240
+Enter gateway and address for backplane1:
+(Enter answer over multiple lines, end by typing '.' (without the quotes) on an empty line)
+address:192.168.57.7/24
+gateway:192.168.57.254
+.
+Please provide value for netconfig.vxbackend.ipaddr of type str
+ [240.0.0.1/16]: 
+Please provide value for mothership1.cloudbroker.defense_proxy of type str
+: http://192.168.57.7/
+Please provide value for cloudbroker.portalurl of type str
+: http://192.168.57.7:82
+Please provide value for param.vncproxy.publichostport of type str
+: 192.168.57.7:8091
+```
+
+## CPU Node
+
+### Install Jumpscale
+```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+
+### Add openvcloud domain
+edit ```/opt/jumscpale7/hrd/system/atyourservice.hrd```
+```
+metadata.jumpscale             =
+    url:'https://github.com/Jumpscale/ays_jumpscale7',
+
+# add this domain
+metadata.mothership1           =
+    url:'https://git.aydo.com/0-complexity/ays_ms1',
+
+```
+
+### Install cb_cpunode_aio
+```ays install -n cb_cpunode_aio```
