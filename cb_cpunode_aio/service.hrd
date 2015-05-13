@@ -1,0 +1,81 @@
+git.url='https://git.aydo.com/0-complexity/openvcloud.git'
+
+dependencies.1               =
+    args:'dep.args.basenetwork',
+    name:'basenetwork',
+    domain:'mothership1',
+
+dep.args.basenetwork         =
+    netconfig.backplanes.names:'backplane1',
+    netconfig.backplanes.backplane1.backplaneinterface:'eth0',
+    netconfig.mgmt_backplane.interfacename:'backplane1',
+    netconfig.public_backplane.interfacename:'backplane1',
+    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
+    netconfig.gw_mgmt.ipaddr:'10.199.0.2/22',
+    netconfig.vxbackend.interfacename:'backplane1',
+    netconfig.gw_mgmt.vlanid:'103',
+    netconfig.mgmt.vlanid:'201',
+    netconfig.vxbackend.vlanid:'200',
+    netconfig.public.vlanid:'0',
+
+
+dep.args.portal_client       =
+    param.port:82,
+    param.secret:'$(instance.param.rootpasswd)',
+
+dep.args.redis =
+    param.disk:0,
+    param.mem : 100,
+    param.passwd:'',
+    param.port:9999,
+    param.unixsocket:0,
+
+dep.args.jsagent = 
+    grid.id:1,
+    grid.node.roles:'node,
+    agentcontroller.connection:'main',
+
+
+dependencies.2 =
+    name:'redis',
+    instance:'system',
+    args:'dep.args.redis',
+
+dependencies.3 =
+    name:'compute_kvm_base',
+    domain:'mothership1',
+
+dependencies.4 =
+    name:'defaultcomputenodeconfig',
+    domain:'mothership1',
+
+dependencies.5 =
+    name:'portal_client',
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+
+dependencies.6 =
+    name:'portal_client',
+    args:'dep.args.portal_client',
+    instance:'main',
+
+dependencies.7 =
+    name:'portal_client',
+    args:'dep.args.portal_client',
+    instance:'cbportal',
+
+dependencies.8 =
+    name:'osis_client',
+    instance:'main',
+
+dependencies.9 =
+    name:'jsagent',
+    instance:'main',
+    args:'dep.args.jsagent',
+
+dependencies.10 =
+    name:'compute_node',
+    domain:'mothership1',
+
+platform.supported=generic,
+
