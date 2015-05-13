@@ -30,7 +30,7 @@ metadata.jumpscale             =
 
 # add this domain
 metadata.mothership1           =
-    url:'https://git.aydo.com/0-complexity/ays_ms1',
+    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
 
 ```
 
@@ -77,7 +77,7 @@ metadata.jumpscale             =
 
 # add this domain
 metadata.mothership1           =
-    url:'https://git.aydo.com/0-complexity/ays_ms1',
+    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
 
 ```
 
