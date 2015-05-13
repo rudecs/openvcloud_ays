@@ -1,5 +1,22 @@
 # OpenvCloud installation
 
+## LXC preparation for compute node or AIO install
+### Modules
+
+Load openvswitch tun and kvm modules on host operation system. Needs to hapen each time you reboot your host.
+```
+modprobe tun
+modprobe kvm 
+modprobe openvswitch
+```
+### Devices
+In the container create /dev/kvm/ and /dev/net/tun Needs to happen only once in the lifetime of the container.
+```
+mkdir -p /dev/net
+mknod /dev/net/tun c 10 200
+mknod /dev/kvm c 10 232
+```
+
 ## Master
 
 ### Install Jumpscale
