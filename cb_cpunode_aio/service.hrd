@@ -26,7 +26,6 @@ dep.args.portal_client       =
 dep.args.redis =
     param.disk:0,
     param.mem : 100,
-    param.passwd:'',
     param.port:9999,
     param.unixsocket:0,
 
