@@ -32,7 +32,7 @@ git.export.3=
     link:False,
 
 git.export.4=
-    url:'http://github.com/0-complexity/mothership1',
+    url:'http://git.aydo.com/0-complexity/openvcloud',
     source:'/apps/vncproxy/utils/*',
     dest:'$(system.paths.app)/vncproxy/utils/',
     link:True,
