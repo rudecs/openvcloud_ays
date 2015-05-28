@@ -23,7 +23,7 @@ mknod /dev/kvm c 10 232
 ```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh```
 
 ### Add openvcloud domain
-edit ```/opt/jumscpale7/hrd/system/atyourservice.hrd```
+edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
 ```
 metadata.jumpscale             =
     url:'https://github.com/Jumpscale/ays_jumpscale7',
