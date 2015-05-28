@@ -72,8 +72,8 @@ dependencies.13 =
     name:'libvirtsizes',
     domain:'mothership1',
 
-dependencies.13 =
-    name:'libvirtsizes',
+dependencies.14 =
+    name:'vfwmanager',
     domain:'mothership1',
     args:'dep.args.vfwmanager',
 
