@@ -1,0 +1,81 @@
+git.url='https://git.aydo.com/0-complexity/openvcloud.git'
+
+dep.args.portal         =
+    portal.instance:'main',
+
+dep.args.portal_client       =
+    param.addr:'localhost',
+    param.port:82,
+    param.secret:'$(instance.param.rootpasswd)',
+
+dep.args.vncproxy =
+    param.portal.connection:'main',
+
+dep.args.vfwmanager =
+    portal.instance:'main',
+
+dependencies.1 =
+    name:'singlenode_grid',
+    domain:'jumpscale',
+
+dependencies.2 =
+    name:'portal_client',
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+
+dependencies.3 =
+    name:'cloudbroker_model',
+    domain:'mothership1',
+
+dependencies.4 =
+    name:'cloudbroker_jumpscripts',
+    domain:'mothership1',
+
+dependencies.5 =
+    name:'billingenginelib',
+    domain:'mothership1',
+
+dependencies.6 =
+    name:'billingengine',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.7 =
+    name:'cloudbrokerlib',
+    domain:'mothership1',
+
+dependencies.8 =
+    name:'libcloudlibvirt',
+    domain:'mothership1',
+
+dependencies.9 =
+    name:'cloudbroker',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.10 =
+    name:'ms1_frontend',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.11 =
+    name:'cbportal',
+    args:'dep.args.portal',
+    domain:'mothership1',
+
+dependencies.12 =
+    name:'gridportal',
+    args:'dep.args.portal',
+    domain:'jumpscale',
+
+dependencies.13 =
+    name:'libvirtsizes',
+    domain:'mothership1',
+
+dependencies.13 =
+    name:'libvirtsizes',
+    domain:'mothership1',
+    args:'dep.args.vfwmanager',
+
+platform.supported=generic,
+
