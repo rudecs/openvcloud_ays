@@ -9,5 +9,8 @@ git.export.1=
 dependencies.1 =
     name:'portal',
 
+dependencies.2 =
+    name:'nginx',
+
 platform.supported=generic,
 
