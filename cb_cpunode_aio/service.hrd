@@ -2,7 +2,6 @@ git.url='https://git.aydo.com/0-complexity/openvcloud.git'
 
 dep.args.basenetwork         =
     netconfig.backplanes.names:'backplane1',
-    netconfig.backplanes.backplane1.backplaneinterface:'eth0',
     netconfig.mgmt_backplane.interfacename:'backplane1',
     netconfig.public_backplane.interfacename:'backplane1',
     netconfig.gw_mgmt_backplane.interfacename:'backplane1',
