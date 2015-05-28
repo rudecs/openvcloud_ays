@@ -37,7 +37,7 @@ dependencies.3 =
     domain:'mothership1',
 
 dependencies.4 =
-    name:'portal_local_all',
+    name:'singlenode_portal',
     domain:'jumpscale',
 
 dependencies.5 =
