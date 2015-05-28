@@ -34,10 +34,7 @@ metadata.mothership1           =
 
 ```
 
-### Install singlenode_grid service
-```ays install -n singlenode_grid```
-
-### Install cb_aio
+### Install cb_master_aio
 
 ```
 ays install -n cb_aio
@@ -49,13 +46,7 @@ Please provide value for param.publicip.start of type str
 : 192.168.57.200
 Please provide value for param.publicip.end of type str
 : 192.168.57.240
-Enter gateway and address for backplane1:
-(Enter answer over multiple lines, end by typing '.' (without the quotes) on an empty line)
-address:192.168.57.7/24
-gateway:192.168.57.254
-.
-Please provide value for netconfig.vxbackend.ipaddr of type str
- [240.0.0.1/16]: 
+
 Please provide value for mothership1.cloudbroker.defense_proxy of type str
 : http://192.168.57.7/
 Please provide value for cloudbroker.portalurl of type str
