@@ -1,0 +1,19 @@
+url='http://git.aydo.com/binary/ovs_branding'
+basepath='/opt/OpenvStorage/webapps/frontend'
+
+git.export.1=
+    url:$(url),
+    source:'images/*',
+    dest:'$(basepath)/lib/ovs/images/',
+    link:False,
+    merge:True,
+
+git.export.2=
+    url:$(url),
+    source:'css/*',
+    dest:'$(basepath)/css/',
+    link:False,
+    merge:True,
+
+platform.supported=generic
+
