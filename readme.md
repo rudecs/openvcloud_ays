@@ -37,7 +37,7 @@ metadata.mothership1           =
 ### Install cb_master_aio
 
 ```
-ays install -n cb_aio
+ays install -n cb_master_aio
 Please provide value for param.publicip.gateway of type str
 : 192.168.57.254
 Please provide value for param.publicip.netmask of type str
