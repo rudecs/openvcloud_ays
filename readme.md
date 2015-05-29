@@ -74,3 +74,8 @@ metadata.mothership1           =
 
 ### Install cb_cpunode_aio
 ```ays install -n cb_cpunode_aio```
+
+Fill in the public IP of the cloudspace where the master is installed:
+```
+PORTAL_CLIENT: Address [localhost]:
+```
