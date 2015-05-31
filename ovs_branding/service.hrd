@@ -8,12 +8,27 @@ git.export.1=
     link:False,
     merge:True,
 
-#git.export.2=
-#    url:$(url),
-#    source:'css/*',
-#    dest:'$(basepath)/css/',
-#    link:False,
-#    merge:True,
+git.export.2=
+    url:$(url),
+    source:'css/*',
+    dest:'$(basepath)/css/',
+    link:False,
+    overwrite:True,
+
+git.export.3=
+    url:$(url),
+    source:'app/views/site/login.html',
+    dest:'$(basepath)/app/views/site/',
+    link:False,
+    overwrite:True,
+
+git.export.4=
+    url:$(url),
+    source:'app/views/index.html',
+    dest:'$(basepath)/app/views/',
+    link:False,
+    merge:True,
 
 platform.supported=generic
+
 
