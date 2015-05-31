@@ -82,5 +82,14 @@ dependencies.10 =
     name:'compute_node',
     domain:'mothership1',
 
+dependencies.11 =
+    name:'vfwnode',
+    args:'dep.args.vfwnode',
+    domain:'mothership1',
+
+dependencies.12 =
+    name:'image_openwrt',
+    domain:'mothership1',
+
 platform.supported=generic,
 
