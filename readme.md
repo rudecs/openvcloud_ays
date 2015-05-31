@@ -11,7 +11,7 @@ modprobe openvswitch
 ```
 ### Devices
 In the container create /dev/kvm/ and /dev/net/tun Needs to happen only once in the lifetime of the container.
-```
+```sh
 mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
 mknod /dev/kvm c 10 232
@@ -20,18 +20,18 @@ mknod /dev/kvm c 10 232
 ## Master
 
 ### Install Jumpscale
-```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+```sh
+curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh
+```
 
 ### Add openvcloud domain
-edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
+edit `/opt/jumpscale7/hrd/system/atyourservice.hrd`
 ```
 metadata.jumpscale             =
     url:'https://github.com/Jumpscale/ays_jumpscale7',
-
 # add this domain
 metadata.mothership1           =
     url:'https://git.aydo.com/0-complexity/openvcloud_ays',
-
 ```
 
 ### Install cb_master_aio
@@ -61,7 +61,7 @@ Please provide value for param.vncproxy.publichostport of type str
 ```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh```
 
 ### Add openvcloud domain
-edit ```/opt/jumscpale7/hrd/system/atyourservice.hrd```
+edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
 ```
 metadata.jumpscale             =
     url:'https://github.com/Jumpscale/ays_jumpscale7',
@@ -74,3 +74,8 @@ metadata.mothership1           =
 
 ### Install cb_cpunode_aio
 ```ays install -n cb_cpunode_aio```
+
+Fill in the public IP of the cloudspace where the master is installed:
+```
+PORTAL_CLIENT: Address [localhost]:
+```
