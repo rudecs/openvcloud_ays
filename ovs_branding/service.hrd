@@ -8,12 +8,12 @@ git.export.1=
     link:False,
     merge:True,
 
-git.export.2=
-    url:$(url),
-    source:'css/*',
-    dest:'$(basepath)/css/',
-    link:False,
-    merge:True,
+#git.export.2=
+#    url:$(url),
+#    source:'css/*',
+#    dest:'$(basepath)/css/',
+#    link:False,
+#    merge:True,
 
 platform.supported=generic
 
