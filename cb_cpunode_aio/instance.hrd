@@ -14,3 +14,6 @@ param.osis.client.addr=@ASK default:localhost  descr:'OSIS CLIENT: OSIS SERVER a
 param.osis.client.port=5544
 param.osis.client.login=@ASK default:root descr:'OSIS CLIENT: OSIS SERVER username'
 param.osis.client.passwd=@ASK default: descr:'OSIS CLIENT: OSIS SERVER password'
+
+#gw_mgmt_ip
+param.basenetwork.gw_mgmt_ip=@ASK default:10.199.0.2/22 descr:'IP for gw_mgmt'

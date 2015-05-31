@@ -5,7 +5,7 @@ dep.args.basenetwork         =
     netconfig.mgmt_backplane.interfacename:'backplane1',
     netconfig.public_backplane.interfacename:'backplane1',
     netconfig.gw_mgmt_backplane.interfacename:'backplane1',
-    netconfig.gw_mgmt.ipaddr:'10.199.0.2/22',
+    netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
     netconfig.vxbackend.interfacename:'backplane1',
     netconfig.gw_mgmt.vlanid:'103',
     netconfig.mgmt.vlanid:'201',
@@ -88,7 +88,7 @@ dependencies.11 =
     domain:'mothership1',
 
 dependencies.12 =
-    name:'image_openwrt',
+    name:'image_ubuntu-1404-x64',
     domain:'mothership1',
 
 platform.supported=generic,
