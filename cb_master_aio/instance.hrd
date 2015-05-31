@@ -1,0 +1,5 @@
+param.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
+param.publicip.gateway = @ASK type:str
+param.publicip.netmask = @ASK type:str
+param.publicip.start = @ASK type:str
+param.publicip.end = @ASK type:str
