@@ -88,6 +88,10 @@ dependencies.11 =
     domain:'mothership1',
 
 dependencies.12 =
+    name:'libcloudlibvirt',
+    domain:'mothership1',
+
+dependencies.13 =
     name:'image_ubuntu-1404-x64',
     domain:'mothership1',
 
