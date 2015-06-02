@@ -14,14 +14,14 @@ dep.args.basenetwork         =
 
 dep.args.portal_client       =
     param.secret:'$(instance.param.rootpasswd)',
-    param.addr:'$(instance.portal_client.addr)',
-    param.port:'$(instance.portal_client.port)',
+    param.addr:'$(instance.param.master.addr)',
+    param.port:82,
 
 dep.args.osis_client =
-    param.osis.client.addr:'$(instance.param.osis.client.addr)',
-    param.osis.client.port:$(instance.param.osis.client.port),
-    param.osis.client.login:'$(instance.param.osis.client.login)',
-    param.osis.client.passwd:'$(instance.param.rootpasswd)',
+    param.osis.client.addr:'$(instance.param.master.addr)',
+    param.osis.client.port:5544,
+    param.osis.client.login:'$(instance.osis.client.login)',
+    param.osis.client.passwd:'$(instance.rootpasswd)',
 
 dep.args.redis =
     param.disk:0,
@@ -32,8 +32,17 @@ dep.args.redis =
 
 dep.args.jsagent =
     grid.id:1,
-    grid.node.roles:'node,
+    grid.node.roles:'node',
     agentcontroller.connection:'main',
+
+dep.args.vfwnode =
+    param.gw_mgmt_ip:'$(instance.param.basenetwork.gw_mgmt_ip)',
+
+dep.args.agentcontroller_client =
+    agentcontroller.client.addr:'$(instance.param.master.addr)',
+    agentcontroller.client.port:4444,
+    agentcontroller.client.login:'node',
+    agentcontroller.client.passwd:'',
 
 dependencies.1               =
     args:'dep.args.basenetwork',
@@ -74,26 +83,43 @@ dependencies.8 =
     instance:'main',
 
 dependencies.9 =
+    name:'osis_client',
+    args:'dep.args.osis_client',
+    instance:'jsagent',
+
+dependencies.10                 =
+    name:'agentcontroller_client',
+    instance:'main',
+    args:'dep.args.agentcontroller_client',
+
+dependencies.11 =
     name:'jsagent',
     instance:'main',
     args:'dep.args.jsagent',
 
-dependencies.10 =
+dependencies.12 =
     name:'compute_node',
     domain:'mothership1',
 
-dependencies.11 =
+dependencies.13 =
     name:'vfwnode',
     args:'dep.args.vfwnode',
     domain:'mothership1',
 
-dependencies.12 =
+dependencies.14 =
     name:'libcloudlibvirt',
     domain:'mothership1',
 
-dependencies.13 =
+dependencies.15 =
     name:'image_ubuntu-1404-x64',
     domain:'mothership1',
+
+dependencies.16  =
+    name:'statsd-collector',
+    args:'dep.args.statsd-collector',
+
+dep.args.statsd-collector =
+    statsd.master.host:'$(instance.param.master.addr)',
 
 platform.supported=generic,
 
