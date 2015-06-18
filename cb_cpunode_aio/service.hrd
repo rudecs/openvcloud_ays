@@ -7,9 +7,9 @@ dep.args.basenetwork         =
     netconfig.gw_mgmt_backplane.interfacename:'backplane1',
     netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
     netconfig.vxbackend.interfacename:'backplane1',
-    netconfig.gw_mgmt.vlanid:'103',
-    netconfig.mgmt.vlanid:'201',
-    netconfig.vxbackend.vlanid:'200',
+    netconfig.gw_mgmt.vlanid:'2311',
+    netconfig.mgmt.vlanid:'2312',
+    netconfig.vxbackend.vlanid:'2313',
     netconfig.public.vlanid:'0',
 
 dep.args.portal_client       =
@@ -122,4 +122,3 @@ dep.args.statsd-collector =
     statsd.master.host:'$(instance.param.master.addr)',
 
 platform.supported=generic,
-
