@@ -23,5 +23,5 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'NAS'
-        imagename = 'rockstor-2.8.0.qcow2'
+        imagename = 'rockstor-3.8.0.qcow2'
         registerImage(serviceObj, name, imagename, 'vStorage', 20)
