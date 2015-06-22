@@ -14,9 +14,13 @@ dep.args.vncproxy =
 dep.args.vfwmanager =
     portal.instance:'main',
 
+dep.args.singlenode_grid =
+    param.rootpasswd: $(instance.param.rootpasswd),
+
 dependencies.1 =
     name:'singlenode_grid',
     domain:'jumpscale',
+    args:'dep.args.singlenode_grid',
 
 dependencies.2 =
     name:'portal_client',
