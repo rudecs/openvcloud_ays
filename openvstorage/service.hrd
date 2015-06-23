@@ -1,0 +1,12 @@
+git.url='http://git.aydo.com/binary/openvstorage'
+
+git.export.1=
+    url:$(git.url),
+    source:'openvstorage/',
+    dest:'/opt/openvstorage',
+    link:False,
+
+# in next version of the service, we have to sandbox openvstorage and don't rely on apt
+ubuntu.packages = 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'ntp'
+
+platform.supported='linux64'
