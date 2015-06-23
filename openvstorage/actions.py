@@ -33,7 +33,8 @@ class Actions(ActionsBase):
             '/mnt/bfs': {
                 'device': 'DIR_ONLY',
                 'percentage': 100,
-                'label': 'backendfs'
+                'label': 'backendfs',
+                'type': 'storage'
             },
             '/mnt/cache1': {
                 'device': 'DIR_ONLY',
@@ -50,7 +51,8 @@ class Actions(ActionsBase):
             '/var/tmp': {
                 'device': 'DIR_ONLY',
                 'percentage': 100,
-                'label': 'tempfs'
+                'label': 'tempfs',
+                'type': 'storage'
             }
         }
 
