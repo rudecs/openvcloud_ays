@@ -32,7 +32,8 @@ class Actions(ActionsBase):
         dictLayout = {
             '/mnt/bfs': {
                 'device': 'DIR_ONLY',
-                'percentage': 100
+                'percentage': 100,
+                'label': 'backendfs'
             },
             '/mnt/cache1': {
                 'device': 'DIR_ONLY',
@@ -42,11 +43,14 @@ class Actions(ActionsBase):
             },
             '/mnt/cache2': {
                 'device': 'DIR_ONLY',
-                'percentage': 100
+                'percentage': 100,
+                'label': 'cache2',
+                'type': 'readcache'
             },
             '/var/tmp': {
                 'device': 'DIR_ONLY',
-                'percentage': 100
+                'percentage': 100,
+                'label': 'tempfs'
             }
         }
 
