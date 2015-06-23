@@ -51,6 +51,8 @@ class Actions(ActionsBase):
         }
 
         layout = json.dumps(dictLayout)
+        # hrd hack
+        layout = layout.replace("}}", "} }")
         serviceObj.hrd.set('instance.disklayout', layout)
 
         j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
