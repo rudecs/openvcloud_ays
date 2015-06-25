@@ -19,49 +19,30 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def prepare(self, serviceObj):
-        """
-        this gets executed before the files are downloaded & installed on appropriate spots
-        """
-        j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com unstable/", append=False)
-        j.do.execute('apt-get update')
-        j.do.execute('apt-get install -y --force-yes openvstorage-hc')
+    def installOVS(self, cl):
+        cl.file_write(location="/etc/apt/sources.list.d/openvstorage.list", content="deb http://apt-ovs.cloudfounders.com alpha/", sudo=True)
+        cl.sudo('apt-get update')
+        cl.sudo('apt-get install -y --force-yes openvstorage-hc')
 
     def configure(self, serviceObj):
-        import json
-        dictLayout = {
-            '/mnt/bfs': {
-                'device': 'DIR_ONLY',
-                'percentage': 100,
-                'label': 'backendfs',
-                'type': 'storage'
-            },
-            '/mnt/cache1': {
-                'device': 'DIR_ONLY',
-                'percentage': 100,
-                'label': 'cache1',
-                'type': 'writecache'
-            },
-            '/mnt/cache2': {
-                'device': 'DIR_ONLY',
-                'percentage': 100,
-                'label': 'cache2',
-                'type': 'readcache'
-            },
-            '/var/tmp': {
-                'device': 'DIR_ONLY',
-                'percentage': 100,
-                'label': 'tempfs',
-                'type': 'storage'
-            }
-        }
 
-        layout = json.dumps(dictLayout)
-        # hrd hack
-        layout = layout.replace("}}", "} }")
-        serviceObj.hrd.set('instance.disklayout', layout)
+        #choose if master node or extra node install
+        isMaster = False
+        if serviceObj.hrd.get('instance.masterip') == '':
+            #master install
+            isMaster = True
+            serviceObj.hrd.set('instance.joinCluster', False)
+            serviceObj.hrd.set('instance.masterip') == serviceObj.hrd.getStr('instance.targetip')
+            serviceObj.hrd.set('instance.masterpasswd') == serviceObj.hrd.getStr('instance.targetpasswd')
+        else:
+            serviceObj.hrd.set('instance.joinCluster', True)
+
+        #install OVS package on the target location, can be local or remote
+        cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
+        self.installOVS(cl)
 
         j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
         serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
+
         j.do.execute('ovs setup')
-        return True
+    return True
