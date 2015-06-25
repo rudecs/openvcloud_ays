@@ -30,7 +30,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
 
         # choose if master node or extra node install
-        if not serviceObj.hrd.getBool('instance.joincluster', False) or \
+        if not serviceObj.hrd.getBool('instance.joincluster', True) or \
            serviceObj.hrd.get('instance.masterip') == '':
             # master install
             serviceObj.hrd.set('instance.joinCluster', False)
@@ -41,6 +41,7 @@ class Actions(ActionsBase):
             # extra node install
             serviceObj.hrd.set('instance.joinCluster', True)
             cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
+	    cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
             self.installOVSRemote(cl)
 
         serviceObj.hrd.save()
@@ -50,3 +51,4 @@ class Actions(ActionsBase):
         j.do.execute('ovs setup')
 
         return True
+
