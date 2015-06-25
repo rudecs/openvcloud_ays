@@ -25,7 +25,8 @@ class Actions(ActionsBase):
 
     def installOVSLocal(self):
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
-        j.do.execute('apt-get update; apt-get install -y --force-yes openvstorage-hc')
+        j.system.platform.ubuntu.updatePackageMetadata()
+        j.system.platform.ubuntu.install('openvstorage-hc')
 
     def configure(self, serviceObj):
 
