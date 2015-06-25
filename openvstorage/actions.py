@@ -42,7 +42,7 @@ class Actions(ActionsBase):
             # extra node install
             serviceObj.hrd.set('instance.joinCluster', True)
             cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
-	    cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
+            cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
             self.installOVSRemote(cl)
 
         serviceObj.hrd.save()
