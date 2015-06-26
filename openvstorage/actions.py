@@ -20,18 +20,12 @@ class Actions(ActionsBase):
     """
 
     # in next version of the service, we have to sandbox openvstorage and don't rely on apt
-    packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
 
-    def installOVSRemote(self, cl):
-        cl.file_write(location="/etc/apt/sources.list.d/openvstorage.list", content="deb http://apt-ovs.cloudfounders.com alpha/", sudo=True)
-        cl.sudo('apt-get update')
-        cl.sudo('apt-get install -y --force-yes %s' % ' '.join(self.packages))
-
-    def installOVSLocal(self):
+    def installOVS(self):
+        packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
-        for package in packages:
-            j.system.platform.ubuntu.install(self.package)
+        j.system.platform.ubuntu.install(' '.join(packages))
 
     def configure(self, serviceObj):
 
@@ -42,15 +36,12 @@ class Actions(ActionsBase):
             serviceObj.hrd.set('instance.joinCluster', False)
             serviceObj.hrd.set('instance.masterip', serviceObj.hrd.getStr('instance.targetip'))
             serviceObj.hrd.set('instance.masterpasswd', serviceObj.hrd.getStr('instance.targetpasswd'))
-            self.installOVSLocal()
         else:
             # extra node install
             serviceObj.hrd.set('instance.joinCluster', True)
-            cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
-            cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
-            self.installOVSRemote(cl)
 
         serviceObj.hrd.save()
+        self.installOVS()
 
         j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
         serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")

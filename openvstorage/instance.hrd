@@ -1,5 +1,4 @@
 targetip=@ASK type:str  descr:'OVS: Target node ip'
-targetuser=@ASK type:str descr:'OVS: Target user name'
 targetpasswd=@ASK type:str  descr:'OVS: Target node password'
 clustername=@ASK type:str default:'kvm131' descr:'OVS: Cluster name'
 masterip=@ASK default:'' type:str  descr:'OVS: Master Host Ip (leave empty for master installation)'
