@@ -20,7 +20,7 @@ class Actions(ActionsBase):
     """
 
     # in next version of the service, we have to sandbox openvstorage and don't rely on apt
-    packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst' 'openvstorage-hc']
+    packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
 
     def installOVSRemote(self, cl):
         cl.file_write(location="/etc/apt/sources.list.d/openvstorage.list", content="deb http://apt-ovs.cloudfounders.com alpha/", sudo=True)
