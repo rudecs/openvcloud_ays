@@ -6,7 +6,5 @@ git.export.1=
     dest:'/opt/openvstorage',
     link:False,
 
-# in next version of the service, we have to sandbox openvstorage and don't rely on apt
-ubuntu.packages = 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'ntp'
 
 platform.supported='linux64'

@@ -19,37 +19,42 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
+    # in next version of the service, we have to sandbox openvstorage and don't rely on apt
+    packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst' 'openvstorage-hc']
+
     def installOVSRemote(self, cl):
         cl.file_write(location="/etc/apt/sources.list.d/openvstorage.list", content="deb http://apt-ovs.cloudfounders.com alpha/", sudo=True)
-        cl.sudo('apt-get update; apt-get install -y --force-yes openvstorage-hc')
+        cl.sudo('apt-get update')
+        cl.sudo('apt-get install -y --force-yes %s' % ' '.join(packages))
 
     def installOVSLocal(self):
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
-        j.system.platform.ubuntu.install('openvstorage-hc')
+        for package in packages:
+            j.system.platform.ubuntu.install(package)
 
     def configure(self, serviceObj):
 
-        # choose if master node or extra node install
-        if not serviceObj.hrd.getBool('instance.joincluster', True) or \
-           serviceObj.hrd.get('instance.masterip') == '':
-            # master install
-            serviceObj.hrd.set('instance.joinCluster', False)
-            serviceObj.hrd.set('instance.masterip', serviceObj.hrd.getStr('instance.targetip'))
-            serviceObj.hrd.set('instance.masterpasswd', serviceObj.hrd.getStr('instance.targetpasswd'))
-            self.installOVSLocal()
-        else:
-            # extra node install
-            serviceObj.hrd.set('instance.joinCluster', True)
-            cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
-            cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
-            self.installOVSRemote(cl)
+        def config():
+            # choose if master node or extra node install
+            if not serviceObj.hrd.getBool('instance.joincluster', True) or \
+               serviceObj.hrd.get('instance.masterip') == '':
+                # master install
+                serviceObj.hrd.set('instance.joinCluster', False)
+                serviceObj.hrd.set('instance.masterip', serviceObj.hrd.getStr('instance.targetip'))
+                serviceObj.hrd.set('instance.masterpasswd', serviceObj.hrd.getStr('instance.targetpasswd'))
+                self.installOVSLocal()
+            else:
+                # extra node install
+                serviceObj.hrd.set('instance.joinCluster', True)
+                cl = j.remote.cuisine.connect(serviceObj.hrd.get('instance.targetip'), 22, serviceObj.hrd.get('instance.targetpasswd'))
+                cl.fabric.api.env['user'] = serviceObj.hrd.get('instance.targetuser', 'root')
+                self.installOVSRemote(cl)
 
-        serviceObj.hrd.save()
+            serviceObj.hrd.save()
 
-        j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
-        serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
-        j.do.execute('ovs setup')
+            j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
+            serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
+            j.do.execute('ovs setup')
 
         return True
-
