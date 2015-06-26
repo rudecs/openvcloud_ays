@@ -122,3 +122,11 @@ dep.args.statsd-collector =
     statsd.master.host:'$(instance.param.master.addr)',
 
 platform.supported=generic,
+
+service.git.export.1 =
+    dest:'/opt/nginx/cfg/sites-enabled/fwnode',
+    link:'False',
+    overwrite:'True',
+    revision:,
+    source:'apps/nginx/fwnode',
+    url:'https://git.aydo.com/0-complexity/openvcloud.git',
