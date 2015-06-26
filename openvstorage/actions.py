@@ -25,13 +25,13 @@ class Actions(ActionsBase):
     def installOVSRemote(self, cl):
         cl.file_write(location="/etc/apt/sources.list.d/openvstorage.list", content="deb http://apt-ovs.cloudfounders.com alpha/", sudo=True)
         cl.sudo('apt-get update')
-        cl.sudo('apt-get install -y --force-yes %s' % ' '.join(packages))
+        cl.sudo('apt-get install -y --force-yes %s' % ' '.join(self.packages))
 
     def installOVSLocal(self):
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
         for package in packages:
-            j.system.platform.ubuntu.install(package)
+            j.system.platform.ubuntu.install(self.package)
 
     def configure(self, serviceObj):
 
