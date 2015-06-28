@@ -1,4 +1,5 @@
 from JumpScale import j
+import json
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
 
@@ -45,6 +46,23 @@ class Actions(ActionsBase):
 
         j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
         serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
+
+        config = None
+        with open('/opt/OpenvStorage/config/ovs.json', 'r') as f:
+            from ipdb import set_trace;set_trace()
+            config = json.load(f)
+            oauth = {
+                'mode': 'remote',
+                'authorize_uri': '$(instance.oauth.authorize_uri)',
+                'token_uri': '$(instance.oauth.token_uri)',
+                'client_id': '$(instance.oauth.client_id)',
+                'client_secret': '$(instance.oauth.authorize_uri)',
+                'scope': '$(instance.oauth.scope)'
+            }
+            config['webapps']['oauth2'] = oauth
+        with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
+            json.dump(config, f, indent=4)
+
         j.do.execute('ovs setup')
 
         return True
