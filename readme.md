@@ -21,7 +21,7 @@ mknod /dev/kvm c 10 232
 
 ### Install Jumpscale
 ```sh
-curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh
+curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh
 ```
 
 ### Add openvcloud domain
@@ -58,7 +58,7 @@ Please provide value for param.vncproxy.publichostport of type str
 ## CPU Node
 
 ### Install Jumpscale
-```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install_python_web.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh```
 
 ### Add openvcloud domain
 edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
