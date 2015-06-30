@@ -21,19 +21,17 @@ class Actions(ActionsBase):
 
 
     def configure(self, serviceObj):
-        from JumpScale import j
-        import JumpScale.grid.osis
+        contents = "\n  /mnt/vmstor/** rw,\n  /mnt/vmstor/**/** rw,"
+        j.system.fs.writeFile('/etc/apparmor.d/abstractions/libvirt-qemu', contents, True)
 
-        contents =  "\n  /mnt/vmstor/** rw,\n  /mnt/vmstor/**/** rw,"
-        j.system.fs.writeFile('/etc/apparmor.d/abstractions/libvirt-qemu',contents,True)
-
-        osis = j.clients.osis.getNamespace('cloudbroker')
+        ccl = j.clients.osis.getNamespace('cloudbroker')
+        lcl = j.clients.osis.getNamespace('libvirt')
 
         oob_interface = 'backplane1'
         ipaddress = j.system.net.getIpAddress(oob_interface)[0][0]
 
-        #create a new stack:
-        if not osis.stack.search({'referenceId': str(j.application.whoAmI.nid), 'gid': j.application.whoAmI.gid})[0]:
+        # create a new stack:
+        if not ccl.stack.search({'referenceId': str(j.application.whoAmI.nid), 'gid': j.application.whoAmI.gid})[0]:
             stack = dict()
             stack['id'] = None
             stack['apiUrl'] = 'qemu+ssh://%s/system' % ipaddress
@@ -43,6 +41,16 @@ class Actions(ActionsBase):
             stack['name'] = j.system.net.getHostname()
             stack['gid'] = j.application.whoAmI.gid
             stack['referenceId'] = str(j.application.whoAmI.nid)
-            osis.stack.set(stack)
+            ccl.stack.set(stack)
+
+        # create resourceprovider
+        agentid = j.application.getAgentId()
+        if not lcl.resourceprovider.exists(agentid):
+            rp = lcl.resourceprovider.new()
+            rp.cloudUnitType = 'CU'
+            rp.guid = agentid
+            rp.gid = j.application.whoAmi.gid
+            rp.id = str(j.application.whoAmi.nid)
+            lcl.resourceprovider.set(rp)
 
         return True
