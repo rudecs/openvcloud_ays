@@ -49,8 +49,8 @@ class Actions(ActionsBase):
             rp = lcl.resourceprovider.new()
             rp.cloudUnitType = 'CU'
             rp.guid = agentid
-            rp.gid = j.application.whoAmi.gid
-            rp.id = str(j.application.whoAmi.nid)
+            rp.gid = j.application.whoAmI.gid
+            rp.id = str(j.application.whoAmI.nid)
             lcl.resourceprovider.set(rp)
 
         return True
