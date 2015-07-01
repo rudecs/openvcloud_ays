@@ -35,20 +35,20 @@ class Actions(ActionsBase):
         """
         binarysecret = os.urandom(256)
         cookie_store_secret = base64.b64encode(binarysecret)
-        serviceObj.hrd.set("oauth.cookie_store_secret", cookie_store_secret)
+        serviceObj.hrd.set("instance.oauth.cookie_store_secret", cookie_store_secret)
         serviceObj.hrd.applyOnFile("$(system.paths.base)/apps/oauthserver/settings.toml")
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("oauth.clients.dcpm.secret", clientsecret)
+        serviceObj.hrd.set("instance.oauth.clients.dcpm.secret", clientsecret)
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("oauth.clients.ovs.secret", clientsecret)
+        serviceObj.hrd.set("instance.oauth.clients.ovs.secret", clientsecret)
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("oauth.clients.portal.secret", clientsecret)
+        serviceObj.hrd.set("instance.oauth.clients.portal.secret", clientsecret)
 
         serviceObj.hrd.applyOnFile("$(system.paths.base)/apps/oauthserver/clients.toml")
 
