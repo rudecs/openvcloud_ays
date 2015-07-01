@@ -31,7 +31,7 @@ git.export.4=
 
 
 process.1=
-    cmd:'oauthserver',
+    cmd:'./oauthserver',
     args: '',
     prio:20,
     env:,
