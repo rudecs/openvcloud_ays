@@ -23,6 +23,13 @@ git.export.3=
     link:False,
 
 
+git.export.4=
+    url:$(git.url),
+    source:'apps/oauthserver/clients.toml',
+    dest:'$(system.paths.base)/apps/oauthserver/clients.toml',
+    link:False,
+
+
 process.1=
     cmd:'oauthserver',
     args: '',
