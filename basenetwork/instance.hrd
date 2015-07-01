@@ -9,5 +9,5 @@ netconfig.gw_mgmt.vlanid=@ASK type:str
 netconfig.mgmt.vlanid=@ASK type:str
 netconfig.vxbackend.vlanid=@ASK type:str
 netconfig.public.vlanid=@ASK type:str
-netconfig.vxbackend.ipaddr=@ASK type:str default:240.0.0.1/16
+netconfig.vxbackend.ipaddr=@ASK type:str default:10.240.0.1/16
 
