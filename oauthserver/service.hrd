@@ -1,0 +1,41 @@
+#source $(system.paths.base)/env.sh;/$(system.paths.base)/bin/
+
+#base of repo where code or files are e.g. http://git.aydo.com/binary/base
+git.url='https://git.aydo.com/binary/openvcloud/'
+#known var's are: $root,$base,$cfg,$jslib,$pylib,$lib
+git.export.1=
+    url:$(git.url),
+    source:'apps/oauthserver/oauthserver',
+    dest:'$(system.paths.base)/apps/oauthserver/oauthserver',
+    link:True,
+
+
+git.export.2=
+    url:$(git.url),
+    source:'apps/oauthserver/html',
+    dest:'$(system.paths.base)/apps/oauthserver/html',
+    link:True,
+
+git.export.3=
+    url:$(git.url),
+    source:'apps/oauthserver/settings.toml',
+    dest:'$(system.paths.base)/apps/oauthserver/settings.toml',
+    link:False,
+
+
+process.1=
+    cmd:'oauthserver',
+    args: '',
+    prio:20,
+    env:,
+    cwd:'$(system.paths.base)/apps/oauthserver/',
+    timeout_start:20,
+    timeout_stop:20,
+    ports:4444,
+    startupmanager:tmux,
+    filterstr:'oauthserver'
+
+platform.supported=generic,
+
+#how many instances can be installed of this package, if 1 the instance name is always 'main'
+instances.maxnr=1
