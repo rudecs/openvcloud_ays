@@ -38,7 +38,7 @@ process.1=
     cwd:'$(system.paths.base)/apps/oauthserver/',
     timeout_start:20,
     timeout_stop:20,
-    ports:4444,
+    ports:8010,
     startupmanager:tmux,
     filterstr:'oauthserver'
 
