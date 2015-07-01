@@ -81,6 +81,10 @@ dependencies.14 =
     domain:'mothership1',
     args:'dep.args.vfwmanager',
 
+dependencies.15 =
+    name:'oauthserver',
+    domain:'mothership1',
+
 platform.supported=generic,
 
 service.git.export.1 =
