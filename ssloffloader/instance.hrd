@@ -1,0 +1,3 @@
+dcpm.servername = @ASK type:str default:'dcpmcustomer.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
+dcpm.internalhost = @ASK type:str default:'192.168.103.251:80'  descr:'internal server/port DCPM is running on'
+master.ipadress = @ASK type:str default:'192.168.103.254'  descr:'ipaddress of the master node'

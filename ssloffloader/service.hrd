@@ -1,0 +1,29 @@
+#source $(system.paths.base)/env.sh;/$(system.paths.base)/bin/
+
+#known var's are: $root,$base,$cfg,$jslib,$pylib,$lib
+
+
+dependencies.1 =
+    name:'nginx',
+    domain:'jumpscale',
+
+git.url='https://git.aydo.com/binary/openvcloud_ssloffloader/'
+#git.export.1=
+#    url:$(git.url),
+#    source:'ovc',
+#    dest:'$(system.paths.base)/apps/oauthserver/oauthserver',
+#    link:False,
+
+git.certurl='https://git.aydo.com/protected/certificates_demo.greenitglobe.com'
+#git.export.2=
+#    url:$(git.certurl),
+#    source:'/',
+#    dest:'$(system.paths.base)/apps/oauthserver/html',
+#    link:True,
+
+
+
+platform.supported=generic,
+
+#how many instances can be installed of this package, if 1 the instance name is always 'main'
+instances.maxnr=1
