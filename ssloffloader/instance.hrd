@@ -3,4 +3,4 @@ master.ipadress = @ASK type:str default:'192.168.103.254'  descr:'ipaddress of t
 dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
 dcpm.internalhost = @ASK type:str default:'192.168.103.252:80'  descr:'internal server/port DCPM is running on'
 ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at'
-defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at'
+defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield should be exposed at'
