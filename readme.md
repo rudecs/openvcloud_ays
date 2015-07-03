@@ -74,6 +74,13 @@ metadata.mothership1           =
 ### Install ssloffloader
 ```ays install -n ssloffloader```
 
+```
+Servername DCPM is exposed at [dcpmcustomer.demo.greenitglobe.com]: dcpm3.demo.greenitglobe.com #The DNS entry for dcpm
+internal server/port DCPM is running on
+ [192.168.103.251:80]: 192.168.103.252:80
+ipaddress of the master node [192.168.103.254]:
+```
+
 ## CPU Node
 
 ### Install Jumpscale
