@@ -47,7 +47,7 @@ dep.args.agentcontroller_client =
 dependencies.1               =
     args:'dep.args.basenetwork',
     name:'basenetwork',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.2 =
     name:'redis',
@@ -56,11 +56,11 @@ dependencies.2 =
 
 dependencies.3 =
     name:'compute_kvm_base',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.4 =
     name:'defaultcomputenodeconfig',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.5 =
     name:'portal_client',
@@ -99,20 +99,20 @@ dependencies.11 =
 
 dependencies.12 =
     name:'compute_node',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.13 =
     name:'vfwnode',
     args:'dep.args.vfwnode',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.14 =
     name:'libcloudlibvirt',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.15 =
     name:'image_ubuntu-1404-x64',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.16  =
     name:'statsd-collector',

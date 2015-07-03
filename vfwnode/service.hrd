@@ -1,6 +1,6 @@
 dependencies.1               =
     name:'openwrt-remote-manager',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 git.export.1=
     url:'http://git.aydo.com/binary/routeros.git',
