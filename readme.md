@@ -75,10 +75,14 @@ metadata.mothership1           =
 ```ays install -n ssloffloader```
 
 ```
-Servername DCPM is exposed at [dcpmcustomer.demo.greenitglobe.com]: dcpm3.demo.greenitglobe.com #The DNS entry for dcpm
+ost for which the ssl is being offloaded
+ [environment.demo.greenitglobe.com]: demo3.demo.greenitglobe.com
+ipaddress of the master node [192.168.103.254]:
+servername DCPM is exposed at [dcpmenvironment.demo.greenitglobe.com]: dcpm3.demo.greenitglobe.com
 internal server/port DCPM is running on
  [192.168.103.251:80]: 192.168.103.252:80
-ipaddress of the master node [192.168.103.254]:
+servername OVS is exposed at [ovsenvironment.demo.greenitglobe.com]: ovs3.demo.greenitglobe.com
+servername OVS is exposed at [defenseenvironment.demo.greenitglobe.com]: defense3.demo.greenitglobe.com
 ```
 
 ## CPU Node
