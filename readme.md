@@ -55,6 +55,25 @@ Please provide value for param.vncproxy.publichostport of type str
 : 192.168.57.7:8091
 ```
 
+## SSL offloader
+
+### Install Jumpscale
+```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+
+### Add openvcloud domain
+edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
+```
+metadata.jumpscale             =
+    url:'https://github.com/Jumpscale/ays_jumpscale7',
+
+# add this domain
+metadata.mothership1           =
+    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
+```
+
+### Install openvcloud_ssloffloader
+```ays install -n openvcloud_ssloffloader```
+
 ## CPU Node
 
 ### Install Jumpscale
