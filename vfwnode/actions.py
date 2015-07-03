@@ -21,7 +21,7 @@ class Actions(ActionsBase):
     """
 
     def prepare(self, serviceObj):
-        openwrt_manager = j.atyourservice.get('mothership1', 'openwrt-remote-manager')
+        openwrt_manager = j.atyourservice.get('openvcloud', 'openwrt-remote-manager')
         openwrt_manager.build()
 
     def configure(self,  serviceObj):

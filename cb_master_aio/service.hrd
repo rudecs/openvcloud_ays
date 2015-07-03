@@ -29,43 +29,43 @@ dependencies.2 =
 
 dependencies.3 =
     name:'cloudbroker_model',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.4 =
     name:'cloudbroker_jumpscripts',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.5 =
     name:'billingenginelib',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.6 =
     name:'billingengine',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.7 =
     name:'cloudbrokerlib',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.8 =
     name:'libcloudlibvirt',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.9 =
     name:'cloudbroker',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.10 =
     name:'ms1_frontend',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.11 =
     name:'cbportal',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.12 =
     name:'gridportal',
@@ -74,16 +74,16 @@ dependencies.12 =
 
 dependencies.13 =
     name:'libvirtsizes',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.14 =
     name:'vfwmanager',
-    domain:'mothership1',
+    domain:'openvcloud',
     args:'dep.args.vfwmanager',
 
 dependencies.15 =
     name:'oauthserver',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 platform.supported=generic,
 

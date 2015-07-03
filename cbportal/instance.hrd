@@ -1,4 +1,4 @@
 portal.instance=@ASK descr:give__instance__name__of__portal__to__be__used__to__run__in
-mothership1.cloudbroker.signupcredit=5
-mothership1.cloudbroker.notifysupport=0
+openvcloud.cloudbroker.signupcredit=5
+openvcloud.cloudbroker.notifysupport=0
 

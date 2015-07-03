@@ -1,8 +1,8 @@
 portal.instance=@ASK descr:give__instance__name__of__portal__to__be__used__to__run__in
-mothership1.cloudbroker.paypal.sandbox=1
-mothership1.cloudbroker.paypal.apiuser=AR3m7BDSytnZsBY_dSQr23VJ1E_63LQrHr7jZ6OIchco3RmoFjhNRDhLuuUT
-mothership1.cloudbroker.paypal.apisecret=EKcPPRDv9IBNQ6g0io06kO1GvSZtWRA0WdM3BGOMRp4qqSRfNiZ4eqLaq8g1
-mothership1.cloudbroker.creditcheck.daysofcreditrequired=4
-mothership1.cloudbroker.defense_proxy=@ASK type:str
+openvcloud.cloudbroker.paypal.sandbox=1
+openvcloud.cloudbroker.paypal.apiuser=AR3m7BDSytnZsBY_dSQr23VJ1E_63LQrHr7jZ6OIchco3RmoFjhNRDhLuuUT
+openvcloud.cloudbroker.paypal.apisecret=EKcPPRDv9IBNQ6g0io06kO1GvSZtWRA0WdM3BGOMRp4qqSRfNiZ4eqLaq8g1
+openvcloud.cloudbroker.creditcheck.daysofcreditrequired=4
+openvcloud.cloudbroker.defense_proxy=@ASK type:str
 cloudbroker.portalurl=@ASK type:str
 

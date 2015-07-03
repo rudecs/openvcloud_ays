@@ -24,7 +24,7 @@ class Actions(ActionsBase):
         import libvirt
         #configure the package
 
-        basenetwork = j.atyourservice.findServices('mothership1', 'basenetwork')[0]
+        basenetwork = j.atyourservice.findServices('openvcloud', 'basenetwork')[0]
         # basenetwork = jpd.getInstance('main')
         hrd = basenetwork.hrd
 

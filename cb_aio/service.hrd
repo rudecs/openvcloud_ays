@@ -3,7 +3,7 @@ git.url='https://git.aydo.com/0-complexity/openvcloud.git'
 dependencies.1               =
     args:'dep.args.basenetwork',
     name:'basenetwork',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dep.args.basenetwork         =
     netconfig.backplanes.names:'backplane1',
@@ -30,11 +30,11 @@ dep.args.vncproxy =
 
 dependencies.2 =
     name:'compute_kvm_base',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.3 =
     name:'defaultcomputenodeconfig',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.4 =
     name:'singlenode_portal',
@@ -47,43 +47,43 @@ dependencies.5 =
 
 dependencies.6 =
     name:'cloudbroker_model',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.7 =
     name:'cloudbroker_jumpscripts',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.8 =
     name:'billingenginelib',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.9 =
     name:'billingengine',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.10 =
     name:'cloudbrokerlib',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.11 =
     name:'libcloudlibvirt',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.12 =
     name:'cloudbroker',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.13 =
     name:'ms1_frontend',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.14 =
     name:'cbportal',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.15 =
     name:'gridportal',
@@ -93,31 +93,31 @@ dependencies.15 =
 dependencies.16 =
     name:'vfwmanager',
     args:'dep.args.portal',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.17 =
     name:'vfwnode',
     args:'dep.args.vfwnode',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dep.args.vfwnode =
     param.gw_mgmt_ip:'10.199.0.2/22',
 
 dependencies.18 =
     name:'compute_node',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.19 =
     name:'image_openwrt',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.20 =
     name:'libvirtsizes',
-    domain:'mothership1',
+    domain:'openvcloud',
 
 dependencies.21 =
     name:'vncproxy',
-    domain:'mothership1',
+    domain:'openvcloud',
     args:'dep.args.vncproxy',
 
 platform.supported=generic,
