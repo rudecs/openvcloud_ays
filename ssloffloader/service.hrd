@@ -8,18 +8,18 @@ dependencies.1 =
     domain:'jumpscale',
 
 git.url='https://git.aydo.com/binary/openvcloud_ssloffloader/'
-#git.export.1=
-#    url:$(git.url),
-#    source:'ovc',
-#    dest:'$(system.paths.base)/apps/oauthserver/oauthserver',
-#    link:False,
+git.export.1=
+    url:$(git.url),
+    source:'ovc',
+    dest:'/opt/nginx/cfg/sites-enabled/ovc',
+    link:False,
 
 git.certurl='https://git.aydo.com/protected/certificates_demo.greenitglobe.com'
-#git.export.2=
-#    url:$(git.certurl),
-#    source:'/',
-#    dest:'$(system.paths.base)/apps/oauthserver/html',
-#    link:True,
+git.export.2=
+    url:$(git.certurl),
+    source:'',
+    dest:'/opt/ngxinx/cfg/ssl',
+    link:True,
 
 
 

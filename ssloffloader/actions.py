@@ -32,7 +32,9 @@ class Actions(ActionsBase):
         this step is used to do configuration steps to the platform
         after this step the system will try to start the jpackage if anything needs to be started
         """
-
+        serviceObj.hrd.applyOnFile("/opt/nginx/cfg/sites-enabled/ovc")
+        nginx = j.atyourservice.get(name='nginx', instance='main')
+        nginx.restart()
         return True
 
 
