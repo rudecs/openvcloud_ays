@@ -71,8 +71,8 @@ metadata.mothership1           =
     url:'https://git.aydo.com/0-complexity/openvcloud_ays',
 ```
 
-### Install openvcloud_ssloffloader
-```ays install -n openvcloud_ssloffloader```
+### Install ssloffloader
+```ays install -n ssloffloader```
 
 ## CPU Node
 
