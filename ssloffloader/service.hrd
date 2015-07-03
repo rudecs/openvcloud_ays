@@ -18,7 +18,7 @@ git.certurl='https://git.aydo.com/protected/certificates_demo.greenitglobe.com'
 git.export.2=
     url:$(git.certurl),
     source:'certs',
-    dest:'/opt/ngxinx/cfg/ssl',
+    dest:'/opt/nginx/cfg/ssl',
     link:True,
 
 
