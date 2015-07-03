@@ -74,15 +74,18 @@ metadata.openvcloud           =
 ### Install ssloffloader
 ```ays install -n ssloffloader```
 
+Configuration example with the netlog customer:
 ```
-ost for which the ssl is being offloaded
- [environment.demo.greenitglobe.com]: demo3.demo.greenitglobe.com
-ipaddress of the master node [192.168.103.254]:
-servername DCPM is exposed at [dcpmenvironment.demo.greenitglobe.com]: dcpm3.demo.greenitglobe.com
+host for which the ssl is being offloaded
+ [environment.demo.greenitglobe.com]: netlog.demo.greenitglobe.com
+ipaddress of the master node [192.168.103.254]: 192.168.103.248
+servername DCPM is exposed at [dcpmenvironment.demo.greenitglobe.com]: dcpmnetlog.demo.greenitglobe.com
 internal server/port DCPM is running on
- [192.168.103.251:80]: 192.168.103.252:80
-servername OVS is exposed at [ovsenvironment.demo.greenitglobe.com]: ovs3.demo.greenitglobe.com
-servername OVS is exposed at [defenseenvironment.demo.greenitglobe.com]: defense3.demo.greenitglobe.com
+ [192.168.103.252:80]: 192.168.103.249
+servername OVS is exposed at [ovsenvironment.demo.greenitglobe.com]: ovsnetlog.demo.greenitglobe.com
+hostname the defenseshield should be exposed at
+ [defenseenvironment.demo.greenitglobe.com]: defensenetlog.demo.greenitglobe.com
+
 ```
 
 ## CPU Node
