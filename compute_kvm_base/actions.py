@@ -1,6 +1,7 @@
 from JumpScale import j
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     """
@@ -10,11 +11,43 @@ class Actions(ActionsBase):
     step2: check_requirements action
     step3: download files & copy on right location (hrd info is used)
     step4: configure action
-    step5: check_uptime_local to see if process stops  (uses timeout $process.stop.timeout)
-    step5b: if check uptime was true will do stop action and retry the check_uptime_local check
-    step5c: if check uptime was true even after stop will do halt action and retry the check_uptime_local check
+    step5: check_uptime_local to see if process stops  (uses timeout
+        $process.stop.timeout)
+    step5b: if check uptime was true will do stop action and retry the
+        check_uptime_local check
+    step5c: if check uptime was true even after stop will do halt action and
+        retry the check_uptime_local check
     step6: use the info in the hrd to start the application
     step7: do check_uptime_local to see if process starts
     step7b: do monitor_local to see if package healthy installed & running
-    step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
+    step7c: do monitor_remote to see if package healthy installed & running,
+        but this time test is done from central location
     """
+
+    def configure(self, service):
+        """
+        sed -r '/#?\s*user\s*=\s*"root"/{s//user = "ovs"/}'
+            /etc/libvirt/qemu.conf
+        """
+
+        assert j.system.unix.unixUserExists('ovs'), '"ovs" user does not exist'
+        assert j.system.unix.unixGroupExists('kvm'), \
+            '"kvm" group does not exist"'
+
+        # make sure that quemu user is ovs, not root
+        sed = 'sed -r -i.bak \'/#?\s*user\s*=\s*"root"/{s//user = "ovs"/}\' ' \
+            '/etc/libvirt/qemu.conf'
+
+        j.system.process.execute(sed)
+
+        # make sure that quemu user is ovs, not root
+        sed = 'sed -r -i.bak \'/#?\s*group\s*=.+/{s//group = "ovs"/}\' ' \
+            '/etc/libvirt/qemu.conf'
+
+        j.system.process.execute(sed)
+
+        # add ovs user to kvm group
+        j.system.unix.addUserToGroup('ovs', 'kvm')
+
+        # restart libvirt
+        j.system.process.execute('/etc/init.d/libvirt-bin restart')
