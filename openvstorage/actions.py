@@ -23,7 +23,7 @@ class Actions(ActionsBase):
     # in next version of the service, we have to sandbox openvstorage and don't rely on apt
 
     def installOVS(self):
-        packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
+        packages = ['ntp', 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
         j.system.platform.ubuntu.install(' '.join(packages))
