@@ -39,3 +39,11 @@ git.export.4=
 
 platform.supported=generic
 
+dependencies.1 = 
+    name:'python_portal',
+    domain:'jumpscale',
+
+depencencies.2 = 
+    name:'portal_client',
+    domain:'jumpscale',
+    instance:'$(instance.param.portal.connection)',
