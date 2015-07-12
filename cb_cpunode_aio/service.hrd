@@ -110,10 +110,6 @@ dependencies.14 =
     name:'libcloudlibvirt',
     domain:'openvcloud',
 
-dependencies.15 =
-    name:'image_ubuntu-1404-x64',
-    domain:'openvcloud',
-
 dependencies.16  =
     name:'statsd-collector',
     args:'dep.args.statsd-collector',
