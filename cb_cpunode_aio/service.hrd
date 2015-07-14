@@ -114,6 +114,10 @@ dependencies.16  =
     name:'statsd-collector',
     args:'dep.args.statsd-collector',
 
+dependencies.17 =
+    name:'ovs_branding',
+    domain:'openvcloud',
+
 dep.args.statsd-collector =
     statsd.master.host:'$(instance.param.master.addr)',
 
