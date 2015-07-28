@@ -25,7 +25,7 @@ class Actions(ActionsBase):
         import JumpScale.portal
         cl = j.clients.portal.getByInstance("$(instance.param.portal.connection)")
         actor = cl.getActor('libcloud', 'libvirt')
-        myurl = "http://$(instance.param.vncproxy.publichostport)/vnc_auto.html?token="
+        myurl = "$(instance.param.vncproxy.publichostport)/vnc_auto.html?token="
         gid = "$(grid.id)"
         if myurl not in actor.listVNC(gid):
             actor.registerVNC(myurl, gid)
