@@ -118,6 +118,10 @@ dependencies.17 =
     name:'ovs_branding',
     domain:'openvcloud',
 
+dependencies.18 =
+    name:'nginx',
+    domain:'jumpscale'
+
 dep.args.statsd-collector =
     statsd.master.host:'$(instance.param.master.addr)',
 
