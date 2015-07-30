@@ -15,6 +15,7 @@ env.procces.1 =
 
 git.export.1=
     url:'http://github.com/0-complexity/noVNC',
+    branch:'0.5.1'
     source:'vnc_auto.html',
     dest:'$(system.paths.app)/vncproxy/',
     link:False,
