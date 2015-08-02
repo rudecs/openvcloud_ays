@@ -22,6 +22,13 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         import JumpScale.grid
         import JumpScale.portal
+        # set billing role
+        roles = j.application.config.getList('grid.node.roles')
+        if 'billing' not in roles:
+            roles.append('billing')
+            j.application.config.set('grid.node.roles', roles)
+            j.atyourservice.get(name='jsagent', instance='main').restart()
+
         ccl = j.clients.osis.getNamespace('cloudbroker')
         # set location
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
