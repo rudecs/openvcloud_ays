@@ -1,96 +1,109 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
+dep.args.oauthserver           =
+    dcpm.url:'$(instance.dcpm.url)',
+    oauth.url:'$(instance.oauth.url)',
+    ovs.url:'$(instance.ovs.url)',
+    portal.url:'$(instance.portal.url)',
 
-dep.args.portal         =
+dep.args.portal                =
     portal.instance:'main',
 
-dep.args.portal_client       =
+dep.args.portal_client         =
     param.addr:'localhost',
-    param.port:82,
+    param.port:'82',
     param.secret:'$(instance.param.rootpasswd)',
 
-dep.args.vncproxy =
-    param.portal.connection:'main',
+dep.args.singlenode_grid       =
+    param.rootpasswd:'$(instance.param.rootpasswd)',
 
-dep.args.vfwmanager =
+dep.args.vfwmanager            =
     portal.instance:'main',
 
-dep.args.singlenode_grid =
-    param.rootpasswd: $(instance.param.rootpasswd),
+dep.args.vncproxy              =
+    param.portal.connection:'main',
 
-dependencies.1 =
-    name:'singlenode_grid',
-    domain:'jumpscale',
+dependencies.1                 =
     args:'dep.args.singlenode_grid',
+    domain:'jumpscale',
+    name:'singlenode_grid',
 
-dependencies.2 =
-    name:'portal_client',
+dependencies.10                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'ms1_frontend',
+
+dependencies.11                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'cbportal',
+
+dependencies.12                =
+    args:'dep.args.portal',
+    domain:'jumpscale',
+    name:'gridportal',
+
+dependencies.13                =
+    domain:'openvcloud',
+    name:'libvirtsizes',
+
+dependencies.14                =
+    args:'dep.args.vfwmanager',
+    domain:'openvcloud',
+    name:'vfwmanager',
+
+dependencies.15                =
+    args:'dep.args.oauthserver',
+    domain:'openvcloud',
+    name:'oauthserver',
+
+dependencies.16                =
+    domain:'openvcloud',
+    name:'portal_branding',
+
+dependencies.2                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
+    name:'portal_client',
 
-dependencies.3 =
+dependencies.3                 =
+    domain:'openvcloud',
     name:'cloudbroker_model',
-    domain:'openvcloud',
 
-dependencies.4 =
+dependencies.4                 =
+    domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
-    domain:'openvcloud',
 
-dependencies.5 =
+dependencies.5                 =
+    domain:'openvcloud',
     name:'billingenginelib',
-    domain:'openvcloud',
 
-dependencies.6 =
+dependencies.6                 =
+    args:'dep.args.portal',
+    domain:'openvcloud',
     name:'billingengine',
-    args:'dep.args.portal',
-    domain:'openvcloud',
 
-dependencies.7 =
+dependencies.7                 =
+    domain:'openvcloud',
     name:'cloudbrokerlib',
-    domain:'openvcloud',
 
-dependencies.8 =
+dependencies.8                 =
+    domain:'openvcloud',
     name:'libcloudlibvirt',
-    domain:'openvcloud',
 
-dependencies.9 =
+dependencies.9                 =
+    args:'dep.args.portal',
+    domain:'openvcloud',
     name:'cloudbroker',
-    args:'dep.args.portal',
-    domain:'openvcloud',
 
-dependencies.10 =
-    name:'ms1_frontend',
-    args:'dep.args.portal',
-    domain:'openvcloud',
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
 
-dependencies.11 =
-    name:'cbportal',
-    args:'dep.args.portal',
-    domain:'openvcloud',
+platform.supported             =
+    'generic',
 
-dependencies.12 =
-    name:'gridportal',
-    args:'dep.args.portal',
-    domain:'jumpscale',
-
-dependencies.13 =
-    name:'libvirtsizes',
-    domain:'openvcloud',
-
-dependencies.14 =
-    name:'vfwmanager',
-    domain:'openvcloud',
-    args:'dep.args.vfwmanager',
-
-dependencies.15 =
-    name:'oauthserver',
-    domain:'openvcloud',
-
-platform.supported=generic,
-
-service.git.export.1 =
+git.export.1           =
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/ms1_fe',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
+

@@ -29,8 +29,18 @@ class Actions(ActionsBase):
             j.application.config.set('grid.node.roles', roles)
             j.atyourservice.get(name='jsagent', instance='main').restart()
 
-        ccl = j.clients.osis.getNamespace('cloudbroker')
+        # set navigation
+        portal = j.atyourservice.get(name='portal', instance='main')
+        portal.stop()
+        links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
+                'Open vStorage': serviceObj.hrd.get('instance.param.ovs.url'),
+                'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
+                }
+        portal.hrd.set('instance.navigationlinks.Portals', links)
+        portal.start()
+
         # set location
+        ccl = j.clients.osis.getNamespace('cloudbroker')
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
             loc = ccl.location.new()
             loc.gid = j.application.whoAmI.gid
@@ -40,6 +50,7 @@ class Actions(ActionsBase):
             ccl.location.set(loc)
 
         j.clients.portal.getByInstance('main')
+
         # register networks
         start = 201
         end = 250
@@ -65,5 +76,4 @@ class Actions(ActionsBase):
             pool.pubips = pubips
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
-
 
