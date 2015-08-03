@@ -39,8 +39,19 @@ class Actions(ActionsBase):
         portal.hrd.set('instance.navigationlinks.Portals', links)
         portal.start()
 
-        # set location
         ccl = j.clients.osis.getNamespace('cloudbroker')
+        scl = j.clients.osis.getNamespace('system')
+
+        # setup user/groups
+        for groupname in ('user', 'dcpm_admin', 'ovs_admin'):
+            if not scl.group.search({'id': groupname})[0]:
+                group = scl.group.new()
+                group.gid = j.application.whoAmI.gid
+                group.id = groupname
+                group.users = ['admin']
+                scl.group.set(group)
+
+        # set location
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
             loc = ccl.location.new()
             loc.gid = j.application.whoAmI.gid
