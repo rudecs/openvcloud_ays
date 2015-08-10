@@ -15,6 +15,7 @@ env.procces.1 =
 
 git.export.1=
     url:'http://github.com/0-complexity/noVNC',
+    branch:'0.5.1'
     source:'vnc_auto.html',
     dest:'$(system.paths.app)/vncproxy/',
     link:False,
@@ -39,3 +40,11 @@ git.export.4=
 
 platform.supported=generic
 
+dependencies.1 = 
+    name:'python_portal',
+    domain:'jumpscale',
+
+depencencies.2 = 
+    name:'portal_client',
+    domain:'jumpscale',
+    instance:'$(instance.param.portal.connection)',

@@ -19,14 +19,19 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-
     def configure(self, serviceObj):
-        from JumpScale import j
-        import JumpScale.portal
-        cl = j.clients.portal.getByInstance("$(instance.param.portal.connection)")
-        actor = cl.getActor('libcloud', 'libvirt')
-        myurl = "$(instance.param.vncproxy.publichostport)/vnc_auto.html?token="
-        gid = "$(grid.id)"
-        if myurl not in actor.listVNC(gid):
-            actor.registerVNC(myurl, gid)
-        return True
+        def patchDefaultWiki(path):
+            if not j.system.fs.exists(path):
+                return
+            editor = j.codetools.getTextFileEditor(path)
+            regex = "^{{logo.*$"
+            if not editor.existsLine(regex):
+                editor.appendReplaceLine("^{{find.*$", "{{find}}\n{{logo:/cbgrid/.files/green.png}}")
+                editor.save()
+
+        for space in ['home', 'Grid', 'AYS']:
+            path = j.system.fs.joinPaths(j.dirs.baseDir, 'apps', 'portals', serviceObj.instance, 'base', space, '.space', 'default.wiki')
+            patchDefaultWiki(path)
+
+        path = j.system.fs.joinPaths(j.dirs.baseDir, 'apps', 'portals', 'portalbase', 'wiki', 'System', '.space', 'default.wiki')
+        patchDefaultWiki(path)

@@ -22,7 +22,35 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         import JumpScale.grid
         import JumpScale.portal
+        # set billing role
+        roles = j.application.config.getList('grid.node.roles')
+        if 'billing' not in roles:
+            roles.append('billing')
+            j.application.config.set('grid.node.roles', roles)
+            j.atyourservice.get(name='jsagent', instance='main').restart()
+
+        # set navigation
+        portal = j.atyourservice.get(name='portal', instance='main')
+        portal.stop()
+        links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
+                'Open vStorage': serviceObj.hrd.get('instance.param.ovs.url'),
+                'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
+                }
+        portal.hrd.set('instance.navigationlinks.Portals', links)
+        portal.start()
+
         ccl = j.clients.osis.getNamespace('cloudbroker')
+        scl = j.clients.osis.getNamespace('system')
+
+        # setup user/groups
+        for groupname in ('user', 'dcpm_admin', 'ovs_admin'):
+            if not scl.group.search({'id': groupname})[0]:
+                group = scl.group.new()
+                group.gid = j.application.whoAmI.gid
+                group.id = groupname
+                group.users = ['admin']
+                scl.group.set(group)
+
         # set location
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
             loc = ccl.location.new()
@@ -33,6 +61,7 @@ class Actions(ActionsBase):
             ccl.location.set(loc)
 
         j.clients.portal.getByInstance('main')
+
         # register networks
         start = 201
         end = 250
@@ -58,5 +87,4 @@ class Actions(ActionsBase):
             pool.pubips = pubips
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
-
 
