@@ -1,0 +1,5 @@
+platform.supported             =
+    'ubuntu64',
+
+ubuntu.packages=
+    'autossh'
