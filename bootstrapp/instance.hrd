@@ -1,0 +1,7 @@
+listen.port           =@ASK descr:'listent port of the app' default:5000 type:'int'
+ovc_git               =@ASK descr:'path to the OVC_GIT repo' default:'/opt/OVC_GIT' type:'str'
+master.name           =@ASK descr:'service name of the master node' default:'jumpscale__node.ssh__master' type:'str'
+reflector.ip.priv     =@ASK descr:'private ip of the reflector VM' type:'str'
+reflector.ip.pub      =@ASK descr:'public ip of the reflector VM (ip of the cloudscpace)' type:'str'
+reflector.name        =@ASK descr:'service name of the master node' default:'jumpscale__node.ssh__reflector' type:'str'
+reflector.user        =@ASK descr:'safe user on the reflector' default:'guest' type:'str'
