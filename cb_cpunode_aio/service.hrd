@@ -128,9 +128,9 @@ dep.args.statsd-collector =
 platform.supported=generic,
 
 service.git.export.1 =
-    dest:'/opt/nginx/cfg/sites-enabled/fwnode',
+    dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
-    source:'apps/nginx/fwnode',
+    source:'apps/nginx/cpunode_aio',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
