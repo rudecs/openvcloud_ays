@@ -21,6 +21,7 @@ class Actions(ActionsBase):
     """
 
     # in next version of the service, we have to sandbox openvstorage and don't rely on apt
+    DJANGO_SETTINGS = '/opt/OpenvStorage/webapps/api/settings.py'
 
     def installOVS(self):
         packages = ['kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
@@ -46,6 +47,8 @@ class Actions(ActionsBase):
 
         j.system.fs.copyFile("/opt/code/git/binary/openvstorage/openvstorage/openvstorage_preconfig.cfg", "/tmp/openvstorage_preconfig.cfg")
         serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
+
+        j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
 
         try:
             oauthHRD = j.application.getAppInstanceHRD(name='oauthserver', instance='main', domain='')
