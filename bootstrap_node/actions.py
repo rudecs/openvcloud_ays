@@ -21,12 +21,12 @@ class Actions(ActionsBase):
         # make request to the bootstrapp
         resp = requests.post('$(instance.bootstrapp.addr)', json=data)
         if resp.status_code < 200 or resp.status_code > 299:
-            msg = resp.json()['error']
+            msg = resp.json()['message']
             j.events.opserror_critical(msg, category='bootstrap_node')
 
         data = resp.json()
-        cl.ssh_authorize('root', data['master.key'])
-        cl.ssh_authorize('root', data['reflector.key'])
+        j.system.fs.writeFile('/root/.ssh/authorized_keys', data['master.key'], append=True)
+        j.system.fs.writeFile('/root/.ssh/authorized_keys', data['reflector.key'], append=True)
 
         # create reverse tunnel to reflector
         args = {
