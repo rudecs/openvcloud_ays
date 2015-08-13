@@ -6,7 +6,7 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 class Actions(ActionsBase):
 
     def configure(self, serviceObj):
-        ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance='main')
+        ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance='$(instance.ms1_client.connection)')
         spacesecret = ms1clHRD.getStr('instance.param.secret')
         self.api = j.tools.ms1.get()
 
