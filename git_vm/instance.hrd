@@ -1,0 +1,2 @@
+param.recovery.passwd=@ASK type:str descr:'recovery password'
+param.ip=@ASK type:str descr:'ip address'
