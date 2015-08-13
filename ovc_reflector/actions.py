@@ -17,4 +17,4 @@ class Actions(ActionsBase):
         j.system.platform.ubuntu.generateLocalSSHKeyPair(passphrase='$(instance.root.passphrase)', path=rootPath, type='rsa', overwrite=True)
 
         j.system.unix.addSystemUser('guest', groupname=None, shell='/bin/bash', homedir=None)
-        j.system.platform.ubuntu.generateLocalSSHKeyPair(path=rootPath, type='rsa', overwrite=True)
+        j.system.platform.ubuntu.generateLocalSSHKeyPair(path=guestPath, type='rsa', overwrite=True)
