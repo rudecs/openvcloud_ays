@@ -7,13 +7,13 @@ ActionsBase=j.atyourservice.getActionsBaseClass()
 class Actions(ActionsBase):
 
     def configure(self, serviceObj):
-        cl = j.remote.cuisine.connect('localhost', 22, '$(instance.passwd)')
-        if not j.system.fs.exists(path='/root/.ssh/id_dsa.pub'):
-            cl.ssh_keygen('root', keytype='dsa')
+        keyapth = '/root/.ssh/id_rsa'
+        if not j.system.fs.exists(path=keyapth):
+            j.system.platform.ubuntu.generateLocalSSHKeyPair(passphrase='', type='rsa', overwrite=False, path=keyapth)
 
         hostname = j.system.net.getHostname()
         data = {
-            'key.pub': j.system.fs.fileGetContents('/root/.ssh/id_dsa.pub'),
+            'key.pub': j.system.fs.fileGetContents(keyapth+'.pub'),
             'hostname': hostname,
             'login': 'root'
         }
