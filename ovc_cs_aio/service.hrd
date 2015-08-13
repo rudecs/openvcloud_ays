@@ -1,8 +1,0 @@
-dependencies.1 = 
-    name:'ovc_proxy_vm',
-
-dependencies.2 = 
-    name:'ovc_reflector_vm',
-
-dependencies.3 = 
-    name:'ovc_master_vm',
