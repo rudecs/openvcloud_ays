@@ -1,0 +1,29 @@
+param.override = @ASK default:False type:bool descr:'delete vm and recreate new one'
+
+# ovc
+ovc.login = @ASK type:str descr:'login of cloud api'
+ovc.passwd = @ASK type:str descr:'passwd of cloud api'
+ovc.cloudspace = @ASK type:str descr:'cloudspace of cloud api'
+ovc.location = @ASK type:str descr:'location of cloud api'
+
+# master
+master.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
+master.publicip.start = @ASK type:str
+master.publicip.end = @ASK type:str
+master.dcpm.url = @ASK type:str default:'https://dcpmcustomer.demo.greenitglobe.com'  descr:'url DCPM is hosted on'
+master.ovs.url = @ASK type:str default:'https://ovscustomer.demo.greenitglobe.com'  descr:'url OpenvStorage is hosted on'
+master.portal.url = @ASK type:str default:'https://customer.demo.greenitglobe.com'  descr:'url the gridportal is hosted on'
+master.oauth.url = @ASK type:str default:'https://environment.demo.greenitglobe.com' descr:'public url of the oauth server'
+master.defense.url = @ASK type:str default:'htttp://defensecurtomer.demo.greenitglobe.com' descr:'url for the defense shield'
+
+# proxy
+proxy.host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded'
+proxy.master.ipadress = @ASK type:str default:'192.168.103.254'  descr:'ipaddress of the master node'
+proxy.dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
+proxy.dcpm.internalhost = @ASK type:str default:'192.168.103.252:80'  descr:'internal server/port DCPM is running on'
+proxy.ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at'
+proxy.defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield should be proxy.exposed at'
+proxy.novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at'
+
+# reflector
+reflector.root.passphrase=@ASK descr:'passphrase for the root ssh keypair' type:'str'
