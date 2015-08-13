@@ -10,20 +10,26 @@ class Actions(ActionsBase):
         spacesecret = ms1clHRD.getStr('instance.param.secret')
         self.api = j.tools.ms1.get()
 
-        # install reflector
-        self.initReflectorVM(spacesecret, '$(instance.reflector.root.passphrase)', delete='$(instance.param.override)')
+        def reflector():
+            # install reflector
+            self.initReflectorVM(spacesecret, '$(instance.reflector.root.passphrase)', delete='$(instance.param.override)')
+        j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
 
-        # install proxy
-        self.initProxyVM(spacesecret, '$(instance.proxy.host)', '$(instance.proxy.dcpm.servername)',
+        def proxy():
+            # install proxy
+            self.initProxyVM(spacesecret, '$(instance.proxy.host)', '$(instance.proxy.dcpm.servername)',
                         '$(instance.proxy.dcpm.internalhost)', '$(proxy.ovs.servername)',
                         '$(instance.proxy.defense.servername)', '$(instance.proxy.novnc.servername)',
                          delete='$(instance.param.override)')
+        j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
-        # install 
-        self.initMasterVM(spacesecret, '$(instance.master.rootpasswd)', '$(instance.master.publicip.start)', 
-                        '$(instance.master.publicip.end)', '$(instance.master.dcpm.url)',
-                        '$(instance.ovs.url)', '$(instance.portal.url)', '$(instance.oauth.url)',
-                        '$(instance.defense.url)', delete='$(instance.param.override)')
+        def master():
+            # install 
+            self.initMasterVM(spacesecret, '$(instance.master.rootpasswd)', '$(instance.master.publicip.start)', 
+                            '$(instance.master.publicip.end)', '$(instance.master.dcpm.url)',
+                            '$(instance.ovs.url)', '$(instance.portal.url)', '$(instance.oauth.url)',
+                            '$(instance.defense.url)', delete='$(instance.param.override)')
+        j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, delete=False):
         """

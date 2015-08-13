@@ -1,1 +1,0 @@
-root.passphrase=@ASK descr:'passphrase for the root ssh keypair' type:'str'
