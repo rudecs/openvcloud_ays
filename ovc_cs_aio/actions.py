@@ -62,7 +62,7 @@ class Actions(ActionsBase):
 
         # genretate keypair on the vm
         cl.ssh_keygen('root', keytype='rsa')
-        cl.user_ensure('gueset', home='/home/guest', shell='/bin/bash')
+        cl.user_ensure('guest', home='/home/guest', shell='/bin/bash')
         cl.ssh_keygen('guest', keytype='rsa')
         # copy the key on the git vm
         keys = {
