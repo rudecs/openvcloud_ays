@@ -34,8 +34,8 @@ class Actions(ActionsBase):
             # install
             self.initMasterVM(spacesecret, '$(instance.master.rootpasswd)', '$(instance.master.publicip.start)',
                             '$(instance.master.publicip.end)', '$(instance.master.dcpm.url)',
-                            '$(instance.ovs.url)', '$(instance.portal.url)', '$(instance.oauth.url)',
-                            '$(instance.defense.url)', '$(instance.param.repo.path)', delete=delete)
+                            '$(instance.master.ovs.url)', '$(instance.master.portal.url)', '$(instance.master.oauth.url)',
+                            '$(instance.master.defense.url)', '$(instance.param.repo.path)', delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
