@@ -27,8 +27,6 @@ class Actions(ActionsBase):
         self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
         self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
 
-        from ipdb import set_trace;set_trace()
-
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
 
     def configure(self, serviceObj):
