@@ -6,36 +6,62 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
 
-    def configure(self, serviceObj):
-        ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance='$(instance.ms1_client.connection)')
-        spacesecret = ms1clHRD.getStr('instance.param.secret')
+    def prepare(self, serviceObj):
+        self.host = serviceObj.hrd.getStr('instance.host')
+        self.dcpmServerName = serviceObj.hrd.getStr('instance.dcpm.servername')
+        self.ovsServerName = serviceObj.hrd.getStr('instance.ovs.servername')
+        self.defenseServerName = serviceObj.hrd.getStr('instance.defense.servername')
+        self.novncServerName = serviceObj.hrd.getStr('instance.novnc.servername')
 
-        gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance='$(instance.gitlab_client.connection)')
+        self.dcpmInternal = serviceObj.hrd.getStr('instance.dcpm.internalhost')
+
+        self.oauthUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
+        self.portalUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
+        self.dcpmUrl = 'https://'+self.dcpmServerName
+        self.ovsUrl = 'https://'+self.ovsServerName
+        self.defenseUrl = 'https://'+self.defenseServerName
+        self.novncUrl = 'https://'+self.novncServerName
+
+        gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
+        gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
         self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
         self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
+
+        from ipdb import set_trace;set_trace()
+
+        self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
+
+    def configure(self, serviceObj):
+        ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
+        ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance=ms1Connection)
+        spacesecret = ms1clHRD.getStr('instance.param.secret')
 
         self.api = j.tools.ms1.get()
         delete = serviceObj.hrd.getBool('instance.param.override')
 
         def reflector():
             # install reflector
-            self.initReflectorVM(spacesecret, '$(instance.reflector.root.passphrase)', '$(instance.param.repo.path)', delete=delete)
+            reflectorPassphrase = serviceObj.hrd.getStr('instance.reflector.root.passphrase')
+            self.initReflectorVM(spacesecret, reflectorPassphrase, self.repoPath, delete=delete)
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
 
         def proxy():
             # install proxy
-            self.initProxyVM(spacesecret, '$(instance.proxy.host)', '$(instance.proxy.dcpm.servername)',
-                        '$(instance.proxy.dcpm.internalhost)', '$(instance.proxy.ovs.servername)',
-                        '$(instance.proxy.defense.servername)', '$(instance.proxy.novnc.servername)',
-                         delete=delete)
+            self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
+                             self.dcpmInternal, self.ovsServerName,
+                             self.defenseServerName, self.novncServerName,
+                             delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
         def master():
             # install
-            self.initMasterVM(spacesecret, '$(instance.master.rootpasswd)', '$(instance.master.publicip.start)',
-                            '$(instance.master.publicip.end)', '$(instance.master.dcpm.url)',
-                            '$(instance.master.ovs.url)', '$(instance.master.portal.url)', '$(instance.master.oauth.url)',
-                            '$(instance.master.defense.url)', '$(instance.param.repo.path)', delete=delete)
+            rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
+            ipStart = serviceObj.hrd.getStr('instance.master.publicip.start')
+            ipEnd = serviceObj.hrd.getStr('instance.master.publicip.end')
+            self.initMasterVM(spacesecret, rootpasswd,
+                              ipStart, ipEnd,
+                              self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
+                              self.defenseUrl, self.repoPath, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
