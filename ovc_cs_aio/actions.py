@@ -284,4 +284,4 @@ class Actions(ActionsBase):
         master.install(deps=True)
 
         content = j.system.fs.fileGetContents('%s/keys/reflector_guest.pub' % repoPath)
-        cl.file_append('/root/.ssh/.ssh/authorized_keys', content)
+        cl.file_append('/root/.ssh/authorized_keys', content)
