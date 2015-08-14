@@ -1,5 +1,5 @@
 param.override = @ASK default:False type:bool descr:'delete vm and recreate new one'
-
+param.repo.path= @ASK default:'/opt/code/git/account/reponame' type:str descr:'path to the config git repo'
 ms1_client.connection = @ASK default:'main' descr:'instance name of the ms1_client service' type:str
 
 # master
