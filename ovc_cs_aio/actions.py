@@ -210,7 +210,7 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.host': host,
-            'instance.master.ipadress': cloudspaceObj['publicipaddress'],
+            'instance.master.ipadress': ip,
             'instance.dcpm.servername': dcpmServerName,
             'instance.dcpm.internalhost': dcpmInternalHost,
             'instance.ovs.servername': ovsServerName,
