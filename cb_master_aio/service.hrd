@@ -1,3 +1,8 @@
+dep.args.cloudborker           =
+    cloudbroker.portalurl:'$(instance.param.portal.url)',
+    openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
+    portal.instance:'main',
+
 dep.args.oauthserver           =
     dcpm.url:'$(instance.param.dcpm.url)',
     oauth.url:'$(instance.param.oauth.url)',
@@ -6,11 +11,6 @@ dep.args.oauthserver           =
 
 dep.args.portal                =
     portal.instance:'main',
-
-dep.args.cloudborker =
-    portal.instance:'main',
-    openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
-    cloudbroker.portalurl:'$(instance.param.portal.url)',
 
 dep.args.portal_client         =
     param.addr:'localhost',
