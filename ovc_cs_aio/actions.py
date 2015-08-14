@@ -62,13 +62,13 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
-
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
         print "jumpscale installed"
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # genretate keypair on the vm
         cl.ssh_keygen('root', keytype='rsa')
@@ -147,13 +147,13 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
-
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
         print "jumpscale installed"
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -214,8 +214,6 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # generate key pair on the vm
         print 'generate keypair on the vm'
@@ -232,6 +230,9 @@ class Actions(ActionsBase):
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
         print "jumpscale installed"
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # create service required to connect to ovc reflector with ays
         data = {
