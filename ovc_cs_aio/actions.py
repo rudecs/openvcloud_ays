@@ -1,4 +1,5 @@
 from JumpScale import j
+import urllib
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -186,7 +187,7 @@ class Actions(ActionsBase):
         }
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=nodeService)
         ssloffloader.consume('node', nodeService.instance)
-        ssloffloader.install(reinstall=True, deps=True)
+        ssloffloader.install(deps=True)
 
     def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, delete=False):
         """
@@ -267,7 +268,7 @@ class Actions(ActionsBase):
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
-        master.install(reinstall=True, deps=True)
+        master.install(deps=True)
 
         content = j.system.fs.fileGetContents('%s/keys/reflector_guest.pub' % repoPath)
         cl.file_append('/root/.ssh/.ssh/authorized_keys', content)
