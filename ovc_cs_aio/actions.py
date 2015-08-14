@@ -8,19 +8,25 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance='$(instance.ms1_client.connection)')
         spacesecret = ms1clHRD.getStr('instance.param.secret')
+
+        gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance='$(instance.gitlab_client.connection)')
+        self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
+        self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
+
         self.api = j.tools.ms1.get()
+        delete = serviceObj.hrd.getBool('instance.param.override')
 
         def reflector():
             # install reflector
-            self.initReflectorVM(spacesecret, '$(instance.reflector.root.passphrase)', '$(instance.param.repo.path)', delete='$(instance.param.override)')
+            self.initReflectorVM(spacesecret, '$(instance.reflector.root.passphrase)', '$(instance.param.repo.path)', delete=delete)
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
 
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, '$(instance.proxy.host)', '$(instance.proxy.dcpm.servername)',
-                        '$(instance.proxy.dcpm.internalhost)', '$(proxy.ovs.servername)',
+                        '$(instance.proxy.dcpm.internalhost)', '$(instance.proxy.ovs.servername)',
                         '$(instance.proxy.defense.servername)', '$(instance.proxy.novnc.servername)',
-                         delete='$(instance.param.override)')
+                         delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
         def master():
@@ -28,7 +34,7 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, '$(instance.master.rootpasswd)', '$(instance.master.publicip.start)',
                             '$(instance.master.publicip.end)', '$(instance.master.dcpm.url)',
                             '$(instance.ovs.url)', '$(instance.portal.url)', '$(instance.oauth.url)',
-                            '$(instance.defense.url)', '$(instance.param.repo.path)', delete='$(instance.param.override)')
+                            '$(instance.defense.url)', '$(instance.param.repo.path)', delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
@@ -54,6 +60,9 @@ class Actions(ActionsBase):
         privIP = machine['interfaces'][0]['ipAddress']
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # install Jumpscale
         print "install jumpscale"
@@ -137,6 +146,9 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
@@ -200,6 +212,9 @@ class Actions(ActionsBase):
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 4444, pubipport=4444)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
         # generate key pair on the vm
         print 'generate keypair on the vm'
