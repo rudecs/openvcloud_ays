@@ -56,7 +56,11 @@ class Actions(ActionsBase):
         """
 
         # create ovc_git vm
-        _, pubIP, _ = self.api.createMachine(spacesecret, 'ovc_reflector', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        try:
+            _, pubIP, _ = self.api.createMachine(spacesecret, 'ovc_reflector', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        except Exception as e:
+            if e.message.find('Could not create machine it does already exist') == -1:
+                raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
 
@@ -137,7 +141,11 @@ class Actions(ActionsBase):
         """
 
         # create ovc_git vm
-        self.api.createMachine(spacesecret, 'ovc_proxy', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        try:
+            self.api.createMachine(spacesecret, 'ovc_proxy', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        except Exception as e:
+            if e.message.find('Could not create machine it does already exist') == -1:
+                raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         ip = machine['interfaces'][0]['ipAddress']
 
@@ -205,7 +213,11 @@ class Actions(ActionsBase):
         """
 
         # create ovc_git vm
-        self.api.createMachine(spacesecret, 'ovc_master', memsize='4', ssdsize='40', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        try:
+            self.api.createMachine(spacesecret, 'ovc_master', memsize='4', ssdsize='40', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        except Exception as e:
+            if e.message.find('Could not create machine it does already exist') == -1:
+                raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_master')
         ip = machine['interfaces'][0]['ipAddress']
 
