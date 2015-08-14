@@ -146,7 +146,7 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
-        machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
+        machine = self.api.getMachineObject(spacesecret, 'ovc_proxy')
         ip = machine['interfaces'][0]['ipAddress']
 
         # portforward 80 and 443 to 80 and 442 on ovc_proxy
