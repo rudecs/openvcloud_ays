@@ -79,9 +79,9 @@ class Actions(ActionsBase):
             - install bootrapp on ovc_git vm, this happens now, cause we need the ip of the relfector vm to install bootrapp
         """
 
-        # create ovc_git vm
+        # create ovc_reflector vm
         try:
-            _, pubIP, _ = self.api.createMachine(spacesecret, 'ovc_reflector', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+            _, pubIP, sshPort = self.api.createMachine(spacesecret, 'ovc_reflector', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
@@ -141,6 +141,7 @@ class Actions(ActionsBase):
             'instance.master.name': 'jumpscale__node.ssh__ovc_master',
             'instance.reflector.ip.priv': privIP,
             'instance.reflector.ip.pub': pubIP,
+            'instance.reflector.port': sshPort,
             'instance.reflector.name': 'jumpscale__node.ssh__ovc_reflector',
             'instance.reflector.user': 'guest'
         }
@@ -306,6 +307,3 @@ class Actions(ActionsBase):
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
         master.install(deps=True)
-
-        content = j.system.fs.fileGetContents('%s/keys/reflector_guest.pub' % repoPath)
-        cl.file_append('/root/.ssh/authorized_keys', content)
