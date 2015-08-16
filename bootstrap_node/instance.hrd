@@ -1,2 +1,1 @@
 bootstrapp.addr=@ASK descr:'address of the bootstrapp' default:'http://bootstrapp1.demo.greenitglobe.com' type:'str'
-passwd=@ASK descr:'password of the root account' default:'rooter' type:'str'
