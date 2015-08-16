@@ -9,7 +9,11 @@ publicip.end = @ASK type:str
 
 host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded'
 dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
-dcpm.internalhost = @ASK type:str default:'192.168.103.252:80'  descr:'internal server/port DCPM is running on'
+dcpm.ipadress = @ASK type:str default:'192.168.103.252'  descr:'internal ip address DCPM is running on'
+dcpm.port = @ASK type:int default:80  descr:'port DCPM is listenning on'
+bootstrapp.ipadress = @ASK  type:str default:'192.168.103.251'  descr:'internal ip address bootrapp is running on'
+bootstrapp.port = @ASK  type:int descr:'port bootstrapp is listenning on' default:5000
+bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.greenitglobe.com' descr:'servername bootstrapp is exposed at'
 ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at'
 defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield'
 novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at'

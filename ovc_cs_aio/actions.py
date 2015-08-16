@@ -13,7 +13,12 @@ class Actions(ActionsBase):
         self.defenseServerName = serviceObj.hrd.getStr('instance.defense.servername')
         self.novncServerName = serviceObj.hrd.getStr('instance.novnc.servername')
 
-        self.dcpmInternal = serviceObj.hrd.getStr('instance.dcpm.internalhost')
+        self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
+        self.dcpmPort = serviceObj.hrd.getStr('instance.dcpm.port')
+
+        self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
+        self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
+        self.bootrappServerName = serviceObj.hrd.get('instance.bootstrapp.servername')
 
         self.oauthUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
         self.portalUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
@@ -46,8 +51,10 @@ class Actions(ActionsBase):
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
-                             self.dcpmInternal, self.ovsServerName,
+                             self.dcpmIpAddress, self.dcpmPort,
+                             self.ovsServerName,
                              self.defenseServerName, self.novncServerName,
+                             self.bootrappIpAddress, self.bootrappPort,
                              delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
@@ -156,7 +163,7 @@ class Actions(ActionsBase):
         # expose port of bootrapp
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_git', 5000, pubipport=5000)
 
-    def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmInternalHost, ovsServerName, defenseServerName, novncServerName,
+    def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmIpAddress, dcpmPort, ovsServerName, defenseServerName, novncServerName, bootrappIpAddress, bootrappPort, bootrappServerName,
         delete=False):
         """
         this methods need to be run from the ovc_git VM
@@ -218,7 +225,11 @@ class Actions(ActionsBase):
             'instance.host': host,
             'instance.master.ipadress': ip,
             'instance.dcpm.servername': dcpmServerName,
-            'instance.dcpm.internalhost': dcpmInternalHost,
+            'instance.dcpm.ipadress': dcpmIpAddress,
+            'instance.dcpm.port': dcpmPort,
+            'instance.bootstrapp.ipadress': bootrappIpAddress,
+            'instance.bootstrapp.port': bootrappPort,
+            'instance.bootstrapp.servername': bootrappServerName,
             'instance.ovs.servername': ovsServerName,
             'instance.defense.servername': defenseServerName,
             'instance.novnc.servername': novncServerName
