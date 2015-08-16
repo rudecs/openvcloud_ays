@@ -113,6 +113,11 @@ class Actions(ActionsBase):
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
 
+        # configure ssh to let master connect to the node through reflector
+        content = cl.file_read('/etc/ssh/sshd_config')
+        if content.find('GatewayPorts clientspecified') == -1:
+            cl.file_apprend('/etc/ssh/sshd_config', 'GatewayPorts clientspecified')
+
 
         # create service required to connect to ovc reflector with ays
         data = {
