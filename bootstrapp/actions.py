@@ -12,8 +12,9 @@ class Actions(ActionsBase):
             j.system.fs.createDir(path)
 
     def configure(self, serviceObj):
+        from ipdb import set_trace;set_trace()
         ps = serviceObj.hrd.getDictFromPrefix('service.process')['1']
-        args = ps['args']
-        args = '--gitpath $(instance.ovc_git) --hrd %s' % serviceObj.hrd.path
-        ps['args'] = args
-        # serviceObj.hrd.save()
+        args2 = ps['args']
+        args2 = '--gitpath $(instance.ovc_git) --hrd %s' % serviceObj.hrd.path
+        ps['args'] = args2
+        serviceObj.hrd.save()
