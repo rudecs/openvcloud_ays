@@ -25,14 +25,13 @@ class Actions(ActionsBase):
             j.events.opserror_critical(msg, category='bootstrap_node')
 
         data = resp.json()
-        j.system.fs.writeFile('/root/.ssh/authorized_keys', data['master.key'], append=True)
-        j.system.fs.writeFile('/root/.ssh/authorized_keys', data['reflector.key'], append=True)
+        j.system.fs.writeFile('/root/.ssh/authorized_keys', '\n'+data['master.key'], append=True)
 
         # create reverse tunnel to reflector
         args = {
             'instance.remote.bind': data['reflector.ip.priv'],
             'instance.remote.address': data['reflector.ip.pub'],
-            'instance.remote.connection.port': 22,
+            'instance.remote.connection.port': data['reflector.port'],
             'instance.remote.login': data['reflector.user'],
             'instance.remote.port': data['autossh.remote.port'],
             'instance.local.address': 'localhost',
