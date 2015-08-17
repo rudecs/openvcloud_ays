@@ -1,136 +1,138 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
-
-dep.args.basenetwork         =
-    netconfig.backplanes.names:'backplane1',
-    netconfig.mgmt_backplane.interfacename:'backplane1',
-    netconfig.public_backplane.interfacename:'backplane1',
-    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
-    netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
-    netconfig.vxbackend.interfacename:'backplane1',
-    netconfig.gw_mgmt.vlanid:'2311',
-    netconfig.mgmt.vlanid:'2312',
-    netconfig.vxbackend.vlanid:'2313',
-    netconfig.public.vlanid:'0',
-
-dep.args.portal_client       =
-    param.secret:'$(instance.param.rootpasswd)',
-    param.addr:'$(instance.param.master.addr)',
-    param.port:82,
-
-dep.args.osis_client =
-    param.osis.client.addr:'$(instance.param.master.addr)',
-    param.osis.client.port:5544,
-    param.osis.client.login:'root',
-    param.osis.client.passwd:'$(instance.param.rootpasswd)',
-
-dep.args.redis =
-    param.disk:0,
-    param.passwd :'$(instance.param.rootpasswd)',
-    param.mem : 100,
-    param.port:9999,
-    param.unixsocket:0,
-
-dep.args.jsagent =
-    grid.id:1,
-    grid.node.roles:'node',
-    agentcontroller.connection:'main',
-
-dep.args.vfwnode =
-    param.gw_mgmt_ip:'$(instance.param.basenetwork.gw_mgmt_ip)',
-
 dep.args.agentcontroller_client =
     agentcontroller.client.addr:'$(instance.param.master.addr)',
-    agentcontroller.client.port:4444,
     agentcontroller.client.login:'node',
-    agentcontroller.client.passwd:'',
+    agentcontroller.client.passwd:,
+    agentcontroller.client.port:'4444',
 
-dependencies.1               =
-    args:'dep.args.basenetwork',
-    name:'basenetwork',
-    domain:'openvcloud',
+dep.args.basenetwork           =
+    netconfig.backplanes.names:'backplane1',
+    netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
+    netconfig.gw_mgmt.vlanid:'2311',
+    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
+    netconfig.mgmt.vlanid:'2312',
+    netconfig.mgmt_backplane.interfacename:'backplane1',
+    netconfig.public.vlanid:'0',
+    netconfig.public_backplane.interfacename:'backplane1',
+    netconfig.vxbackend.interfacename:'backplane1',
+    netconfig.vxbackend.vlanid:'2313',
 
-dependencies.2 =
-    name:'redis',
-    instance:'system',
-    args:'dep.args.redis',
+dep.args.jsagent               =
+    agentcontroller.connection:'main',
+    grid.id:'1',
+    grid.node.roles:'node',
 
-dependencies.3 =
-    name:'compute_kvm_base',
-    domain:'openvcloud',
+dep.args.osis_client           =
+    param.osis.client.addr:'$(instance.param.master.addr)',
+    param.osis.client.login:'root',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
+    param.osis.client.port:'5544',
 
-dependencies.4 =
-    name:'defaultcomputenodeconfig',
-    domain:'openvcloud',
+dep.args.portal_client         =
+    param.addr:'$(instance.param.master.addr)',
+    param.port:'82',
+    param.secret:'$(instance.param.rootpasswd)',
 
-dependencies.5 =
-    name:'portal_client',
-    args:'dep.args.portal_client',
-    instance:'cloudbroker',
+dep.args.redis                 =
+    param.disk:'0',
+    param.mem:'100',
+    param.passwd:'$(instance.param.rootpasswd)',
+    param.port:'9999',
+    param.unixsocket:'0',
 
-dependencies.6 =
-    name:'portal_client',
-    args:'dep.args.portal_client',
-    instance:'main',
-
-dependencies.7 =
-    name:'portal_client',
-    args:'dep.args.portal_client',
-    instance:'cbportal',
-
-dependencies.8 =
-    name:'osis_client',
-    args:'dep.args.osis_client',
-    instance:'main',
-
-dependencies.9 =
-    name:'osis_client',
-    args:'dep.args.osis_client',
-    instance:'jsagent',
-
-dependencies.10                 =
-    name:'agentcontroller_client',
-    instance:'main',
-    args:'dep.args.agentcontroller_client',
-
-dependencies.11 =
-    name:'jsagent',
-    instance:'main',
-    args:'dep.args.jsagent',
-
-dependencies.12 =
-    name:'compute_node',
-    domain:'openvcloud',
-
-dependencies.13 =
-    name:'vfwnode',
-    args:'dep.args.vfwnode',
-    domain:'openvcloud',
-
-dependencies.14 =
-    name:'libcloudlibvirt',
-    domain:'openvcloud',
-
-dependencies.16  =
-    name:'statsd-collector',
-    args:'dep.args.statsd-collector',
-
-dependencies.17 =
-    name:'ovs_branding',
-    domain:'openvcloud',
-
-dependencies.18 =
-    name:'nginx',
-    domain:'jumpscale'
-
-dep.args.statsd-collector =
+dep.args.statsd-collector      =
     statsd.master.host:'$(instance.param.master.addr)',
 
-platform.supported=generic,
+dep.args.vfwnode               =
+    param.gw_mgmt_ip:'$(instance.param.basenetwork.gw_mgmt_ip)',
 
-service.git.export.1 =
+dependencies.1                 =
+    args:'dep.args.basenetwork',
+    domain:'openvcloud',
+    name:'basenetwork',
+
+dependencies.10                =
+    args:'dep.args.agentcontroller_client',
+    instance:'main',
+    name:'agentcontroller_client',
+
+dependencies.11                =
+    args:'dep.args.jsagent',
+    instance:'main',
+    name:'jsagent',
+
+dependencies.12                =
+    domain:'openvcloud',
+    name:'compute_node',
+
+dependencies.13                =
+    args:'dep.args.vfwnode',
+    domain:'openvcloud',
+    name:'vfwnode',
+
+dependencies.14                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
+dependencies.16                =
+    args:'dep.args.statsd-collector',
+    name:'statsd-collector',
+
+dependencies.17                =
+    domain:'openvcloud',
+    name:'ovs_branding',
+
+dependencies.18                =
+    domain:'jumpscale',
+    name:'nginx',
+
+dependencies.2                 =
+    args:'dep.args.redis',
+    instance:'system',
+    name:'redis',
+
+dependencies.3                 =
+    domain:'openvcloud',
+    name:'compute_kvm_base',
+
+dependencies.4                 =
+    domain:'openvcloud',
+    name:'defaultcomputenodeconfig',
+
+dependencies.5                 =
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+    name:'portal_client',
+
+dependencies.6                 =
+    args:'dep.args.portal_client',
+    instance:'main',
+    name:'portal_client',
+
+dependencies.7                 =
+    args:'dep.args.portal_client',
+    instance:'cbportal',
+    name:'portal_client',
+
+dependencies.8                 =
+    args:'dep.args.osis_client',
+    instance:'main',
+    name:'osis_client',
+
+dependencies.9                 =
+    args:'dep.args.osis_client',
+    instance:'jsagent',
+    name:'osis_client',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
+
+git.export.1           =
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/cpunode_aio',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
+
