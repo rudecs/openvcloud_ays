@@ -26,6 +26,7 @@ class Actions(ActionsBase):
 
         data = resp.json()
         j.system.fs.writeFile('/root/.ssh/authorized_keys', '\n'+data['master.key'], append=True)
+        j.system.fs.writeFile('/root/.ssh/authorized_keys', '\n'+data['git.key'], append=True)
 
         # create reverse tunnel to reflector
         args = {
