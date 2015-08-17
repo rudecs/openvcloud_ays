@@ -7,14 +7,10 @@ dep.args.agentcontroller_client =
 dep.args.basenetwork           =
     netconfig.backplanes.names:'backplane1',
     netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
-    netconfig.gw_mgmt.vlanid:'2311',
     netconfig.gw_mgmt_backplane.interfacename:'backplane1',
-    netconfig.mgmt.vlanid:'2312',
     netconfig.mgmt_backplane.interfacename:'backplane1',
-    netconfig.public.vlanid:'0',
     netconfig.public_backplane.interfacename:'backplane1',
     netconfig.vxbackend.interfacename:'backplane1',
-    netconfig.vxbackend.vlanid:'2313',
 
 dep.args.jsagent               =
     agentcontroller.connection:'main',
