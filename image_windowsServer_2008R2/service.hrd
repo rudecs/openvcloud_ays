@@ -1,8 +1,8 @@
 web.export.1=
     url:'ftp://pub:pub1234@ftp.aydo.com',
-    source:'/images_ms1/windows/image_windowsServer_2008R2.qcow2.qcow2',
+    source:'/images_ms1/windows/image_windowsServer_2008R2.qcow2',
     checkmd5: 'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/image_windowsServer_2008R2.qcow2.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/image_windowsServer_2008R2.qcow2',
 
 platform.supported=generic
 
