@@ -86,13 +86,13 @@ class Actions(ActionsBase):
     def enableRootLogin(self, passwd):
         content = j.system.fs.fileGetContents('/etc/ssh/sshd_config')
         updated = content.replace('PermitRootLogin without-password', 'PermitRootLogin yes')
-        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=content)
+        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=updated)
         j.system.process.run('restart ssh')
-        cl.user_passwd('root', passwd)
+        j.system.unix.setUnixUserPassword('root', passwd)
 
     def disableRootLogin(self):
         content = j.system.fs.fileGetContents('/etc/ssh/sshd_config')
-        updated = content.replace('PermitRootLogin without-password', 'PermitRootLogin without-password')
-        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=content)
+        updated = content.replace('PermitRootLogin yes', 'PermitRootLogin without-password')
+        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=updated)
         j.system.process.run('restart ssh')
         j.system.process.run('passwd -d root')
