@@ -119,16 +119,16 @@ dependencies.9                 =
     instance:'jsagent',
     name:'osis_client',
 
-git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
-
-platform.supported             =
-    'generic',
-
-git.export.1           =
+git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/cpunode_aio',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
 
