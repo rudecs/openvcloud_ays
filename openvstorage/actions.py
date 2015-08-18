@@ -75,24 +75,6 @@ class Actions(ActionsBase):
             # oauthserver is not installed, so don't configure oauth in ovs
             pass
 
-        # temporay enable root login before installing.
-        # ovs should be able to install without the need to root login in the future
-        self.enableRootLogin(serviceObj.hrd.getStr('instance.targetpasswd'))
         j.do.execute('ovs setup')
-        self.disableRootLogin()
 
         return True
-
-    def enableRootLogin(self, passwd):
-        content = j.system.fs.fileGetContents('/etc/ssh/sshd_config')
-        updated = content.replace('PermitRootLogin without-password', 'PermitRootLogin yes')
-        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=updated)
-        j.system.process.run('restart ssh')
-        j.system.unix.setUnixUserPassword('root', passwd)
-
-    def disableRootLogin(self):
-        content = j.system.fs.fileGetContents('/etc/ssh/sshd_config')
-        updated = content.replace('PermitRootLogin yes', 'PermitRootLogin without-password')
-        j.system.fs.writeFile(filename='/etc/ssh/sshd_config', contents=updated)
-        j.system.process.run('restart ssh')
-        j.system.process.run('passwd -d root')
