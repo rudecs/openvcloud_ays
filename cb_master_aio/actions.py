@@ -37,6 +37,7 @@ class Actions(ActionsBase):
                 'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
                 }
         portal.hrd.set('instance.navigationlinks.Portals', links)
+        portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
         portal.start()
 
         ccl = j.clients.osis.getNamespace('cloudbroker')
