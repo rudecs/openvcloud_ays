@@ -34,7 +34,7 @@ class Actions(ActionsBase):
         portal.stop()
         links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
                 'Open vStorage Portal': serviceObj.hrd.get('instance.param.ovs.url'),
-                'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
+                'DCPM Portal': serviceObj.hrd.get('instance.param.dcpm.url'),
                 }
         portal.hrd.set('instance.navigationlinks.Portals', links)
         portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
