@@ -33,7 +33,7 @@ class Actions(ActionsBase):
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
         links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
-                'Open vStorage': serviceObj.hrd.get('instance.param.ovs.url'),
+                'Open vStorage Portal': serviceObj.hrd.get('instance.param.ovs.url'),
                 'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
                 }
         portal.hrd.set('instance.navigationlinks.Portals', links)
@@ -88,4 +88,3 @@ class Actions(ActionsBase):
             pool.pubips = pubips
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
-
