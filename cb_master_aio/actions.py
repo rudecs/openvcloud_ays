@@ -32,9 +32,14 @@ class Actions(ActionsBase):
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
-        links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
-                'Open vStorage Portal': serviceObj.hrd.get('instance.param.ovs.url'),
-                'DCPM Portal': serviceObj.hrd.get('instance.param.dcpm.url'),
+        links = {
+                'System': '/system',
+                'End User': serviceObj.hrd.get('instance.param.portal.url'),
+                'Storage': serviceObj.hrd.get('instance.param.ovs.url'),
+                'WhatsInsight': serviceObj.hrd.get('instance.param.dcpm.url'),
+                'At Your Service': '/AYS',
+                'Grid': '/grid',
+                'Cloud Broker': '/cbgrid',
                 }
         portal.hrd.set('instance.navigationlinks.Portals', links)
         portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
