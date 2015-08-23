@@ -34,9 +34,9 @@ class Actions(ActionsBase):
         portal.stop()
         links = {
                 'System': '/system',
-                'external:End User': serviceObj.hrd.get('instance.param.portal.url'),
-                'external:Storage': serviceObj.hrd.get('instance.param.ovs.url'),
-                'external:WhatsInsight': serviceObj.hrd.get('instance.param.dcpm.url'),
+                'End User': serviceObj.hrd.get('instance.param.portal.url'),
+                'Storage': serviceObj.hrd.get('instance.param.ovs.url'),
+                'WhatsInsight': serviceObj.hrd.get('instance.param.dcpm.url'),
                 'At Your Service': '/AYS',
                 'Grid': '/grid',
                 'Cloud Broker': '/cbgrid',
