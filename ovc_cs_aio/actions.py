@@ -61,8 +61,8 @@ class Actions(ActionsBase):
         def master():
             # install
             rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
-            ipStart = serviceObj.hrd.getStr('instance.master.publicip.start')
-            ipEnd = serviceObj.hrd.getStr('instance.master.publicip.end')
+            ipStart = serviceObj.hrd.getStr('instance.publicip.start')
+            ipEnd = serviceObj.hrd.getStr('instance.publicip.end')
             self.initMasterVM(spacesecret, rootpasswd,
                               ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
