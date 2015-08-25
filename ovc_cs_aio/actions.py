@@ -54,7 +54,7 @@ class Actions(ActionsBase):
                              self.dcpmIpAddress, self.dcpmPort,
                              self.ovsServerName,
                              self.defenseServerName, self.novncServerName,
-                             self.bootrappIpAddress, self.bootrappPort, bootrappServerName,
+                             self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
