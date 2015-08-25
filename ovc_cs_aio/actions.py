@@ -263,7 +263,7 @@ class Actions(ActionsBase):
         ip = machine['interfaces'][0]['ipAddress']
 
         # portforward 4444 to 4444 ovc_master
-        self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 4444, pubipport=4444)
+        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -323,3 +323,69 @@ class Actions(ActionsBase):
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
         master.install(deps=True)
+
+    def initDCPMVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, delete=False):
+        """
+        this methods need to be run from the ovc_dcpm VM
+
+        will do following:
+            - create vmachine
+            - install JumpScale
+            - create keypair for root
+            - copy keypair in ovc_dcpm keys directory
+            - install dcpm service
+        """
+
+        # create ovc_git vm
+        try:
+            self.api.createMachine(spacesecret, 'ovc_dcpm', memsize='0.5', ssdsize='10', imagename='ubuntu.14.04.x64',sshkey='/root/.ssh/id_rsa.pub',delete=delete)
+        except Exception as e:
+            if e.message.find('Could not create machine it does already exist') == -1:
+                raise e
+        machine = self.api.getMachineObject(spacesecret, 'ovc_dcpm')
+        ip = machine['interfaces'][0]['ipAddress']
+
+        cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+
+
+        # generate key pair on the vm
+        print 'generate keypair on the vm'
+        cl.ssh_keygen('root', keytype='rsa')
+        keys = {
+            '/root/.ssh/id_rsa': '%s/keys/master_dcpm' % repoPath,
+            '/root/.ssh/id_rsa.pub': '%s/keys/master_dcpm.pub' % repoPath,
+        }
+        for source, destination in keys.iteritems():
+            content = cl.file_read(source)
+            j.system.fs.writeFile(filename=destination, contents=content)
+
+        # install Jumpscale
+        print "install jumpscale"
+        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
+        print "jumpscale installed"
+
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+
+        # create service required to connect to ovc reflector with ays
+        data = {
+            'instance.key.priv': j.system.fs.fileGetContents('/root/.ssh/id_rsa')
+        }
+        keyService = j.atyourservice.new(name='sshkey', instance='ovc_dcpm', args=data)
+        keyService.install()
+
+        data = {
+            'instance.ip': ip,
+            'instance.ssh.port': 22,
+            'instance.login': 'root',
+            'instance.password': '',
+            'instance.sshkey': keyService.instance,
+            'instance.jumpscale': False,
+            'instance.ssh.shell': '/bin/bash -l -c'
+        }
+        j.atyourservice.remove(name='node.ssh', instance='ovc_dcpm')
+        nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_dcpm', args=data)
+        nodeService.install(reinstall=True)
+
+        dcpm = j.atyourservice.new(name='dcpm', parent=nodeService)
+        dcpm.consume('node', nodeService.instance)
