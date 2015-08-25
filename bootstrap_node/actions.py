@@ -15,7 +15,8 @@ class Actions(ActionsBase):
         data = {
             'key.pub': j.system.fs.fileGetContents(keyapth+'.pub'),
             'hostname': hostname,
-            'login': 'root'
+            'login': 'root',
+            'nid': serviceObj.hrd.getInt('instance.node.id')
         }
 
         # make request to the bootstrapp
