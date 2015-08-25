@@ -4,14 +4,6 @@ dep.args.agentcontroller_client =
     agentcontroller.client.passwd:,
     agentcontroller.client.port:'4444',
 
-dep.args.basenetwork           =
-    netconfig.backplanes.names:'backplane1',
-    netconfig.gw_mgmt.ipaddr:'$(instance.param.basenetwork.gw_mgmt_ip)',
-    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
-    netconfig.mgmt_backplane.interfacename:'backplane1',
-    netconfig.public_backplane.interfacename:'backplane1',
-    netconfig.vxbackend.interfacename:'backplane1',
-
 dep.args.jsagent               =
     agentcontroller.connection:'main',
     grid.id:'1',
@@ -40,11 +32,6 @@ dep.args.statsd-collector      =
 
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.basenetwork.gw_mgmt_ip)',
-
-dependencies.1                 =
-    args:'dep.args.basenetwork',
-    domain:'openvcloud',
-    name:'basenetwork',
 
 dependencies.10                =
     args:'dep.args.agentcontroller_client',
