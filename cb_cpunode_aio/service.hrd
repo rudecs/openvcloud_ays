@@ -31,80 +31,72 @@ dep.args.statsd-collector      =
     statsd.master.host:'$(instance.param.master.addr)',
 
 dep.args.vfwnode               =
-    param.gw_mgmt_ip:'$(instance.param.basenetwork.gw_mgmt_ip)',
+    param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
 
-dependencies.10                =
-    args:'dep.args.agentcontroller_client',
-    instance:'main',
-    name:'agentcontroller_client',
-
-dependencies.11                =
-    args:'dep.args.jsagent',
-    instance:'main',
-    name:'jsagent',
-
-dependencies.12                =
-    domain:'openvcloud',
-    name:'compute_node',
-
-dependencies.13                =
-    args:'dep.args.vfwnode',
-    domain:'openvcloud',
-    name:'vfwnode',
-
-dependencies.14                =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
-dependencies.16                =
-    args:'dep.args.statsd-collector',
-    name:'statsd-collector',
-
-dependencies.17                =
-    domain:'openvcloud',
-    name:'ovs_branding',
-
-dependencies.18                =
-    domain:'jumpscale',
-    name:'nginx',
-
-dependencies.2                 =
+dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
 
-dependencies.3                 =
+dependencies.10                =
+    args:'dep.args.vfwnode',
     domain:'openvcloud',
-    name:'compute_kvm_base',
+    name:'vfwnode',
 
-dependencies.4                 =
+dependencies.11                =
     domain:'openvcloud',
-    name:'defaultcomputenodeconfig',
+    name:'libcloudlibvirt',
 
-dependencies.5                 =
+dependencies.12                =
+    args:'dep.args.statsd-collector',
+    name:'statsd-collector',
+
+dependencies.13                =
+    domain:'openvcloud',
+    name:'ovs_branding',
+
+dependencies.14                =
+    domain:'jumpscale',
+    name:'nginx',
+
+dependencies.2                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
     name:'portal_client',
 
-dependencies.6                 =
+dependencies.3                 =
     args:'dep.args.portal_client',
     instance:'main',
     name:'portal_client',
 
-dependencies.7                 =
+dependencies.4                 =
     args:'dep.args.portal_client',
     instance:'cbportal',
     name:'portal_client',
 
-dependencies.8                 =
+dependencies.5                 =
     args:'dep.args.osis_client',
     instance:'main',
     name:'osis_client',
 
-dependencies.9                 =
+dependencies.6                 =
     args:'dep.args.osis_client',
     instance:'jsagent',
     name:'osis_client',
+
+dependencies.7                 =
+    args:'dep.args.agentcontroller_client',
+    instance:'main',
+    name:'agentcontroller_client',
+
+dependencies.8                 =
+    args:'dep.args.jsagent',
+    instance:'main',
+    name:'jsagent',
+
+dependencies.9                 =
+    domain:'openvcloud',
+    name:'compute_node',
 
 git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',

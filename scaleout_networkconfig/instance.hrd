@@ -1,0 +1,8 @@
+netconfig.public_backplane.interfacename=@ASK default:'backplane1'
+netconfig.gw_mgmt_backplane.interfacename=@ASK default:'backplane1'
+netconfig.vxbackend.interfacename=@ASK default:'backplane1'
+netconfig.public.vlanid=@ASK default:2314
+netconfig.gw_mgmt.vlanid=@ASK default:2311
+netconfig.vxbackend.vlanid=@ASK default:2313
+netconfig.gw_mgmt.ipaddr=@ASK default:'10.199.0.2/22'
+netconfig.vxbackend.ipaddr=@ASK default:'10.240.0.1/16'

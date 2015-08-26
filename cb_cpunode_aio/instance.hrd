@@ -2,4 +2,4 @@ param.rootpasswd=@ASK type:str descr='CBAIO: Portal secret'
 param.master.addr=@ASK descr:'Master node address'
 
 #gw_mgmt_ip
-param.basenetwork.gw_mgmt_ip=@ASK default:10.199.0.2/22 descr:'IP for gw_mgmt'
+param.network.gw_mgmt_ip=@ASK default:10.199.0.2/22 descr:'IP for gw_mgmt'
