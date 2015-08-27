@@ -36,7 +36,7 @@ class Actions(ActionsBase):
                 'System': '/system',
                 'End User': '%s:external' % serviceObj.hrd.get('instance.param.portal.url'),
                 'Storage': '%s:external' % serviceObj.hrd.get('instance.param.ovs.url'),
-                'WhatsInsight': '%s:external' % serviceObj.hrd.get('instance.param.dcpm.url'),
+                'Power Management': '%s:external' % serviceObj.hrd.get('instance.param.dcpm.url'),
                 'At Your Service': '/AYS',
                 'Grid': '/grid',
                 'Cloud Broker': '/cbgrid',

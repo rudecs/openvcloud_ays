@@ -19,6 +19,7 @@ dep.args.portal_client         =
     param.addr:'$(instance.param.master.addr)',
     param.port:'82',
     param.secret:'$(instance.param.rootpasswd)',
+    openvcloud.supportemail:'support@greenitglobe.com',
 
 dep.args.redis                 =
     param.disk:'0',
