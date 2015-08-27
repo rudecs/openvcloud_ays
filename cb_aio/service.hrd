@@ -19,6 +19,7 @@ dep.args.basenetwork         =
 
 dep.args.portal         =
     portal.instance:'main',
+    openvcloud.supportemail:'support@greenitglobe.com',
 
 dep.args.portal_client       =
     param.addr:'localhost',
