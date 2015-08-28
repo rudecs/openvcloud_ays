@@ -93,3 +93,8 @@ class Actions(ActionsBase):
             pool.pubips = pubips
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
+
+        oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
+        oauthClientHRD = j.atyourservice.get(name='oauth_client').hrd
+        portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
+        oauthClientHRD.set('instance.oauth.client.secret', portalSecret)

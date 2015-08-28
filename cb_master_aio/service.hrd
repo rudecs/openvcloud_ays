@@ -3,6 +3,15 @@ dep.args.cloudborker           =
     openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
     portal.instance:'main',
 
+dep.args.oauthclient           =
+    oauth.client.id:'portal',
+    oauth.client.logout_url:'$(instance.param.portal.url)/logout',
+    oauth.client.redirect_url:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
+    oauth.client.scope:'user',
+    oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
+    oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
+    oauth.client.user_info_url:'http://127.0.0.1:8010/user',
+
 dep.args.oauthserver           =
     dcpm.url:'$(instance.param.dcpm.url)',
     oauth.url:'$(instance.param.oauth.url)',
@@ -10,8 +19,8 @@ dep.args.oauthserver           =
     portal.url:'$(instance.param.portal.url)',
 
 dep.args.portal                =
-    portal.instance:'main',
     openvcloud.supportemail:'support@greenitglobe.com',
+    portal.instance:'main',
 
 dep.args.portal_client         =
     param.addr:'localhost',
@@ -62,6 +71,11 @@ dependencies.15                =
     name:'oauthserver',
 
 dependencies.16                =
+    args:'dep.args.oauthclient',
+    domain:'jumpscale',
+    name:'oauth_client',
+
+dependencies.17                =
     domain:'openvcloud',
     name:'portal_branding',
 
@@ -112,4 +126,3 @@ git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.g
 
 platform.supported             =
     'generic',
-

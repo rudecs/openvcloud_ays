@@ -34,6 +34,15 @@ dep.args.statsd-collector      =
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
 
+dep.args.autossh = 
+    local.address: 'localhost'
+    local.port: $(instance.autossh.port)
+    remote.address: '$(instance.param.master.addr)'
+    remote.bind: '$(instance.autossh.reflector.ip)'
+    remote.connection.port: $(instance.autossh.reflector.port)
+    remote.login: 'guest'
+    remote.port: $(instance.autossh.port)
+
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
@@ -59,6 +68,12 @@ dependencies.14                =
 dependencies.15                =
     domain:'jumpscale',
     name:'nginx',
+
+dependencies.16                =
+    domain:'jumpscale',
+    name:'autossh',
+    instance:'http_proxy'
+    args:'dep.args.autossh'
 
 dependencies.2                =
     name:'compute_kvm_base',
