@@ -58,9 +58,9 @@ class Actions(ActionsBase):
         # pip install --upgrade contoml
         print '[+] building this vnaslb settings'
         
-        vdiskroot  = serviceObj.hrd.get("instance.vdiskroot")
-        vdiskmount = serviceObj.hrd.get("instance.vdiskmount")
-        cifspath   = serviceObj.hrd.get("instance.cifspath")
+        vdiskroot  = serviceObj.hrd.get("instance.param.vdiskroot")
+        vdiskmount = serviceObj.hrd.get("instance.param.vdiskmount")
+        cifspath   = serviceObj.hrd.get("instance.param.cifspath")
         
         """
         toml = contoml.new()  
