@@ -1,6 +1,6 @@
 dependencies.1                 =
     domain:'jumpscale',
-    name:'samba4',
+    name:'samba4-standalone',
 
 dependencies.2                 =
     domain:'jumpscale',

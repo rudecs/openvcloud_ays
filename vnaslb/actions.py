@@ -23,11 +23,18 @@ class Actions(ActionsBase):
     
 
     def configure(self, serviceObj):
+        print '[+] loading configuration'
+        
         instance = serviceObj.hrd.get("instance.arakoon.instance")
         hrd = j.application.getAppInstanceHRD("arakoon_client", instance)
         arakoon = hrd.getList("instance.cluster")
 
         vdisks = int(serviceObj.hrd.get("instance.param.vdisks"))
+        
+        vdiskroot  = serviceObj.hrd.get("instance.param.vdiskroot")
+        vdiskmount = serviceObj.hrd.get("instance.param.vdiskmount")
+        cifspath   = serviceObj.hrd.get("instance.param.cifspath")
+        
         
         print '[+] building arakoon config files'
         
@@ -52,17 +59,17 @@ class Actions(ActionsBase):
         with open('/tmp/arakoon.ini', 'wb') as configfile:
             config.write(configfile)
         
-        print '[+] starting this arakoon node'
-        # TODO: Launch Arakoon
         
-        # pip install --upgrade contoml
+        print '[+] configuring samba'
+        
+        smb = j.ssh.samba.get(j.ssh.connect())
+        smb.addShare('vnasfs', cifspath, {'public': 'yes', 'writable': 'yes'})
+        smb.commitShare()
+        
         print '[+] building this vnaslb settings'
         
-        vdiskroot  = serviceObj.hrd.get("instance.param.vdiskroot")
-        vdiskmount = serviceObj.hrd.get("instance.param.vdiskmount")
-        cifspath   = serviceObj.hrd.get("instance.param.cifspath")
-        
         """
+        !! FIXME !!
         toml = contoml.new()  
         
         # global
