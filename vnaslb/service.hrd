@@ -1,0 +1,28 @@
+dependencies.1                 =
+    domain:'jumpscale',
+    name:'samba4',
+
+dependencies.2                 =
+    domain:'jumpscale',
+    name:'s3fs-fuse',
+
+git.export.1                   =
+    dest:'$(system.paths.base)/apps/vnaslb',
+    link:'False',
+    platform:'linux64',
+    source:,
+    url:'http://git.aydo.com/binary/vnaslb',
+
+platform.supported             = 'generic'
+
+process.1                      =
+    args:,
+    cmd:'vnaslb',
+    cwd:'$(system.paths.base)/apps/vnaslb/',
+    filterstr:'vnaslb',
+    ports:,
+    prio:'100',
+    startupmanager:'tmux',
+    timeout_start:'20',
+    timeout_stop:'20',
+

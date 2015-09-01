@@ -1,0 +1,2 @@
+arakoon.instance = @ASK type:str default:vnas descr:'Arakoon settings instance name'
+param.vdisks = @ASK type:str default:2 descr:'How many vdisk to set'
