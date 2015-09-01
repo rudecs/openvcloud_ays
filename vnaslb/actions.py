@@ -26,21 +26,10 @@ class Actions(ActionsBase):
         instance = serviceObj.hrd.get("instance.arakoon.instance")
         hrd = j.application.getAppInstanceHRD("arakoon_client", instance)
         arakoon = hrd.getList("instance.cluster")
-        
-        # temp = j.clients.arakoon.getByInstance(arakoon)
-        
-        address = hrd.getList("instance.cluster")
-        # current = temp.hrd.get("instance.param.arakoon.this")
-        current = 'debug'
-        print address
-        
-        # address = ["1.1.1.1", "2.2.2.2"]
-        # current = "1.1.1.1"
-        
-        nodes = len(address)
+
         vdisks = int(serviceObj.hrd.get("instance.param.vdisks"))
         
-        print '[+] building arakoon config files (node %s)' % current
+        print '[+] building arakoon config files'
         
         config = ConfigParser.RawConfigParser()
         
@@ -49,7 +38,7 @@ class Actions(ActionsBase):
         config.set('global', 'cluster', hrd.get("instance.cluster"))
 
         
-        for node in address:
+        for node in arakoon:
             item = hrd.get("instance." + node)
             
             config.add_section(node)
@@ -112,13 +101,12 @@ class Actions(ActionsBase):
         j.system.fs.writeFile(fn, "\n\n", True)
         j.system.fs.writeFile(fn, "\n[Nodes]", True)
         
-        for i in range(0, nodes):
-            name = 'node%d' % (i + 1)
-            item = hrd.get("instance." + name)
+        for node in arakoon:
+            item = hrd.get("instance." + node)
             
-            j.system.fs.writeFile(fn, "\n[Nodes." + name + "]", True)
+            j.system.fs.writeFile(fn, "\n[Nodes." + node + "]", True)
             j.system.fs.writeFile(fn, "\nHost = \"" + item['ip'] + "\"", True)
-            j.system.fs.writeFile(fn, "\nID = \"" + name + "\"", True)
+            j.system.fs.writeFile(fn, "\nID = \"" + node + "\"", True)
             j.system.fs.writeFile(fn, "\nPort = 4000", True)
             
         j.system.fs.writeFile(fn, "\n\n", True)
