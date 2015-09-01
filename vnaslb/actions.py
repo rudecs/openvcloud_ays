@@ -96,8 +96,8 @@ class Actions(ActionsBase):
         j.system.fs.writeFile(fn, "ClusterID = \"" + hrd.get("instance.clusterid") + "\"", False)
         j.system.fs.writeFile(fn, "\nClientID = \"vdisk_client\"", True)
         j.system.fs.writeFile(fn, "\nVdisksRoot = \"" + vdiskroot + "\"", True)
-        j.system.fs.writeFile(fn, "\nVdisksMountpoint = \"" + vdiskroot + "\"", True)
-        j.system.fs.writeFile(fn, "\nCifsMountedVolume = \"" + vdiskmount + "\"", True)
+        j.system.fs.writeFile(fn, "\nVdisksMountpoint = \"" + vdiskmount + "\"", True)
+        j.system.fs.writeFile(fn, "\nCifsMountedVolume = \"" + cifspath + "\"", True)
         j.system.fs.writeFile(fn, "\n\n", True)
         j.system.fs.writeFile(fn, "\n[Nodes]", True)
         
@@ -107,7 +107,7 @@ class Actions(ActionsBase):
             j.system.fs.writeFile(fn, "\n[Nodes." + node + "]", True)
             j.system.fs.writeFile(fn, "\nHost = \"" + item['ip'] + "\"", True)
             j.system.fs.writeFile(fn, "\nID = \"" + node + "\"", True)
-            j.system.fs.writeFile(fn, "\nPort = \"" + item['client_port'] + "\"", True)
+            j.system.fs.writeFile(fn, "\nPort = " + `item['client_port']`, True)
             
         j.system.fs.writeFile(fn, "\n\n", True)
         j.system.fs.writeFile(fn, "\n[vdisks]", True)
@@ -120,5 +120,16 @@ class Actions(ActionsBase):
             j.system.fs.writeFile(fn, "\nid = " + `diskid`, True)
         
         j.system.fs.writeFile(fn, "\n\n", True)
+        
+        print '[+] creating paths'
+        
+        if not j.system.fs.exists(vdiskroot):
+            j.system.fs.createDir(vdiskroot)
+            
+        if not j.system.fs.exists(vdiskmount):
+            j.system.fs.createDir(vdiskmount)
+            
+        if not j.system.fs.exists(cifspath):
+            j.system.fs.createDir(cifspath)
             
         return True
