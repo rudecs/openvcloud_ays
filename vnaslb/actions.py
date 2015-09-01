@@ -114,9 +114,10 @@ class Actions(ActionsBase):
         
         for i in range(0, nodes):
             name = 'node%d' % (i + 1)
+            item = hrd.get("instance." + name)
             
             j.system.fs.writeFile(fn, "\n[Nodes." + name + "]", True)
-            j.system.fs.writeFile(fn, "\nHost = \"" + name + "\"", True)
+            j.system.fs.writeFile(fn, "\nHost = \"" + item['ip'] + "\"", True)
             j.system.fs.writeFile(fn, "\nID = \"" + name + "\"", True)
             j.system.fs.writeFile(fn, "\nPort = 4000", True)
             
