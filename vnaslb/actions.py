@@ -107,7 +107,7 @@ class Actions(ActionsBase):
             j.system.fs.writeFile(fn, "\n[Nodes." + node + "]", True)
             j.system.fs.writeFile(fn, "\nHost = \"" + item['ip'] + "\"", True)
             j.system.fs.writeFile(fn, "\nID = \"" + node + "\"", True)
-            j.system.fs.writeFile(fn, "\nPort = 4000", True)
+            j.system.fs.writeFile(fn, "\nPort = \"" + item['client_port'] + "\"", True)
             
         j.system.fs.writeFile(fn, "\n\n", True)
         j.system.fs.writeFile(fn, "\n[vdisks]", True)
