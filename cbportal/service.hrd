@@ -5,6 +5,11 @@ git.export.1=
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:True,
 
+git.export.2=
+    url:$(git.url),
+    source:'apps/cbportal/templates/*',
+    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/templates/',
+    link:True,
 
 dependencies.1 =
     name:'portal',
