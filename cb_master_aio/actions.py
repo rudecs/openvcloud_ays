@@ -32,11 +32,17 @@ class Actions(ActionsBase):
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
-        links = {'Open vCloud Portal': serviceObj.hrd.get('instance.param.portal.url'),
-                'Open vStorage': serviceObj.hrd.get('instance.param.ovs.url'),
-                'Whats in sight': serviceObj.hrd.get('instance.param.dcpm.url'),
+        links = {
+                'System': '/system',
+                'End User': '%s:external' % serviceObj.hrd.get('instance.param.portal.url'),
+                'Storage': '%s:external' % serviceObj.hrd.get('instance.param.ovs.url'),
+                'Power Management': '%s:external' % serviceObj.hrd.get('instance.param.dcpm.url'),
+                'At Your Service': '/AYS',
+                'Grid': '/grid',
+                'Cloud Broker': '/cbgrid',
                 }
         portal.hrd.set('instance.navigationlinks.Portals', links)
+        portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
         portal.start()
 
         ccl = j.clients.osis.getNamespace('cloudbroker')
@@ -88,3 +94,7 @@ class Actions(ActionsBase):
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
 
+        oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
+        oauthClientHRD = j.atyourservice.get(name='oauth_client').hrd
+        portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
+        oauthClientHRD.set('instance.oauth.client.secret', portalSecret)

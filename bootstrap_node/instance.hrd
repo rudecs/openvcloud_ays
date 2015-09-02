@@ -1,0 +1,2 @@
+bootstrapp.addr=@ASK descr:'address of the bootstrapp' default:'http://bootstrapp1.demo.greenitglobe.com' type:'str'
+node.id=@ASK descr:'node id, should be a int' type:int

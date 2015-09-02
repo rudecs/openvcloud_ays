@@ -1,0 +1,23 @@
+git.export.1                   =
+    dest:'$(system.paths.base)/apps/bootstrapp',
+    link:'True',
+    source:'apps/bootstrapp/*',
+    url:'https://git.aydo.com/0-complexity/openvcloud.git',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'ubuntu64',
+
+process.1                      =
+    args:'--gitpath $(instance.ovc_git)',
+    cmd:'jspython bootstrapp.py',
+    cwd:'$(system.paths.base)/apps/bootstrapp/',
+    env:,
+    filterstr:'jspython bootstrapp.py',
+    ports:'$(instance.listen.port)',
+    prio:'20',
+    startupmanager:'tmux',
+    timeout_start:'20',
+    timeout_stop:'20',
+

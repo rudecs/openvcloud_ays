@@ -1,0 +1,6 @@
+param.location=@ASK type:str
+param.cloudspace=@ASK default:default descr:'cloudspace name'
+param.login=@ASK descr:'username'
+param.passwd=@ASK descr:'password'
+param.apiurl=@ASK type:str descr:'host of the OpenVcloud environement e.g: env.demo.greenitglobe.com'
+param.secret=

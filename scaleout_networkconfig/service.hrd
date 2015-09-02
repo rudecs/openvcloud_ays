@@ -1,0 +1,7 @@
+ubuntu.packages=libvirt-bin,python-libvirt,virtinst
+platform.supported=ubuntu64,
+
+
+dependencies.1                 =
+    domain:'openvcloud',
+    name:'compute_kvm_base',

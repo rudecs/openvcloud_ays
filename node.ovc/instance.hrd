@@ -1,0 +1,16 @@
+ovc.connection=@ASK descr:'ovc_client instance' default:'main'
+name=@ASK descr:'vmachine name'
+memsize=@ASK type:dropdown descr:'MEM size (GBs)'  dropdownvals:0.5,1,2,4,8,16
+ssdsize=@ASK type:dropdown descr:'SSD size (GBs)'  dropdownvals:10,20,30,40,100
+stackid=@ASK type:int descr:'Stack id on which to deploy the VM. if emty choosen automaticly.'
+imagename='ubuntu 14.04 x64'
+
+machine.id=
+ip=
+ssh.port=
+
+#link to sshkey to be used
+sshkey = @ASK default:'main' descr:'sshkey instance'
+
+jumpscale=@ASK descr:'install jumpscale ?' default:True type:bool
+ssh.shell=@ASK descr:'shell to use during ssh session' default:'/bin/bash -l -c'

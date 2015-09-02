@@ -1,10 +1,25 @@
+dep.args.cloudborker           =
+    cloudbroker.portalurl:'$(instance.param.portal.url)',
+    openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
+    portal.instance:'main',
+
+dep.args.oauthclient           =
+    oauth.client.id:'portal',
+    oauth.client.logout_url:'$(instance.param.portal.url)/logout',
+    oauth.client.redirect_url:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
+    oauth.client.scope:'user',
+    oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
+    oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
+    oauth.client.user_info_url:'http://127.0.0.1:8010/user',
+
 dep.args.oauthserver           =
-    dcpm.url:'$(instance.dcpm.url)',
-    oauth.url:'$(instance.oauth.url)',
-    ovs.url:'$(instance.ovs.url)',
-    portal.url:'$(instance.portal.url)',
+    dcpm.url:'$(instance.param.dcpm.url)',
+    oauth.url:'$(instance.param.oauth.url)',
+    ovs.url:'$(instance.param.ovs.url)',
+    portal.url:'$(instance.param.portal.url)',
 
 dep.args.portal                =
+    openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
 dep.args.portal_client         =
@@ -56,6 +71,11 @@ dependencies.15                =
     name:'oauthserver',
 
 dependencies.16                =
+    args:'dep.args.oauthclient',
+    domain:'jumpscale',
+    name:'oauth_client',
+
+dependencies.17                =
     domain:'openvcloud',
     name:'portal_branding',
 
@@ -90,16 +110,11 @@ dependencies.8                 =
     name:'libcloudlibvirt',
 
 dependencies.9                 =
-    args:'dep.args.portal',
+    args:'dep.args.cloudborker',
     domain:'openvcloud',
     name:'cloudbroker',
 
-git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
-
-platform.supported             =
-    'generic',
-
-git.export.1           =
+git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
@@ -107,3 +122,7 @@ git.export.1           =
     source:'apps/nginx/ms1_fe',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
 
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
