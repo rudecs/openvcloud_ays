@@ -34,68 +34,87 @@ dep.args.statsd-collector      =
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
 
+dep.args.autossh = 
+    local.address: 'localhost',
+    local.port: $(instance.autossh.port),
+    remote.address: '$(instance.param.master.addr)',
+    remote.bind: '$(instance.autossh.reflector.ip)',
+    remote.connection.port: $(instance.autossh.reflector.port),
+    remote.login: 'guest',
+    remote.port: $(instance.autossh.port),
+
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
 
-dependencies.10                =
+dependencies.11                =
     args:'dep.args.vfwnode',
     domain:'openvcloud',
     name:'vfwnode',
 
-dependencies.11                =
+dependencies.12                =
     domain:'openvcloud',
     name:'libcloudlibvirt',
 
-dependencies.12                =
+dependencies.13                =
     args:'dep.args.statsd-collector',
     name:'statsd-collector',
 
-dependencies.13                =
+dependencies.14                =
     domain:'openvcloud',
     name:'ovs_branding',
 
-dependencies.14                =
+dependencies.15                =
     domain:'jumpscale',
     name:'nginx',
 
-dependencies.2                 =
+dependencies.16                =
+    domain:'jumpscale',
+    name:'autossh',
+    instance:'http_proxy',
+    args:'dep.args.autossh'
+
+dependencies.2                =
+    name:'compute_kvm_base',
+    domain:'openvcloud',
+
+dependencies.3                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
     name:'portal_client',
 
-dependencies.3                 =
+dependencies.4                 =
     args:'dep.args.portal_client',
     instance:'main',
     name:'portal_client',
 
-dependencies.4                 =
+dependencies.5                 =
     args:'dep.args.portal_client',
     instance:'cbportal',
     name:'portal_client',
 
-dependencies.5                 =
+dependencies.6                 =
     args:'dep.args.osis_client',
     instance:'main',
     name:'osis_client',
 
-dependencies.6                 =
+dependencies.7                 =
     args:'dep.args.osis_client',
     instance:'jsagent',
     name:'osis_client',
 
-dependencies.7                 =
+dependencies.8                 =
     args:'dep.args.agentcontroller_client',
     instance:'main',
     name:'agentcontroller_client',
 
-dependencies.8                 =
+dependencies.9                 =
     args:'dep.args.jsagent',
     instance:'main',
     name:'jsagent',
 
-dependencies.9                 =
+dependencies.10                 =
     domain:'openvcloud',
     name:'compute_node',
 

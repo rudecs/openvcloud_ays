@@ -5,4 +5,4 @@ openvcloud.cloudbroker.paypal.apisecret=EKcPPRDv9IBNQ6g0io06kO1GvSZtWRA0WdM3BGOM
 openvcloud.cloudbroker.creditcheck.daysofcreditrequired=4
 openvcloud.cloudbroker.defense_proxy=@ASK type:str
 cloudbroker.portalurl=@ASK type:str
-
+openvcloud.supportemail=@ASK default:'support@greenitglobe.com' descr:'User activiation and support sender email address'

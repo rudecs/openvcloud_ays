@@ -9,7 +9,7 @@ from JumpScale.baselib.atyourservice.ActionsBaseNode import ActionsBaseNode
 class Actions(ActionsBaseNode):
 
     def _getSpaceSecret(self, serviceObj):
-        ovsClientHRD = j.application.getAppInstanceHRD("ovc_client","$(instance.ovc.connection)")
+        ovsClientHRD = j.application.getAppInstanceHRD(domain='openvcloud', name="ovc_client", instance="$(instance.ovc.connection)")
         spacesecret = ovsClientHRD.get("instance.param.secret", '')
         if True or spacesecret == '':
             ms1Service = j.atyourservice.get(name='ovc_client', instance="$(instance.ovc.connection)")
@@ -20,7 +20,7 @@ class Actions(ActionsBaseNode):
         return spacesecret
 
     def getCoudClient(self):
-        ovsClientHRD = j.application.getAppInstanceHRD("ovc_client","$(instance.ovc.connection)")
+        ovsClientHRD = j.application.getAppInstanceHRD(domain='openvcloud', name="ovc_client", instance="$(instance.ovc.connection)")
         return j.tools.ms1.get(ovsClientHRD.get('instance.param.apiurl'))
 
     def configure(self, serviceObj):
