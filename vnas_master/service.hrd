@@ -1,0 +1,99 @@
+dep.args.influxdbclient        =
+    param.influxdb.client.address:'localhost',
+    param.influxdb.client.dbname:'main',
+    param.influxdb.client.login:'root',
+    param.influxdb.client.passwd:'root',
+    param.influxdb.client.port:'8086',
+
+dep.args.mongodb               =
+    param.host:'localhost',
+    param.port:'27017',
+    param.replicaset:,
+
+dep.args.mongodbclient         =
+    param.addr:'localhost',
+    param.login:,
+    param.passwd:,
+    param.port:'27017',
+    param.replicaSet:,
+
+dep.args.osis                  =
+    param.osis.connection.influxdb:'main',
+    param.osis.connection.mongodb:'main',
+    param.osis.superadmin.passwd:'$(instance.param.rootpasswd)',
+
+dep.args.osis_client           =
+    param.osis.client.addr:'localhost',
+    param.osis.client.login:'root',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
+
+dep.args.portal                =
+    param.cfg.admingroups:'admin,',
+    param.cfg.authentication.method:'osis',
+    param.cfg.contentdirs:,
+    param.cfg.defaultspace:'home',
+    param.cfg.force_oauth_instance:,
+    param.cfg.gitlab.connection:'main',
+    param.cfg.ipaddr:'localhost',
+    param.cfg.port:'82',
+    param.cfg.secret:'$(instance.param.rootpasswd)',
+    param.osis.connection:'main',
+    param.portal.name:'main',
+    param.portal.rootpasswd:'$(instance.param.rootpasswd)',
+    param.dcpm.url:'https://dcpmcustomer.demo.greenitglobe.com',
+    param.ovs.url:'https://ovscustomer.demo.greenitglobe.com',
+    param.portal.url:'https://customer.demo.greenitglobe.com',
+
+dep.args.portal_client         =
+    param.addr:'localhost',
+    param.port:'82',
+    param.secret:'$(instance.param.rootpasswd)',
+
+dep.args.redis                 =
+    param.disk:'1',
+    param.mem:'100',
+    param.passwd:'$(instance.param.rootpasswd)',
+    param.port:'9999',
+    param.unixsocket:'0',
+
+dependencies.1                 =
+    args:'dep.args.redis',
+    instance:'system',
+    name:'redis',
+
+dependencies.10                =
+    args:'dep.args.portal',
+    name:'portal',
+
+dependencies.11                =
+    args:'dep.args.portal_client',
+    name:'portal_client',
+
+dependencies.2                 =
+    name:'web',
+
+dependencies.3                 =
+    args:'dep.args.mongodb',
+    name:'mongodb',
+
+dependencies.4                 =
+    args:'dep.args.mongodbclient',
+    name:'mongodb_client',
+
+dependencies.5                 =
+    name:'influxdb',
+
+dependencies.6                 =
+    args:'dep.args.influxdbclient',
+    name:'influxdb_client',
+
+dependencies.7                 =
+    args:'dep.args.osis',
+    name:'osis',
+
+dependencies.8                 =
+    args:'dep.args.osis_client',
+    name:'osis_client',
+
+
+platform.supported=linux,

@@ -1,0 +1,25 @@
+dep.args.vnaslb = 
+    arakoon.instance:'main',
+    param.vdisks:0,
+    param.vdiskroot:'/mnt/vdisks',
+    param.vdiskmount:''
+    param.cifspath:'/Storage/vnas'
+
+dep.args.samba4-member = 
+    param.ad.domain:'vnas',
+    param.ad.realm:'vnas.gig',
+    param.ad.adminpwd:'jsR00t3r',
+    param.ad.remote:'$(instance.member.ad.address)',
+    param.ad.ipaddr:'$(instance.member.address)',
+
+
+dependencies.1                 =
+    name:'samba4-member'
+    args:'samba4-member'
+
+dependencies.2                 =
+    name:'vnaslb',
+    args:'dep.args.vnaslb',
+
+
+platform.supported=linux,

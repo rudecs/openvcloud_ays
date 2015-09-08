@@ -1,0 +1,18 @@
+dep.args.samba4-ad  =
+    param.ad.domain:'vnas',
+    param.ad.realm:'vnas.gig',
+    param.ad.adminpwd:'jsR00t3r',
+
+dep.args.samba4_ad_user = 
+    user.username:'gig',
+    user.passwd:'rooter',
+
+dependencies.1                 =
+    name:'samba4-ad',
+    args:'dep.args.samba4-ad',
+
+dependencies.2                 =
+    name:'samba4_ad_user',
+    args:'dep.args.samba4_ad_user',
+
+platform.supported=linux,

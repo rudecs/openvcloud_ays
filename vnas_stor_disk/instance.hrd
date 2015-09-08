@@ -1,0 +1,3 @@
+disk.id=@ASK type:int
+nfs.host=@ASK type:str description:'nfs allow clients' default:'192.168.103.0/24'
+nfs.options=@ASK type:str default:'root_no_squash, no_subtree_check' description:'nfs options'
