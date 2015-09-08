@@ -26,8 +26,8 @@ class Actions(ActionsBase):
         for i in range(diskNbr):
             data = {
                 'instance.disk.id': i,
-                'instance.nfs.host': '192.168.0.103.0/24'
-                'instance.nfs.options': 'root_no_squash, no_subtree_check',
+                'instance.nfs.host': '192.168.0.103.0/24',
+                'instance.nfs.options': 'no_root_squash, no_subtree_check',
             }
-            stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance=i, args=data, parent=serviceObj)
+            stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=serviceObj)
             stor_disk.install()

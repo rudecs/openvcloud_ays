@@ -6,10 +6,11 @@ git.export.1                   =
     url:'http://git.aydo.com/binary/vnaslb',
 
 platform.supported             = 'generic'
+ubuntu.packages = 'fuse'
 
 process.1                      =
     args:,
-    cmd:'vnaslb',
+    cmd:'./vnaslb',
     cwd:'$(system.paths.base)/apps/vnaslb/',
     filterstr:'vnaslb',
     ports:,

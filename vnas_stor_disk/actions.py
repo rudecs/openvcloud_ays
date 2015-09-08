@@ -27,16 +27,20 @@ class Actions(ActionsBase):
             j.events.opserror_critical(msg="can't find vnas_stor. install vnas_stor first", category="vnas_stor_disk")
 
         storHRD = services[0].hrd
-        disksDir = storHRD.getStr('instance.stor.export.dir')
-        diskID = serviceObj.getInt('instance.disk.id')
+        disksDir = storHRD.get('instance.stor.export.dir')
+        diskID = serviceObj.hrd.getInt('instance.disk.id')
         path = j.system.fs.joinPaths(disksDir, str(diskID))
-        nfsHost = serviceObj.getInt('instance.nfs.host')
-        nfsOptions = serviceObj.getInt('instance.nfs.options')
-
+        nfsHost = serviceObj.hrd.getStr('instance.nfs.host')
+        nfsOptions = serviceObj.hrd.getStr('instance.nfs.options')
+        from ipdb import set_trace;set_trace()
         nfs = j.ssh.nfs.get(j.ssh.connect())
         share = nfs.add(path)
         share.addClient(nfsHost, nfsOptions)
         nfs.commit()
 
+        output = j.system.fs.joinPaths(path, '.vnas.toml')
+        j.system.fs.createDir(path)
+        j.system.fs.createEmptyFile(output)
+
         disk = {'id': diskID, 'pool': ''}
-        contoml.dump(disk, j.system.fs.joinPaths(path, '.vnas.toml'), prettify=True)
+        contoml.dump(disk, output, prettify=True)

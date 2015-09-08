@@ -1,10 +1,4 @@
-dependencies.1                 =
-    name:'samba4_ad',
+platform.supported             =
+    'linux',
 
-dependencies.2                 =
-    name:'samba4_ad_user',
-    args:'dep.args.user'
-
-platform.supported=linux,
-
-ubuntu.packages = 'nfs-kernel-server'
+ubuntu.packages                = 'nfs-kernel-server'

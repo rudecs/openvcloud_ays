@@ -1,3 +1,13 @@
+dep.args.agentcontroller2      =
+    param.redis.host:'localhost:9999',
+    param.redis.password:,
+    param.webservice.host:':8966',
+
+dep.args.agentcontroller2_client =
+    param.redis.address:'localhost',
+    param.redis.password:,
+    param.redis.port:'9999',
+
 dep.args.influxdbclient        =
     param.influxdb.client.address:'localhost',
     param.influxdb.client.dbname:'main',
@@ -37,11 +47,11 @@ dep.args.portal                =
     param.cfg.ipaddr:'localhost',
     param.cfg.port:'82',
     param.cfg.secret:'$(instance.param.rootpasswd)',
+    param.dcpm.url:'https://dcpmcustomer.demo.greenitglobe.com',
     param.osis.connection:'main',
+    param.ovs.url:'https://ovscustomer.demo.greenitglobe.com',
     param.portal.name:'main',
     param.portal.rootpasswd:'$(instance.param.rootpasswd)',
-    param.dcpm.url:'https://dcpmcustomer.demo.greenitglobe.com',
-    param.ovs.url:'https://ovscustomer.demo.greenitglobe.com',
     param.portal.url:'https://customer.demo.greenitglobe.com',
 
 dep.args.portal_client         =
@@ -52,7 +62,7 @@ dep.args.portal_client         =
 dep.args.redis                 =
     param.disk:'1',
     param.mem:'100',
-    param.passwd:'$(instance.param.rootpasswd)',
+    param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
 
@@ -62,8 +72,8 @@ dependencies.1                 =
     name:'redis',
 
 dependencies.10                =
-    args:'dep.args.portal',
-    name:'portal',
+    args:'dep.args.agentcontroller2_client',
+    name:'agentcontroller2_client',
 
 dependencies.11                =
     args:'dep.args.portal_client',
@@ -95,5 +105,10 @@ dependencies.8                 =
     args:'dep.args.osis_client',
     name:'osis_client',
 
+dependencies.9                 =
+    args:'dep.args.agentcontroller2',
+    name:'agentcontroller2',
 
-platform.supported=linux,
+platform.supported             =
+    'linux',
+

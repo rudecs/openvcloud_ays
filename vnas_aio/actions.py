@@ -1,4 +1,5 @@
 from JumpScale import j
+import time
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -27,9 +28,10 @@ class Actions(ActionsBase):
                                               ovcClientHRD.getStr('instance.param.passwd'),
                                               ovcClientHRD.getStr('instance.param.cloudspace'),
                                               location=ovcClientHRD.getStr('instance.param.location'))
+
         j.system.platform.ubuntu.generateLocalSSHKeyPair()
-        # create service required to connect to ovc reflector with ays
         self.key = j.system.fs.fileGetContents('/root/.ssh/id_rsa')
+        self.keypub = j.system.fs.fileGetContents('/root/.ssh/id_rsa.pub')
         data = {'instance.key.priv': self.key}
         keyService = j.atyourservice.new(name='sshkey', instance='vnas', args=data)
         keyService.install()
@@ -37,17 +39,17 @@ class Actions(ActionsBase):
 
         j.actions.start(description='create vnas master', action=self.createMaster, category='vnas', name='vnas_master', serviceObj=serviceObj)
         j.actions.start(description='create vnas Active directory', action=self.createAD, category='vnas', name='vnas_ad', serviceObj=serviceObj)
-        for i in range(1, 6):
+        for i in range(1, 2):
             id = i
             stackID = 2+i
             j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
-        for i in range(1, 6):
+        for i in range(1, 2):
             j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
             self.createFrontend(id, stackID=3+i)
 
     def createMaster(self):
-        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_master', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, stackId=1,  sshkey=self.key)
-
+        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_master', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        self.masterIP = ip
 
         data = {
             'instance.ip': ip,
@@ -58,16 +60,17 @@ class Actions(ActionsBase):
             'instance.jumpscale': True,
             'instance.ssh.shell': '/bin/bash -l -c'
         }
+        from ipdb import set_trace;set_trace()
         nodeMaster = j.atyourservice.new(name='node.ssh', instance='vnas_master', args=data)
         nodeMaster.install(reinstall=True)
 
         data = {'instance.param.rootpasswd': 'rooter'}
-        vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data, parent=vnasMaster)
+        vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data, parent=nodeMaster)
         vnasMaster.consume('node', nodeMaster.instance)
         vnasMaster.install(reinstall=True)
 
     def createAD(self):
-        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', stackId=1, delete=True, sshkey=self.key)
+        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         self.ADIP = ip
 
         data = {
@@ -83,17 +86,19 @@ class Actions(ActionsBase):
         nodeAD.install(reinstall=True)
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
-        vnasAD.consume('node', nodeAD)
+        vnasAD.consume('node', nodeAD.instance)
         vnasAD.install(reinstall=True)
 
     def createBackend(self, id, stackID):
         vmName = 'vnas_backend%s' % id
-        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, stackId=stackID, sshkey=self.key)
+        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         self.ovc.stopMachine(self.spacesecret, vmName)
+        time.sleep(2)
         for x in xrange(1, 11):
             diskName = 'data%s' % x
-            ovc.addDisk(self.spaceSecret, vmName, diskName, size=2000, description=None, type='D')
+            self.ovc.addDisk(self.spacesecret, vmName, diskName, size=2000, description=None, type='D')
         self.ovc.startMachine(self.spacesecret, vmName)
+        time.sleep(2)
 
         data = {
             'instance.ip': ip,
@@ -114,12 +119,12 @@ class Actions(ActionsBase):
             'instance.disk.size': 2000,
         }
         vnasStor = j.atyourservice.new(name='vnas_stor', instance='main', args=data, parent=node)
-        vnasStor.consume('node', node)
+        vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True)
 
     def createFrontend(self, id, stackID):
         vmName = 'vnas%s' % id
-        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, stackId=stackID, sshkey=self.key)
+        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
 
         data = {
             'instance.ip': ip,
@@ -136,8 +141,9 @@ class Actions(ActionsBase):
         data = {
             'instance.member.ad.address': self.ADIP,
             'instance.member.address': ip,
+            'instance.agent.address': self.masterIP,
+            'instance.agent.nid': id,
         }
         vnasStor = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
-        vnasStor.consume('node', node)
+        vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True)
-

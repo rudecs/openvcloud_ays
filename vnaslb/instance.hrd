@@ -1,5 +1,5 @@
 arakoon.instance = @ASK type:str default:vnas descr:'Arakoon settings instance name'
 param.vdisks = @ASK type:str default:2 descr:'How many vdisk to set'
-param.vdiskroot = @ASK type:str default:/mnt/vdisk/ descr:'vDisk root path'
+param.vdiskroot = @ASK type:str default:/mnt/vdisks/ descr:'vDisk root path'
 param.vdiskmount = @ASK type:str default:/mnt/vdisk/mount descr:'vDisk mount path'
-param.cifspath = @ASK type:str default:/mnt/cifs descr:'cifs path'
+param.cifspath = @ASK type:str default:/storage/vnas descr:'cifs path'
