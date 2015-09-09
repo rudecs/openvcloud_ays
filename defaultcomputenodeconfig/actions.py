@@ -29,7 +29,6 @@ class Actions(ActionsBase):
         hrd = basenetwork.hrd
 
 
-        mgmt_backplane  = hrd.get('instance.netconfig.mgmt_backplane.interfacename')
         public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
         gw_mgmt_backplane = hrd.get('instance.netconfig.gw_mgmt_backplane.interfacename')
         vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
@@ -48,7 +47,6 @@ class Actions(ActionsBase):
 
         j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newVlanBridge('gw_mgmt', gw_mgmt_backplane, gw_mgmt_vlan)
-        j.system.ovsnetconfig.newVlanBridge('mgmt', mgmt_backplane, mgmt_vlan)
         j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan,mtu=2000)
 
         publicxml = '''
@@ -67,14 +65,6 @@ class Actions(ActionsBase):
             <virtualport type='openvswitch'/>
         </network>'''
 
-        mgmtxml = '''
-     <network>
-            <name>mgmt</name>
-            <forward mode="bridge"/>
-            <bridge name='mgmt'/>
-            <virtualport type='openvswitch'/>
-        </network>'''
-
         conn = libvirt.open()
 
         networks = conn.listAllNetworks()
@@ -87,13 +77,7 @@ class Actions(ActionsBase):
         public = conn.networkDefineXML(publicxml)
         public.create()
         public.setAutostart(True)
-
         private = conn.networkDefineXML(gwmgmtxml)
-        private.create()
-        private.setAutostart(True)
-
-
-        private = conn.networkDefineXML(mgmtxml)
         private.create()
         private.setAutostart(True)
 
