@@ -34,9 +34,10 @@ class Actions(ActionsBase):
         portal.stop()
         links = {
                 'System': '/system',
-                'End User': '%s:external' % serviceObj.hrd.get('instance.param.portal.url'),
-                'Storage': '%s:external' % serviceObj.hrd.get('instance.param.ovs.url'),
-                'Power Management': '%s:external' % serviceObj.hrd.get('instance.param.dcpm.url'),
+                'End User': '%s' % serviceObj.hrd.get('instance.param.portal.url'),
+                'Storage': '%s' % serviceObj.hrd.get('instance.param.ovs.url'),
+                'Grafana': '/grafana',
+                'Power Management': '%s' % serviceObj.hrd.get('instance.param.dcpm.url'),
                 'At Your Service': '/AYS',
                 'Grid': '/grid',
                 'Cloud Broker': '/cbgrid',
