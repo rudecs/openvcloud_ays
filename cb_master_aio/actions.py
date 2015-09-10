@@ -113,6 +113,7 @@ class Actions(ActionsBase):
         parser = SafeConfigParser()
         parser.readfp(fp)
         parser.set('server', 'root_url', '%s/grafana' % portalurl)
+        parser.set('users', 'auto_assign_org_role', 'Editor')
         parser.set('auth.github', 'enabled', 'true')
         parser.set('auth.github', 'allow_sign_up', 'true')
         parser.set('auth.github', 'client_id', 'grafana')
