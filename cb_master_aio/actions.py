@@ -1,4 +1,6 @@
 from JumpScale import j
+from ConfigParser import SafeConfigParser
+import cStringIO as StringIO
 
 ActionsBase=j.atyourservice.getActionsBaseClass()
 
@@ -32,11 +34,13 @@ class Actions(ActionsBase):
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
+        portalurl = serviceObj.hrd.get('instance.param.portal.url')
         links = {
                 'System': '/system',
-                'End User': '%s:external' % serviceObj.hrd.get('instance.param.portal.url'),
-                'Storage': '%s:external' % serviceObj.hrd.get('instance.param.ovs.url'),
-                'Power Management': '%s:external' % serviceObj.hrd.get('instance.param.dcpm.url'),
+                'End User': portalurl,
+                'Storage': '%s' % serviceObj.hrd.get('instance.param.ovs.url'),
+                'Grafana': '/grafana',
+                'Power Management': '%s' % serviceObj.hrd.get('instance.param.dcpm.url'),
                 'At Your Service': '/AYS',
                 'Grid': '/grid',
                 'Cloud Broker': '/cbgrid',
@@ -98,3 +102,31 @@ class Actions(ActionsBase):
         oauthClientHRD = j.atyourservice.get(name='oauth_client').hrd
         portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
         oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
+
+        #configure grafana for oauth
+        grafana = j.atyourservice.get(name='grafana')
+        grafanaSecret = oauthServerHRD.get('instance.oauth.clients.grafana.secret')
+        grafana.stop()
+        cfgfile = '/opt/grafana/conf/defaults.ini'
+        cfgcontent = j.system.fs.fileGetContents(cfgfile)
+        fp = StringIO.StringIO('[global]\n' + cfgcontent)
+        parser = SafeConfigParser()
+        parser.readfp(fp)
+        parser.set('server', 'root_url', '%s/grafana' % portalurl)
+        parser.set('users', 'auto_assign_org_role', 'Editor')
+        parser.set('auth.github', 'enabled', 'true')
+        parser.set('auth.github', 'allow_sign_up', 'true')
+        parser.set('auth.github', 'client_id', 'grafana')
+        parser.set('auth.github', 'client_secret', grafanaSecret)
+        parser.set('auth.github', 'scopes', 'admin')
+        parser.set('auth.github', 'auth_url', '%s/login/oauth/authorize' % portalurl)
+        parser.set('auth.github', 'token_url', '%s/login/oauth/access_token' % portalurl)
+        parser.set('auth.github', 'api_url', '%s/user' % portalurl)
+
+        fpout = StringIO.StringIO()
+        parser.write(fpout)
+        content = fpout.getvalue().replace('[global]', '')
+        j.system.fs.writeFile(cfgfile, content)
+        grafana.start()
+
+

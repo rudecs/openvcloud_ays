@@ -1,7 +1,6 @@
 netconfig.backplanes.names=@ASK type:str
 netconfig.backplanes.backplane1.backplaneipconfig=@ASK type:dict descr:'Enter gateway and address for backplane1'
 netconfig.backplanes.backplane1.backplaneinterface=@ASK type:str
-netconfig.mgmt_backplane.interfacename=@ASK type:str
 netconfig.public_backplane.interfacename=@ASK type:str
 netconfig.gw_mgmt_backplane.interfacename=@ASK type:str
 netconfig.vxbackend.interfacename=@ASK type:str

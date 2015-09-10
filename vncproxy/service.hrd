@@ -1,50 +1,52 @@
-
-process.1=
-    cmd:'jspython',
-    args: 'websockify_cs --web $(system.paths.base)/apps/vncproxy --portal-client $(instance.param.portal.connection) 8091',
-    prio:100,
-    cwd:'$(system.paths.base)/apps/vncproxy/utils/',
-    timeout_start:20,
-    timeout_stop:20,
-    ports:8091,
-    startupmanager:tmux,
-    filterstr:'websockify_cs',
-
-env.procces.1 =
-    PYTHONPATH:$(system.paths.base)/apps/vncproxy/utils,
-
-git.export.1=
-    url:'http://github.com/0-complexity/noVNC',
-    branch:'0.5.1'
-    source:'vnc_auto.html',
-    dest:'$(system.paths.app)/vncproxy/',
-    link:False,
-
-git.export.2=
-    url:'http://github.com/0-complexity/noVNC',
-    source:'images',
-    dest:'$(system.paths.app)/vncproxy/images',
-    link:False,
-
-git.export.3=
-    url:'http://github.com/0-complexity/noVNC',
-    source:'utils',
-    dest:'$(system.paths.app)/vncproxy/utils',
-    link:False,
-
-git.export.4=
-    url:'http://git.aydo.com/0-complexity/openvcloud',
-    source:'/apps/vncproxy/utils/*',
-    dest:'$(system.paths.app)/vncproxy/utils/',
-    link:True,
-
-platform.supported=generic
-
-dependencies.1 = 
-    name:'python_portal',
-    domain:'jumpscale',
-
-depencencies.2 = 
-    name:'portal_client',
+depencencies.2                 =
     domain:'jumpscale',
     instance:'$(instance.param.portal.connection)',
+    name:'portal_client',
+
+dependencies.1                 =
+    domain:'jumpscale',
+    name:'python_portal',
+
+env.procces.1                  =
+    PYTHONPATH:'$(system.paths.base)/apps/vncproxy/utils',
+
+git.export.1                   =
+    branch:'0.5.1',
+    dest:'$(system.paths.app)/vncproxy/',
+    link:'False',
+    source:'vnc_auto.html',
+    url:'http://github.com/0-complexity/noVNC',
+
+git.export.2                   =
+    branch:'0.5.1',
+    dest:'$(system.paths.app)/vncproxy/images',
+    link:'False',
+    source:'images',
+    url:'http://github.com/0-complexity/noVNC',
+
+git.export.3                   =
+    branch:'0.5.1',
+    dest:'$(system.paths.app)/vncproxy/utils',
+    link:'False',
+    source:'utils',
+    url:'http://github.com/0-complexity/noVNC',
+
+git.export.4                   =
+    dest:'$(system.paths.app)/vncproxy/utils/',
+    link:'True',
+    source:'/apps/vncproxy/utils/*',
+    url:'http://git.aydo.com/0-complexity/openvcloud',
+
+platform.supported             = 'generic'
+
+process.1                      =
+    args:'websockify_cs --web $(system.paths.base)/apps/vncproxy --portal-client $(instance.param.portal.connection) 8091',
+    cmd:'jspython',
+    cwd:'$(system.paths.base)/apps/vncproxy/utils/',
+    filterstr:'websockify_cs',
+    ports:'8091',
+    prio:'100',
+    startupmanager:'tmux',
+    timeout_start:'20',
+    timeout_stop:'20',
+
