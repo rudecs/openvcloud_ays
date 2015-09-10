@@ -21,7 +21,7 @@ git.export.2                   =
 git.url                        = 'https://git.aydo.com/binary/openvcloud_ssloffloader/'
 
 #how many instances can be installed of this package, if 1 the instance name is always 'main'
-instances.maxnr                = 1
+instances.maxnr                = '1'
 
 platform.supported             =
     'generic',

@@ -50,100 +50,11 @@ class Actions(ActionsBase):
         clientsecret = base64.urlsafe_b64encode(binarysecret)
         serviceObj.hrd.set("instance.oauth.clients.portal.secret", clientsecret)
 
+        binarysecret = os.urandom(32)
+        clientsecret = base64.urlsafe_b64encode(binarysecret)
+        serviceObj.hrd.set("instance.oauth.clients.grafana.secret", clientsecret)
+
         serviceObj.hrd.applyOnFile("$(system.paths.base)/apps/oauthserver/clients.toml")
 
         return True
 
-
-    # def start(self,serviceObj):
-    #     #start mysql in background
-    #     if j.system.net.tcpPortConnectionTest("localhost",3306):
-    #         return
-
-    #     import JumpScale.baselib.screen
-
-    #     cmd="/opt/mariadb/bin/mysqld --basedir=/opt/mariadb --datadir=/opt/mariadb/data --plugin-dir=/opt/mariadb/lib/plugin/ --user=root --console --verbose"
-    #     j.system.platform.screen.createSession("servers",["mariadb"])
-    #     j.system.platform.screen.executeInScreen(sessionname="servers", screenname="mariadb", cmd=cmd, wait=0, cwd=None, env=None, user='root', tmuxuser=None)
-
-    #     #now wait till we can access the port
-    #     res=j.system.net.waitConnectionTest("localhost",3306,2)
-    #     if res==False:
-    #         j.events.inputerror_critical("mariadb did not become active, check in byobu","jpackage.install.mariadb.startup")
-
-    # def stop(self,serviceObj):
-    #     """
-    #     if you want a gracefull shutdown implement this method
-    #     a uptime check will be done afterwards (local)
-    #     return True if stop was ok, if not this step will have failed & halt will be executed.
-    #     """
-    #     cmd="$(param.base)/bin/mysql -u root --password='$(param.rootpasswd)' --execute='shutdown;'"
-    #     print (cmd)
-    #     j.do.execute(cmd)
-
-    #     if self.check_down_local(hrd):
-    #         return True
-    #     else:
-    #         j.events.opserror_critical("Cannot stop %s."%self.jp,"jpackage.stop")
-
-    # def halt(self,serviceObj):
-    #     """
-    #     hard kill the app, std a linux kill is used, you can use this method to do something next to the std behaviour
-    #     """
-    #     return True
-
-    # def check_uptime_local(self,serviceObj):
-    #     """
-    #     do checks to see if process(es) is (are) running.
-    #     this happens on system where process is
-    #     """
-    #     return True
-
-    # def check_requirements(self,serviceObj):
-    #     """
-    #     do checks if requirements are met to install this app
-    #     e.g. can we connect to database, is this the right platform, ...
-    #     """
-    #     return True
-
-    # def monitor_local(self,serviceObj):
-    #     """
-    #     do checks to see if all is ok locally to do with this package
-    #     this happens on system where process is
-    #     """
-    #     return True
-
-    # def monitor_remote(self,serviceObj):
-    #     """
-    #     do checks to see if all is ok from remote to do with this package
-    #     this happens on system from which we install or monitor (unless if defined otherwise in hrd)
-    #     """
-    #     return True
-
-    # def cleanup(self,serviceObj):
-    #     """
-    #     regular cleanup of env e.g. remove logfiles, ...
-    #     is just to keep the system healthy
-    #     """
-    #     return True
-
-    # def data_export(self,serviceObj):
-    #     """
-    #     export data of app to a central location (configured in hrd under whatever chosen params)
-    #     return the location where to restore from (so that the restore action knows how to restore)
-    #     we remember in $name.export the backed up events (epoch,$id,$state,$location)  $state is OK or ERROR
-    #     """
-    #     return False
-
-    # def data_import(self,id,hrd,serviceObj):
-    #     """
-    #     import data of app to local location
-    #     if specifies which retore to do, id corresponds with line item in the $name.export file
-    #     """
-    #     return False
-
-    # def uninstall(self,serviceObj):
-    #     """
-    #     uninstall the apps, remove relevant files
-    #     """
-    #     pass
