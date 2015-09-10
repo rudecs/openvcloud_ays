@@ -32,7 +32,6 @@ class Actions(ActionsBase):
         path = j.system.fs.joinPaths(disksDir, str(diskID))
         nfsHost = serviceObj.hrd.getStr('instance.nfs.host')
         nfsOptions = serviceObj.hrd.getStr('instance.nfs.options')
-        from ipdb import set_trace;set_trace()
         nfs = j.ssh.nfs.get(j.ssh.connect())
         share = nfs.add(path)
         share.addClient(nfsHost, nfsOptions)

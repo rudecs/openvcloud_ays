@@ -37,41 +37,40 @@ class Actions(ActionsBase):
         keyService.install()
 
 
-        j.actions.start(description='create vnas master', action=self.createMaster, category='vnas', name='vnas_master', serviceObj=serviceObj)
-        j.actions.start(description='create vnas Active directory', action=self.createAD, category='vnas', name='vnas_ad', serviceObj=serviceObj)
+        j.actions.start(description='create vnas master', action=self.createMaster, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_master', serviceObj=serviceObj)
+        j.actions.start(description='create vnas Active directory', action=self.createAD, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_ad', serviceObj=serviceObj)
         for i in range(1, 2):
             id = i
             stackID = 2+i
             j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
         for i in range(1, 2):
-            j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
-            self.createFrontend(id, stackID=3+i)
+            j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
-    def createMaster(self):
-        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_master', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
-        self.masterIP = ip
+    def createMaster(self , serviceObj):
+        # id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_master', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        # serviceObj.hrd.set('instance.master.ip', ip)
 
-        data = {
-            'instance.ip': ip,
-            'instance.ssh.port': port,
-            'instance.login': 'root',
-            'instance.password': '',
-            'instance.sshkey': 'vnas',
-            'instance.jumpscale': True,
-            'instance.ssh.shell': '/bin/bash -l -c'
-        }
-        from ipdb import set_trace;set_trace()
-        nodeMaster = j.atyourservice.new(name='node.ssh', instance='vnas_master', args=data)
-        nodeMaster.install(reinstall=True)
+        # data = {
+        #     'instance.ip': ip,
+        #     'instance.ssh.port': 22,
+        #     'instance.login': 'root',
+        #     'instance.password': '',
+        #     'instance.sshkey': 'vnas',
+        #     'instance.jumpscale': True,
+        #     'instance.ssh.shell': '/bin/bash -l -c'
+        # }
+
+        # nodeMaster = j.atyourservice.new(name='node.ssh', instance='vnas_master', args=data)
+        # nodeMaster.install(reinstall=True)
 
         data = {'instance.param.rootpasswd': 'rooter'}
-        vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data, parent=nodeMaster)
-        vnasMaster.consume('node', nodeMaster.instance)
+        vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data)
+        # vnasMaster.consume('node', nodeMaster.instance)
         vnasMaster.install(reinstall=True)
 
-    def createAD(self):
+    def createAD(self, serviceObj):
         id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
-        self.ADIP = ip
+        serviceObj.hrd.set('instance.ad.ip', ip)
 
         data = {
             'instance.ip': ip,
@@ -122,7 +121,7 @@ class Actions(ActionsBase):
         vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True)
 
-    def createFrontend(self, id, stackID):
+    def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
         id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
 
@@ -139,9 +138,9 @@ class Actions(ActionsBase):
         node.install(reinstall=True)
 
         data = {
-            'instance.member.ad.address': self.ADIP,
+            'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
             'instance.member.address': ip,
-            'instance.agent.address': self.masterIP,
+            'instance.agent.address': serviceObj.hrd.get('instance.master.ip'),
             'instance.agent.nid': id,
         }
         vnasStor = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
