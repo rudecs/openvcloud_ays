@@ -43,6 +43,10 @@ dep.args.autossh =
     remote.login: 'guest',
     remote.port: $(instance.autossh.port),
 
+dep.args.vncproxy =
+    param.vncproxy.publichostport:'$(vnc.url)',
+    param.portal.connection:'main',
+
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
@@ -74,6 +78,11 @@ dependencies.16                =
     name:'autossh',
     instance:'http_proxy',
     args:'dep.args.autossh'
+
+dependencies.17                =
+    name:'vncproxy',
+    instance:'main',
+    args:'dep.args.vncproxy',
 
 dependencies.2                =
     name:'compute_kvm_base',
