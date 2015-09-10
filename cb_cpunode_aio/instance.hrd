@@ -7,3 +7,5 @@ param.network.gw_mgmt_ip=@ASK default:10.199.0.2/22 descr:'IP for gw_mgmt'
 autossh.port=@ASK descr:'autossh for http proxy. 21000 + $nid' type:int
 autossh.reflector.ip=@ASK descr:'ip (private) of the ovc_reflector vm' type:str
 autossh.reflector.port=@ASK descr:'port of the ovc_reflector vm' type:str default:22
+
+vnc.url=@ASK type:str description:'public url of the vnc proxy' default:'novncenv.demo.greenitglobe.com'
