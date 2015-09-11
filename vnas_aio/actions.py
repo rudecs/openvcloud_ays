@@ -42,10 +42,11 @@ class Actions(ActionsBase):
         j.actions.start(description='create vnas Active directory', action=self.createAD, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_ad', serviceObj=serviceObj)
 
         nbrBackend = serviceObj.hrd.getInt('instance.nbr.stor')
+        nbrDisk = serviceObj.hrd.getInt('instance.nbr.disk')
         for i in range(1, nbrBackend+1):
             id = i
             stackID = 2+i
-            j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
+            j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID, 'nbrDisk': nbrDisk}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
 
         nbrFrontend = serviceObj.hrd.getInt('instance.nbr.front')
         for i in range(1, nbrFrontend+1):
@@ -86,7 +87,7 @@ class Actions(ActionsBase):
         vnasAD.consume('node', nodeAD.instance)
         vnasAD.install(reinstall=True, deps=True)
 
-    def createBackend(self, id, stackID):
+    def createBackend(self, id, stackID, nbrDisk):
         vmName = 'vnas_backend%s' % id
         id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
@@ -121,12 +122,23 @@ class Actions(ActionsBase):
         data = {
             'instance.stor.id': id,
             'instance.stor.export.dir': '/mnt/disks',
-            'instance.disk.number': 10,
+            'instance.disk.number': nbrDisk,
             'instance.disk.size': 2000,
         }
         vnasStor = j.atyourservice.new(name='vnas_stor', instance='main', args=data, parent=node)
         vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True, deps=True)
+
+        for i in range(nbrDisk):
+            data = {
+                'instance.disk.id': i,
+                'instance.nfs.host': '192.168.0.103.0/24',
+                'instance.nfs.options': 'no_root_squash, no_subtree_check',
+            }
+        stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
+        vnasStor.consume('node', node.instance)
+        stor_disk.install(deps=True)
+
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id

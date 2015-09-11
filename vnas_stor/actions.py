@@ -20,16 +20,3 @@ class Actions(ActionsBase):
     step7b: do monitor_local to see if package healthy installed & running
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
-
-    def configure(self, serviceObj):
-        diskNbr = serviceObj.hrd.getInt('instance.disk.number')
-        exportDir = serviceObj.hrd.getStr('instance.stor.export.dir')
-
-        for i in range(diskNbr):
-            data = {
-                'instance.disk.id': i,
-                'instance.nfs.host': '192.168.0.103.0/24',
-                'instance.nfs.options': 'no_root_squash, no_subtree_check',
-            }
-            stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=serviceObj)
-            stor_disk.install()

@@ -1,3 +1,4 @@
 ovc_client=@ASK default:'main' description:'instance name of the ovc_client'
 nbr.stor=@ASK default:5 description:'number of backend to create'
 nbr.front=@ASK default:5 description:'number of frontend to create'
+nbr.disk=@ASK default:10 description:'number of disk by vnas_stor'

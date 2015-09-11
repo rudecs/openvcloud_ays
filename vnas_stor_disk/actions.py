@@ -39,6 +39,9 @@ class Actions(ActionsBase):
         cmd = 'mkfs.%s %s' % ("btrfs", devName)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=False, outputToStdout=True)
 
+        cmd = 'mount %s %s' %(devName, path)
+        j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
+
         nfs = j.ssh.nfs.get(j.ssh.connect())
         share = nfs.add(path)
         share.addClient(nfsHost, nfsOptions)
