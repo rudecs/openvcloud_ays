@@ -32,6 +32,7 @@ class Actions(ActionsBase):
         for x in xrange(1, diskNbr+1):
             diskName = 'data%s' % x
             ovc.addDisk(self.spacesecret, vmName, diskName, size=2000, description=None, type='D')
+            time.sleep(0.5)
         self.ovc.startMachine(self.spacesecret, vmName)
         time.sleep(2)
 

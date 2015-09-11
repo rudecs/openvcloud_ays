@@ -52,8 +52,9 @@ class Actions(ActionsBase):
             j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
     def createMaster(self , serviceObj):
-        # serviceObj.hrd.set('instance.master.ip', ip)
 
+        _, ip = j.system.net.getDefaultIPConfig()
+        serviceObj.hrd.set('instance.master.ip', ip)
         data = {'instance.param.rootpasswd': 'rooter'}
         vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data)
         vnasMaster.install(reinstall=True, deps=True)
