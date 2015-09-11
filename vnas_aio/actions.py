@@ -52,7 +52,6 @@ class Actions(ActionsBase):
             j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
     def createMaster(self , serviceObj):
-
         _, ip = j.system.net.getDefaultIPConfig()
         serviceObj.hrd.set('instance.master.ip', ip)
         data = {'instance.param.rootpasswd': 'rooter'}
@@ -60,12 +59,14 @@ class Actions(ActionsBase):
         vnasMaster.install(reinstall=True, deps=True)
 
     def createAD(self, serviceObj):
-        id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        id, _, _ = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        obj = self.ovc.getMachineObject(self.spacesecret, 'vnas_ad')
+        ip = obj['interfaces'][0]['ipAddress']
         serviceObj.hrd.set('instance.ad.ip', ip)
 
         data = {
             'instance.ip': ip,
-            'instance.ssh.port': port,
+            'instance.ssh.port': 22,
             'instance.login': 'root',
             'instance.password': '',
             'instance.sshkey': 'vnas',
@@ -87,7 +88,10 @@ class Actions(ActionsBase):
 
     def createBackend(self, id, stackID):
         vmName = 'vnas_backend%s' % id
-        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        obj = self.ovc.getMachineObject(self.spacesecret, vmName)
+        ip = obj['interfaces'][0]['ipAddress']
+
         self.ovc.stopMachine(self.spacesecret, vmName)
         time.sleep(2)
         for x in xrange(1, 11):
@@ -98,7 +102,7 @@ class Actions(ActionsBase):
 
         data = {
             'instance.ip': ip,
-            'instance.ssh.port': port,
+            'instance.ssh.port': 22,
             'instance.login': 'root',
             'instance.password': '',
             'instance.sshkey': 'vnas',
@@ -126,11 +130,13 @@ class Actions(ActionsBase):
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
-        id, ip, port = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        obj = self.ovc.getMachineObject(self.spacesecret, vmName)
+        ip = obj['interfaces'][0]['ipAddress']
 
         data = {
             'instance.ip': ip,
-            'instance.ssh.port': port,
+            'instance.ssh.port': 22,
             'instance.login': 'root',
             'instance.password': '',
             'instance.sshkey': 'vnas',
