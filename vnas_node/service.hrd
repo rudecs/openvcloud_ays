@@ -1,0 +1,40 @@
+dep.args.agent2                =
+    agentcontroller:'http://127.0.0.1:8966/',
+    gid:'100',
+    nid:'$(instance.agent.nid)',
+
+dep.args.arakoon_client        =
+    clusterid:'vnas',
+
+dep.args.samba4_member         =
+    param.ad.adminpwd:'jsR00t3r',
+    param.ad.domain:'vnas',
+    param.ad.ipaddr:'$(instance.member.address)',
+    param.ad.realm:'vnas.gig',
+    param.ad.remote:'$(instance.member.ad.address)',
+
+dep.args.vnaslb                =
+    arakoon.instance:'main',
+    param.vdiskmount:'/Storage/vnas',
+    param.vdiskroot:'/mnt/vdisks',
+    param.vdisks:'0',
+
+dependencies.1                 =
+    args:'dep.args.samba4_member',
+    name:'samba4_member',
+
+dependencies.2                 =
+    args:'dep.args.arakoon_client',
+    name:'arakoon_client',
+
+dependencies.3                 =
+    args:'dep.args.agent2',
+    name:'agent2',
+
+dependencies.4                 =
+    args:'dep.args.vnaslb',
+    name:'vnaslb',
+
+platform.supported             =
+    'linux',
+

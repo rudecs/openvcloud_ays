@@ -1,11 +1,3 @@
-dependencies.1                 =
-    domain:'jumpscale',
-    name:'samba4-standalone',
-
-dependencies.2                 =
-    domain:'jumpscale',
-    name:'s3fs-fuse',
-
 git.export.1                   =
     dest:'$(system.paths.base)/apps/vnaslb',
     link:'False',
@@ -14,10 +6,11 @@ git.export.1                   =
     url:'http://git.aydo.com/binary/vnaslb',
 
 platform.supported             = 'generic'
+ubuntu.packages = 'fuse'
 
 process.1                      =
     args:,
-    cmd:'vnaslb',
+    cmd:'./vnaslb',
     cwd:'$(system.paths.base)/apps/vnaslb/',
     filterstr:'vnaslb',
     ports:,

@@ -1,0 +1,4 @@
+stor.id=@ASK type:int description:'id of the vnas_stor'
+stor.export.dir='/mnt/disks'
+disk.number=@ASK type:int decription:'number of disks to use for vnas backend' default:10
+disk.size=@ASK default:2000 type:int description:'size of the disks in GB'
