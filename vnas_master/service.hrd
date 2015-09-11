@@ -55,9 +55,9 @@ dep.args.portal                =
     param.portal.url:'https://customer.demo.greenitglobe.com',
 
 dep.args.grafana = 
-    param.influxdb.connection='main',
-    param.port=3000,
-    param.password='$(instance.param.rootpasswd)',
+    param.influxdb.connection:'main',
+    param.port:3000,
+    param.password:'$(instance.param.rootpasswd)',
 
 dep.args.portal_client         =
     param.addr:'localhost',
