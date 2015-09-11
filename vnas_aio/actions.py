@@ -56,8 +56,7 @@ class Actions(ActionsBase):
 
         data = {'instance.param.rootpasswd': 'rooter'}
         vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data)
-        # vnasMaster.consume('node', nodeMaster.instance)
-        vnasMaster.install(reinstall=True)
+        vnasMaster.install(reinstall=True, deps=True)
 
     def createAD(self, serviceObj):
         id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_ad', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
@@ -83,7 +82,7 @@ class Actions(ActionsBase):
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
         vnasAD.consume('node', nodeAD.instance)
-        vnasAD.install(reinstall=True)
+        vnasAD.install(reinstall=True, deps=True)
 
     def createBackend(self, id, stackID):
         vmName = 'vnas_backend%s' % id
@@ -122,7 +121,7 @@ class Actions(ActionsBase):
         }
         vnasStor = j.atyourservice.new(name='vnas_stor', instance='main', args=data, parent=node)
         vnasStor.consume('node', node.instance)
-        vnasStor.install(reinstall=True)
+        vnasStor.install(reinstall=True, deps=True)
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
@@ -151,6 +150,6 @@ class Actions(ActionsBase):
             'instance.agent.address': serviceObj.hrd.get('instance.master.ip'),
             'instance.agent.nid': id,
         }
-        vnasStor = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
-        vnasStor.consume('node', node.instance)
-        vnasStor.install(reinstall=True)
+        vnasNode = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
+        vnasNode.consume('node', node.instance)
+        vnasNode.install(reinstall=True, deps=True)

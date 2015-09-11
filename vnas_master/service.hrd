@@ -8,6 +8,11 @@ dep.args.agentcontroller2_client =
     param.redis.password:,
     param.redis.port:'9999',
 
+dep.args.grafana               =
+    param.influxdb.connection:'main',
+    param.password:'$(instance.param.rootpasswd)',
+    param.port:'3000',
+
 dep.args.influxdbclient        =
     param.influxdb.client.address:'localhost',
     param.influxdb.client.dbname:'main',
@@ -53,11 +58,6 @@ dep.args.portal                =
     param.portal.name:'main',
     param.portal.rootpasswd:'$(instance.param.rootpasswd)',
     param.portal.url:'https://customer.demo.greenitglobe.com',
-
-dep.args.grafana = 
-    param.influxdb.connection:'main',
-    param.port:3000,
-    param.password:'$(instance.param.rootpasswd)',
 
 dep.args.portal_client         =
     param.addr:'localhost',
