@@ -37,32 +37,22 @@ class Actions(ActionsBase):
         keyService = j.atyourservice.new(name='sshkey', instance='vnas', args=data)
         keyService.install()
 
-
         j.actions.start(description='create vnas master', action=self.createMaster, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_master', serviceObj=serviceObj)
+
         j.actions.start(description='create vnas Active directory', action=self.createAD, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_ad', serviceObj=serviceObj)
-        for i in range(1, 2):
+
+        nbrBackend = serviceObj.hrd.getInt('instance.nbr.stor')
+        for i in range(1, nbrBackend+1):
             id = i
             stackID = 2+i
             j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
-        for i in range(1, 2):
+
+        nbrFrontend = serviceObj.hrd.getInt('instance.nbr.front')
+        for i in range(1, nbrFrontend+1):
             j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
     def createMaster(self , serviceObj):
-        # id, ip, port = self.ovc.createMachine(self.spacesecret, 'vnas_master', memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         # serviceObj.hrd.set('instance.master.ip', ip)
-
-        # data = {
-        #     'instance.ip': ip,
-        #     'instance.ssh.port': 22,
-        #     'instance.login': 'root',
-        #     'instance.password': '',
-        #     'instance.sshkey': 'vnas',
-        #     'instance.jumpscale': True,
-        #     'instance.ssh.shell': '/bin/bash -l -c'
-        # }
-
-        # nodeMaster = j.atyourservice.new(name='node.ssh', instance='vnas_master', args=data)
-        # nodeMaster.install(reinstall=True)
 
         data = {'instance.param.rootpasswd': 'rooter'}
         vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data)

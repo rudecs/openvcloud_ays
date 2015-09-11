@@ -1,4 +1,5 @@
 from JumpScale import j
+import time
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -23,6 +24,16 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         diskNbr = serviceObj.hrd.getInt('instance.disk.number')
         exportDir = serviceObj.hrd.getStr('instance.stor.export.dir')
+        ovcClientHRD = j.atyourservice.get(name='ovc_client', instance='$(instance.ovc_client)').hrd
+        ovc = j.tools.ms1.get(apiURL=ovcClientHRD.getStr('instance.param.apiurl'))
+
+        ovc.stopMachine(self.spacesecret, vmName)
+        time.sleep(2)
+        for x in xrange(1, diskNbr+1):
+            diskName = 'data%s' % x
+            ovc.addDisk(self.spacesecret, vmName, diskName, size=2000, description=None, type='D')
+        self.ovc.startMachine(self.spacesecret, vmName)
+        time.sleep(2)
 
         for i in range(diskNbr):
             data = {
