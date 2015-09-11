@@ -1,3 +1,4 @@
 
 
 platform.supported=linux,
+ubuntu.packages                = 'btrfs-tools','xfsprogs'

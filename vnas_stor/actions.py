@@ -22,6 +22,7 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         diskNbr = serviceObj.hrd.getInt('instance.disk.number')
+        exportDir = serviceObj.hrd.getStr('instance.stor.export.dir')
 
         for i in range(diskNbr):
             data = {

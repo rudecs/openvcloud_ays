@@ -29,7 +29,8 @@ class Actions(ActionsBase):
                                               ovcClientHRD.getStr('instance.param.cloudspace'),
                                               location=ovcClientHRD.getStr('instance.param.location'))
 
-        j.system.platform.ubuntu.generateLocalSSHKeyPair()
+        if not j.system.fs.exists(path='/root/.ssh/id_rsa'):
+            j.system.platform.ubuntu.generateLocalSSHKeyPair()
         self.key = j.system.fs.fileGetContents('/root/.ssh/id_rsa')
         self.keypub = j.system.fs.fileGetContents('/root/.ssh/id_rsa.pub')
         data = {'instance.key.priv': self.key}
@@ -81,8 +82,14 @@ class Actions(ActionsBase):
             'instance.jumpscale': True,
             'instance.ssh.shell': '/bin/bash -l -c'
         }
+        j.atyourservice.remove(name='node.ssh', instance='vnas_ad')
         nodeAD = j.atyourservice.new(name='node.ssh', instance='vnas_ad', args=data)
         nodeAD.install(reinstall=True)
+
+        # allow SSH SAL to connect seamlessly
+        cl = nodeAD.actions.getSSHClient(nodeAD)
+        cl.ssh_keygen('root', keytype='rsa')
+        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
         vnasAD.consume('node', nodeAD.instance)
@@ -108,8 +115,14 @@ class Actions(ActionsBase):
             'instance.jumpscale': True,
             'instance.ssh.shell': '/bin/bash -l -c'
         }
+        j.atyourservice.remove(name='node.ssh', instance=vmName)
         node = j.atyourservice.new(name='node.ssh', instance=vmName, args=data)
         node.install(reinstall=True)
+
+        # allow SSH SAL to connect seamlessly
+        cl = node.actions.getSSHClient(node)
+        cl.ssh_keygen('root', keytype='rsa')
+        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
 
         data = {
             'instance.stor.id': id,
@@ -134,8 +147,13 @@ class Actions(ActionsBase):
             'instance.jumpscale': True,
             'instance.ssh.shell': '/bin/bash -l -c'
         }
+        j.atyourservice.remove(name='node.ssh', instance=vmName)
         node = j.atyourservice.new(name='node.ssh', instance=vmName, args=data)
         node.install(reinstall=True)
+
+        cl = node.actions.getSSHClient(node)
+        cl.ssh_keygen('root', keytype='rsa')
+        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
 
         data = {
             'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),

@@ -32,6 +32,13 @@ class Actions(ActionsBase):
         path = j.system.fs.joinPaths(disksDir, str(diskID))
         nfsHost = serviceObj.hrd.getStr('instance.nfs.host')
         nfsOptions = serviceObj.hrd.getStr('instance.nfs.options')
+
+        # format disks
+        alpha = 'bcdefghijklmnopqrstuvwxyz'
+        devName = '/dev/vd%s' % alpha[diskID]
+        cmd = 'mkfs.%s %s' % ("btrfs", devName)
+        j.system.process.execute(cmd, dieOnNonZeroExitCode=False, outputToStdout=True)
+
         nfs = j.ssh.nfs.get(j.ssh.connect())
         share = nfs.add(path)
         share.addClient(nfsHost, nfsOptions)
