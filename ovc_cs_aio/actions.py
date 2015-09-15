@@ -229,7 +229,7 @@ class Actions(ActionsBase):
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
 
-        cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+        cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
         # install Jumpscale
         print "install jumpscale"
