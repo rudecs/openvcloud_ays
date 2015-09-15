@@ -218,6 +218,9 @@ class Actions(ActionsBase):
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_proxy')
         ip = machine['interfaces'][0]['ipAddress']
+        
+        reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
+        reflectip = reflectvm['interfaces'][0]['ipAddress']
 
         # portforward 80 and 443 to 80 and 442 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
@@ -265,7 +268,8 @@ class Actions(ActionsBase):
             'instance.bootstrapp.servername': bootrappServerName,
             'instance.ovs.servername': ovsServerName,
             'instance.defense.servername': defenseServerName,
-            'instance.novnc.servername': novncServerName
+            'instance.novnc.servername': novncServerName,
+            'instance.reflector.ipadress': reflectip,
         }
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=nodeService)
         ssloffloader.consume('node', nodeService.instance)
