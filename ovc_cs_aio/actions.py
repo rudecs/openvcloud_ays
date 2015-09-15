@@ -217,7 +217,10 @@ class Actions(ActionsBase):
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_proxy')
-        ip = machine['interfaces'][0]['ipAddress']
+        proxyip = machine['interfaces'][0]['ipAddress']
+        
+        machine = self.api.getMachineObject(spacesecret, 'ovc_master')
+        masterip = machine['interfaces'][0]['ipAddress']
         
         reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         reflectip = reflectvm['interfaces'][0]['ipAddress']
@@ -244,7 +247,7 @@ class Actions(ActionsBase):
         keyService.install()
 
         data = {
-            'instance.ip': ip,
+            'instance.ip': proxyip,
             'instance.ssh.port': 22,
             'instance.login': 'root',
             'instance.password': '',
@@ -259,7 +262,7 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.host': host,
-            'instance.master.ipadress': ip,
+            'instance.master.ipadress': masterip,
             'instance.dcpm.servername': dcpmServerName,
             'instance.dcpm.ipadress': dcpmIpAddress,
             'instance.dcpm.port': dcpmPort,
@@ -355,7 +358,8 @@ class Actions(ActionsBase):
             'instance.param.ovs.url': ovsUrl,
             'instance.param.portal.url': portalUrl,
             'instance.param.oauth.url': oauthUrl,
-            'instance.param.defense.url': defenseUrl
+            'instance.param.defense.url': defenseUrl,
+            
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
