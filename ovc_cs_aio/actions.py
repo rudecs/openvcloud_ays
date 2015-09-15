@@ -81,6 +81,8 @@ class Actions(ActionsBase):
             self.initReflectorVM(spacesecret, reflectorPassphrase, self.repoPath, delete=delete)
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
 
+
+        """
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
@@ -90,6 +92,7 @@ class Actions(ActionsBase):
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
+        """
 
         def master():
             # install
@@ -101,6 +104,16 @@ class Actions(ActionsBase):
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
                               self.defenseUrl, self.repoPath, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
+        
+        def proxy():
+            # install proxy
+            self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
+                             self.dcpmIpAddress, self.dcpmPort,
+                             self.ovsServerName,
+                             self.defenseServerName, self.novncServerName,
+                             self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
+                             delete=delete)
+        j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -216,11 +229,11 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
-        machine = self.api.getMachineObject(spacesecret, 'ovc_proxy')
-        proxyip = machine['interfaces'][0]['ipAddress']
+        proxyvm = self.api.getMachineObject(spacesecret, 'ovc_proxy')
+        proxyip = proxyvm['interfaces'][0]['ipAddress']
         
-        machine = self.api.getMachineObject(spacesecret, 'ovc_master')
-        masterip = machine['interfaces'][0]['ipAddress']
+        mastervm = self.api.getMachineObject(spacesecret, 'ovc_master')
+        masterip = mastervm['interfaces'][0]['ipAddress']
         
         reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         reflectip = reflectvm['interfaces'][0]['ipAddress']
