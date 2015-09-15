@@ -39,7 +39,7 @@ class Actions(ActionsBase):
                 'System': '/system',
                 'End User': portalurl,
                 'Storage': '%s' % serviceObj.hrd.get('instance.param.ovs.url'),
-                'Grafana': '/grafana',
+                'Statistics': '/grafana',
                 'Power Management': '%s' % serviceObj.hrd.get('instance.param.dcpm.url'),
                 'At Your Service': '/AYS',
                 'Grid': '/grid',

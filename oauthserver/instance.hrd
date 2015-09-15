@@ -1,7 +1,7 @@
 oauth.clients.dcpm.id='dcpm'
 oauth.clients.ovs.id='ovs'
 oauth.clients.portal.id='portal'
-oauth.clients.grafana.id='portal'
+oauth.clients.grafana.id='grafana'
 dcpm.url = @ASK type:str default:'https://dcpmcustomer.demo.greenitglobe.com'  descr:'url DCPM is hosted on'
 ovs.url = @ASK type:str default:'https://ovscustomer.demo.greenitglobe.com'  descr:'url OpenvStorage is hosted on'
 grafana.url = @ASK type:str default:'https://customer.demo.greenitglobe.com/grfana'  descr:'url Grafana is hosted on'
