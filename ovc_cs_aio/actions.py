@@ -19,20 +19,53 @@ class Actions(ActionsBase):
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         self.bootrappServerName = serviceObj.hrd.get('instance.bootstrapp.servername')
-
-        self.oauthUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
-        self.portalUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
-        self.dcpmUrl = 'https://'+self.dcpmServerName
-        self.ovsUrl = 'https://'+self.ovsServerName
-        self.defenseUrl = 'https://'+self.defenseServerName
-        self.novncUrl = 'https://'+self.novncServerName
+        
+        self.rootdomain = 'demo.greenitglobe.com'
+        self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
+        
+        if serviceObj.hrd.getStr('instance.host') == 'auto':
+            self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
+            self.portalUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.oauthUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
+            self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
+        
+        if self.dcpmServerName == 'auto':
+            self.dcpmUrl = 'https://dcpm%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.dcpmUrl = 'https://' + self.dcpmServerName
+        
+        if self.ovsServerName == 'auto':
+            self.ovsUrl = 'https://ovs%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.ovsUrl = 'https://' + self.ovsServerName
+        
+        if self.defenseServerName == 'auto':
+            self.defenseUrl = 'https://defense%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.defenseUrl = 'https://' + self.defenseServerName
+        
+        if self.novncServerName == 'auto':
+            self.novncUrl = 'https://novnc%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.novncUrl = 'https://' + self.novncServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
+        
         self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
         self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
+        
+        print '[+] root domain: %s' % self.rootdomain
+        print '[+] environment: %s' % self.rootenv
+        print '[+] oauth   url: %s' % self.oauthUrl
+        print '[+] portal  url: %s' % self.portalUrl
+        print '[+] dcpm    url: %s' % self.dcpmUrl
+        print '[+] ovs     url: %s' % self.ovsUrl
+        print '[+] defense url: %s' % self.defenseUrl
+        print '[+] novnc   url: %s' % self.novncUrl
 
     def configure(self, serviceObj):
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
