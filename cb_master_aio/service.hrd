@@ -1,6 +1,7 @@
 dep.args.cloudborker           =
     cloudbroker.portalurl:'$(instance.param.portal.url)',
     openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
+    openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
 dep.args.oauthclient           =
@@ -18,6 +19,7 @@ dep.args.oauthserver           =
     oauth.url:'$(instance.param.oauth.url)',
     ovs.url:'$(instance.param.ovs.url)',
     portal.url:'$(instance.param.portal.url)',
+    grafana.url:'$(instance.param.grafana.url)',
 
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
