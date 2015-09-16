@@ -39,6 +39,9 @@ class Actions(ActionsBase):
         cmd = 'mkfs.%s %s' % ("btrfs", devName)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=False, outputToStdout=True)
 
+        if not j.system.fs.exists(path=path):
+            j.system.fs.createDir(path)
+
         cmd = 'mount %s %s' %(devName, path)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
 
@@ -48,7 +51,6 @@ class Actions(ActionsBase):
         nfs.commit()
 
         output = j.system.fs.joinPaths(path, '.vnas.toml')
-        j.system.fs.createDir(path)
         j.system.fs.createEmptyFile(output)
 
         disk = {'id': diskID, 'pool': ''}
