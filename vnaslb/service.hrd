@@ -6,7 +6,6 @@ git.export.1                   =
     url:'http://git.aydo.com/binary/vnaslb',
 
 platform.supported             = 'generic'
-ubuntu.packages = 'fuse'
 
 process.1                      =
     args:,
@@ -19,3 +18,4 @@ process.1                      =
     timeout_start:'20',
     timeout_stop:'20',
 
+ubuntu.packages                = 'fuse'
