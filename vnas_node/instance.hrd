@@ -1,4 +1,4 @@
 member.ad.address=@ASK description:'Active directory address'
 member.address=@ASK description:'Active directory member address (address of the local machine')
-agent.address=@ASK description:'agentcontroller2 address'
+agentcontroller.address=@ASK description:'agentcontroller2 address'
 agent.nid=@ASK description:'agent2: node id'

@@ -82,6 +82,7 @@ class Actions(ActionsBase):
         cl = nodeAD.actions.getSSHClient(nodeAD)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
+        setGitCredentials(cl)
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
         vnasAD.consume('node', nodeAD.instance)
@@ -119,6 +120,7 @@ class Actions(ActionsBase):
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
+        setGitCredentials(cl)
 
         data = {
             'instance.stor.id': id,
@@ -133,12 +135,12 @@ class Actions(ActionsBase):
         for i in range(nbrDisk):
             data = {
                 'instance.disk.id': i,
-                'instance.nfs.host': '192.168.0.103.0/24',
+                'instance.nfs.host': '192.168.103.0/24',
                 'instance.nfs.options': 'no_root_squash, no_subtree_check',
             }
-        stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
-        stor_disk.consume('node', node.instance)
-        stor_disk.install(deps=True)
+            stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
+            stor_disk.consume('node', node.instance)
+            stor_disk.install(deps=True)
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
@@ -162,11 +164,12 @@ class Actions(ActionsBase):
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
+        setGitCredentials(cl)
 
         data = {
             'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
             'instance.member.address': ip,
-            'instance.agent.address': serviceObj.hrd.get('instance.master.ip'),
+            'instance.agentcontroller.address': serviceObj.hrd.get('instance.master.ip'),
             'instance.agent.nid': id,
         }
         vnasNode = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
@@ -192,3 +195,7 @@ class Actions(ActionsBase):
             else:
                 time.sleep(1.5)
         j.events.opserror_critical(msg="can't start vm", category="vnas deploy")
+
+    def setGitCredentials(self, cl):
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % j.application.config.getStr('whoami.git.login'))
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(j.application.config.getStr('whoami.git.passwd')))

@@ -1,5 +1,5 @@
 dep.args.agent2                =
-    agentcontroller:'http://127.0.0.1:8966/',
+    agentcontroller:'http://$(instance.agentcontroller.address):8966/',
     gid:'100',
     nid:'$(instance.agent.nid)',
 
@@ -15,7 +15,7 @@ dep.args.samba4_member         =
 
 dep.args.vnaslb                =
     arakoon.instance:'main',
-    param.vdiskmount:'/Storage/vnas',
+    param.vdiskmount:'/storage/vnas',
     param.vdiskroot:'/mnt/vdisks',
     param.vdisks:'0',
 
@@ -37,4 +37,5 @@ dependencies.4                 =
 
 platform.supported             =
     'linux',
+
 
