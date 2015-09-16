@@ -56,7 +56,10 @@ class Actions(ActionsBase):
     def createMaster(self , serviceObj):
         _, ip = j.system.net.getDefaultIPConfig()
         serviceObj.hrd.set('instance.master.ip', ip)
-        data = {'instance.param.rootpasswd': 'rooter'}
+        data = {
+            'instance.param.rootpasswd': 'rooter',
+            'instance.ip': ip,
+        }
         vnasMaster = j.atyourservice.new(name='vnas_master', instance='main', args=data)
         vnasMaster.install(reinstall=True, deps=True)
 
@@ -142,6 +145,9 @@ class Actions(ActionsBase):
             stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
             stor_disk.consume('node', node.instance)
             stor_disk.install(deps=True)
+        # make sure nfs server is running
+        cl.run('/etc/init.d/nfs-kernel-server restart')
+
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
