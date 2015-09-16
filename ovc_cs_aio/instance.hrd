@@ -21,5 +21,6 @@ bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.gree
 ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at (use auto to autodetect)'
 defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield (use auto to autodetect)'
 novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at (use auto to autodetect)'
+grafana.servername = @ASK type:str default:'grafanaenvironment.demo.greenitglobe.com'  descr:'hostname the grafana should be access (use auto to autodetect)'
 
 reflector.root.passphrase=@ASK descr:'passphrase for the root ssh keypair' type:'str'

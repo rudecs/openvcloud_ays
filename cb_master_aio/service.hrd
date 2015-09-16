@@ -1,6 +1,7 @@
 dep.args.cloudborker           =
     cloudbroker.portalurl:'$(instance.param.portal.url)',
     openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
+    openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
 dep.args.oauthclient           =
@@ -11,12 +12,14 @@ dep.args.oauthclient           =
     oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
     oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
     oauth.client.user_info_url:'http://127.0.0.1:8010/user',
+    oauth.client.secret:'652994f8234c2969ac8d11bebf38ee7792447770',
 
 dep.args.oauthserver           =
     dcpm.url:'$(instance.param.dcpm.url)',
     oauth.url:'$(instance.param.oauth.url)',
     ovs.url:'$(instance.param.ovs.url)',
     portal.url:'$(instance.param.portal.url)',
+    grafana.url:'$(instance.param.grafana.url)',
 
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
@@ -74,6 +77,7 @@ dependencies.16                =
     args:'dep.args.oauthclient',
     domain:'jumpscale',
     name:'oauth_client',
+    instance:'oauth',
 
 dependencies.17                =
     domain:'openvcloud',

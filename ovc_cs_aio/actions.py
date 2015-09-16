@@ -12,6 +12,7 @@ class Actions(ActionsBase):
         self.ovsServerName = serviceObj.hrd.getStr('instance.ovs.servername')
         self.defenseServerName = serviceObj.hrd.getStr('instance.defense.servername')
         self.novncServerName = serviceObj.hrd.getStr('instance.novnc.servername')
+        self.grafanaServerName = serviceObj.hrd.getStr('instance.grafana.servername')
 
         self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
         self.dcpmPort = serviceObj.hrd.getStr('instance.dcpm.port')
@@ -49,6 +50,11 @@ class Actions(ActionsBase):
             self.novncUrl = 'https://novnc%s.%s' % (self.rootenv, self.rootdomain)
         else:
             self.novncUrl = 'https://' + self.novncServerName
+        
+        if self.grafanaServerName == 'auto':
+            self.grafanaUrl = 'https://grafana%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.grafanaUrl = 'https://' + self.grafanaServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
@@ -66,6 +72,7 @@ class Actions(ActionsBase):
         print '[+] ovs     url: %s' % self.ovsUrl
         print '[+] defense url: %s' % self.defenseUrl
         print '[+] novnc   url: %s' % self.novncUrl
+        print '[+] grafana url: %s' % self.grafanaUrl
 
     def configure(self, serviceObj):
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
@@ -102,7 +109,7 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, rootpasswd,
                               ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
-                              self.defenseUrl, self.repoPath, delete=delete)
+                              self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
         def proxy():
@@ -112,7 +119,7 @@ class Actions(ActionsBase):
                              self.ovsServerName,
                              self.defenseServerName, self.novncServerName,
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
-                             delete=delete)
+                             self.grafanaServerName, delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
@@ -210,7 +217,7 @@ class Actions(ActionsBase):
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_git', 5000, pubipport=5000)
 
     def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmIpAddress, dcpmPort, ovsServerName, defenseServerName, novncServerName, bootrappIpAddress, bootrappPort, bootrappServerName,
-        delete=False):
+        grafanaServerName, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -285,13 +292,14 @@ class Actions(ActionsBase):
             'instance.ovs.servername': ovsServerName,
             'instance.defense.servername': defenseServerName,
             'instance.novnc.servername': novncServerName,
+            'instance.grafana.servername': grafanaServerName,
             'instance.reflector.ipadress': reflectip,
         }
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=nodeService)
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -372,7 +380,7 @@ class Actions(ActionsBase):
             'instance.param.portal.url': portalUrl,
             'instance.param.oauth.url': oauthUrl,
             'instance.param.defense.url': defenseUrl,
-            
+            'instance.param.grafana.url': grafanaUrl,
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
