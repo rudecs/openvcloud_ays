@@ -370,6 +370,10 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_master')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_master', args=data)
         nodeService.install(reinstall=True)
+        
+        redisService = j.atyourservice.new(name='redis', instance='system', parent=nodeService)
+        redisService.consume('node', nodeService.instance)
+        redisService.install(deps=True)
 
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
