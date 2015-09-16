@@ -109,7 +109,7 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, rootpasswd,
                               ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
-                              self.defenseUrl, self.repoPath, delete=delete)
+                              self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
         def proxy():
@@ -119,7 +119,7 @@ class Actions(ActionsBase):
                              self.ovsServerName,
                              self.defenseServerName, self.novncServerName,
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
-                             delete=delete)
+                             self.grafanaServerName, delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
@@ -217,7 +217,7 @@ class Actions(ActionsBase):
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_git', 5000, pubipport=5000)
 
     def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmIpAddress, dcpmPort, ovsServerName, defenseServerName, novncServerName, bootrappIpAddress, bootrappPort, bootrappServerName,
-        delete=False):
+        grafanaServerName, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -299,7 +299,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
