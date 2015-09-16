@@ -1,0 +1,12 @@
+ovc.environment = @ASK type:str descr:'environment name'
+ovc.path = @ASK type:str descr:'repo path'
+
+ovc.ms1.instance = @ASK type:str
+ovc.gitlab_client.instance = @ASK type:str
+ovc.password = @ASK type:str
+
+ovc.bootstrap.port = @ASK type:str
+ovc.bootstrap.host = @ASK type:str
+
+ovc.cloudip = @ASK type:str
+ovc.gitip = @ASK type:str

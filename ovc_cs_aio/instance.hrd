@@ -7,15 +7,19 @@ master.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
 publicip.start = @ASK type:str
 publicip.end = @ASK type:str
 
-host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded'
-dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
+param.main.host = @ASK type:str descr='root hostname (environment name)'
+
+host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded (use auto to autodetect)'
+dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at (use auto to autodetect)'
 dcpm.ipadress = @ASK type:str default:'192.168.103.252'  descr:'internal ip address DCPM is running on'
 dcpm.port = @ASK type:int default:80  descr:'port DCPM is listenning on'
+
 bootstrapp.ipadress = @ASK  type:str default:'192.168.103.251'  descr:'internal ip address bootrapp is running on'
 bootstrapp.port = @ASK  type:int descr:'port bootstrapp is listenning on' default:5000
-bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.greenitglobe.com' descr:'servername bootstrapp is exposed at'
-ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at'
-defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield'
-novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at'
+
+bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.greenitglobe.com' descr:'servername bootstrapp is exposed at (use auto to autodetect)'
+ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at (use auto to autodetect)'
+defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield (use auto to autodetect)'
+novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at (use auto to autodetect)'
 
 reflector.root.passphrase=@ASK descr:'passphrase for the root ssh keypair' type:'str'

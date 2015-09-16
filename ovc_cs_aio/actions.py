@@ -19,20 +19,53 @@ class Actions(ActionsBase):
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         self.bootrappServerName = serviceObj.hrd.get('instance.bootstrapp.servername')
-
-        self.oauthUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
-        self.portalUrl = 'https://'+serviceObj.hrd.getStr('instance.host')
-        self.dcpmUrl = 'https://'+self.dcpmServerName
-        self.ovsUrl = 'https://'+self.ovsServerName
-        self.defenseUrl = 'https://'+self.defenseServerName
-        self.novncUrl = 'https://'+self.novncServerName
+        
+        self.rootdomain = 'demo.greenitglobe.com'
+        self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
+        
+        if serviceObj.hrd.getStr('instance.host') == 'auto':
+            self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
+            self.portalUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.oauthUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
+            self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
+        
+        if self.dcpmServerName == 'auto':
+            self.dcpmUrl = 'https://dcpm%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.dcpmUrl = 'https://' + self.dcpmServerName
+        
+        if self.ovsServerName == 'auto':
+            self.ovsUrl = 'https://ovs%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.ovsUrl = 'https://' + self.ovsServerName
+        
+        if self.defenseServerName == 'auto':
+            self.defenseUrl = 'https://defense%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.defenseUrl = 'https://' + self.defenseServerName
+        
+        if self.novncServerName == 'auto':
+            self.novncUrl = 'https://novnc%s.%s' % (self.rootenv, self.rootdomain)
+        else:
+            self.novncUrl = 'https://' + self.novncServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
+        
         self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
         self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
+        
+        print '[+] root domain: %s' % self.rootdomain
+        print '[+] environment: %s' % self.rootenv
+        print '[+] oauth   url: %s' % self.oauthUrl
+        print '[+] portal  url: %s' % self.portalUrl
+        print '[+] dcpm    url: %s' % self.dcpmUrl
+        print '[+] ovs     url: %s' % self.ovsUrl
+        print '[+] defense url: %s' % self.defenseUrl
+        print '[+] novnc   url: %s' % self.novncUrl
 
     def configure(self, serviceObj):
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
@@ -48,6 +81,8 @@ class Actions(ActionsBase):
             self.initReflectorVM(spacesecret, reflectorPassphrase, self.repoPath, delete=delete)
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
 
+
+        """
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
@@ -57,6 +92,7 @@ class Actions(ActionsBase):
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
+        """
 
         def master():
             # install
@@ -68,6 +104,16 @@ class Actions(ActionsBase):
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
                               self.defenseUrl, self.repoPath, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
+        
+        def proxy():
+            # install proxy
+            self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
+                             self.dcpmIpAddress, self.dcpmPort,
+                             self.ovsServerName,
+                             self.defenseServerName, self.novncServerName,
+                             self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
+                             delete=delete)
+        j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -183,14 +229,20 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
-        machine = self.api.getMachineObject(spacesecret, 'ovc_proxy')
-        ip = machine['interfaces'][0]['ipAddress']
+        proxyvm = self.api.getMachineObject(spacesecret, 'ovc_proxy')
+        proxyip = proxyvm['interfaces'][0]['ipAddress']
+        
+        mastervm = self.api.getMachineObject(spacesecret, 'ovc_master')
+        masterip = mastervm['interfaces'][0]['ipAddress']
+        
+        reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
+        reflectip = reflectvm['interfaces'][0]['ipAddress']
 
         # portforward 80 and 443 to 80 and 442 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
 
-        cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+        cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
         # install Jumpscale
         print "install jumpscale"
@@ -208,7 +260,7 @@ class Actions(ActionsBase):
         keyService.install()
 
         data = {
-            'instance.ip': ip,
+            'instance.ip': proxyip,
             'instance.ssh.port': 22,
             'instance.login': 'root',
             'instance.password': '',
@@ -223,7 +275,7 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.host': host,
-            'instance.master.ipadress': ip,
+            'instance.master.ipadress': masterip,
             'instance.dcpm.servername': dcpmServerName,
             'instance.dcpm.ipadress': dcpmIpAddress,
             'instance.dcpm.port': dcpmPort,
@@ -232,7 +284,8 @@ class Actions(ActionsBase):
             'instance.bootstrapp.servername': bootrappServerName,
             'instance.ovs.servername': ovsServerName,
             'instance.defense.servername': defenseServerName,
-            'instance.novnc.servername': novncServerName
+            'instance.novnc.servername': novncServerName,
+            'instance.reflector.ipadress': reflectip,
         }
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=nodeService)
         ssloffloader.consume('node', nodeService.instance)
@@ -318,7 +371,8 @@ class Actions(ActionsBase):
             'instance.param.ovs.url': ovsUrl,
             'instance.param.portal.url': portalUrl,
             'instance.param.oauth.url': oauthUrl,
-            'instance.param.defense.url': defenseUrl
+            'instance.param.defense.url': defenseUrl,
+            
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
