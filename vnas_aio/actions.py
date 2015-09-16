@@ -82,7 +82,7 @@ class Actions(ActionsBase):
         cl = nodeAD.actions.getSSHClient(nodeAD)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
-        setGitCredentials(cl)
+        self.setGitCredentials(cl)
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
         vnasAD.consume('node', nodeAD.instance)
@@ -120,7 +120,7 @@ class Actions(ActionsBase):
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
-        setGitCredentials(cl)
+        self.setGitCredentials(cl)
 
         data = {
             'instance.stor.id': id,
@@ -164,7 +164,7 @@ class Actions(ActionsBase):
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
         cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
-        setGitCredentials(cl)
+        self.setGitCredentials(cl)
 
         data = {
             'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
