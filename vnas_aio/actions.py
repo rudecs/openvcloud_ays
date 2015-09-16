@@ -81,7 +81,7 @@ class Actions(ActionsBase):
         # allow SSH SAL to connect seamlessly
         cl = nodeAD.actions.getSSHClient(nodeAD)
         cl.ssh_keygen('root', keytype='rsa')
-        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
+        cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
 
         vnasAD = j.atyourservice.new(name='vnas_ad', instance='main', args=data, parent=nodeAD)
         vnasAD.consume('node', nodeAD.instance)
@@ -93,13 +93,14 @@ class Actions(ActionsBase):
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
         ip = obj['interfaces'][0]['ipAddress']
 
-        self.ovc.stopMachine(self.spacesecret, vmName)
-        time.sleep(2)
-        for x in xrange(1, 11):
+        self.stopVM(vmName)
+        for x in xrange(1, nbrDisk+1):
             diskName = 'data%s' % x
             self.ovc.addDisk(self.spacesecret, vmName, diskName, size=2000, description=None, type='D')
-        self.ovc.startMachine(self.spacesecret, vmName)
-        time.sleep(2)
+        self.startVM(vmName)
+
+        if not j.system.net.waitConnectionTest(ip, 22, 120):
+            j.events.opserror_critical(msg="VM didn't restart after we add disks to it", category="vnas_deploy")
 
         data = {
             'instance.ip': ip,
@@ -117,7 +118,7 @@ class Actions(ActionsBase):
         # allow SSH SAL to connect seamlessly
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
-        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
+        cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
 
         data = {
             'instance.stor.id': id,
@@ -136,9 +137,8 @@ class Actions(ActionsBase):
                 'instance.nfs.options': 'no_root_squash, no_subtree_check',
             }
         stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
-        vnasStor.consume('node', node.instance)
+        stor_disk.consume('node', node.instance)
         stor_disk.install(deps=True)
-
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
@@ -161,7 +161,7 @@ class Actions(ActionsBase):
 
         cl = node.actions.getSSHClient(node)
         cl.ssh_keygen('root', keytype='rsa')
-        cl.run('cat /root/.ssh/id_rsa >> /root/.ssh/authorized_keys')
+        cl.run('cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys')
 
         data = {
             'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
@@ -172,3 +172,23 @@ class Actions(ActionsBase):
         vnasNode = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
         vnasNode.consume('node', node.instance)
         vnasNode.install(reinstall=True, deps=True)
+
+    def stopVM(self, vmName):
+        for i in xrange(5):
+            self.ovc.stopMachine(self.spacesecret, vmName)
+            obj = self.ovc.getMachineObject(self.spacesecret, vmName)
+            if obj['status'] == 'HALTED':
+                return
+            else:
+                time.sleep(1.5)
+        j.events.opserror_critical(msg="can't halt vm", category="vnas deploy")
+
+    def startVM(self, vmName):
+        for i in xrange(5):
+            self.ovc.startMachine(self.spacesecret, vmName)
+            obj = self.ovc.getMachineObject(self.spacesecret, vmName)
+            if obj['status'] == 'RUNNING':
+                return
+            else:
+                time.sleep(1.5)
+        j.events.opserror_critical(msg="can't start vm", category="vnas deploy")
