@@ -9,16 +9,16 @@ dep.args.agentcontroller2_client =
     param.redis.port:'9999',
 
 dep.args.arakoon                 =
-    instance.cfg: '/opt/arakoon//cfg/settings.cfg',
-    instance.clusterid: 'grid',
-    instance.home: '/opt/arakoon/',
-    instance.nodename: 'master',
-    instance.nodes: 'master',
-    instance.nodes.master.client_port: '7080',
-    instance.nodes.master.home: '/opt/arakoon/data/',
-    instance.nodes.master.ip: '$(instance.ip)',
-    instance.nodes.master.messaging_port: '10000',
-    instance.nodes.master.name: 'master',
+    cfg: '/opt/arakoon//cfg/settings.cfg',
+    clusterid: 'grid',
+    home: '/opt/arakoon/',
+    nodename: 'master',
+    nodes: 'master',
+    nodes.master.client_port: '7080',
+    nodes.master.home: '/opt/arakoon/data/',
+    nodes.master.ip: '$(instance.ip)',
+    nodes.master.messaging_port: '10000',
+    nodes.master.name: 'master',
 
 dep.args.grafana               =
     param.influxdb.connection:'main',
