@@ -147,8 +147,8 @@ class Actions(ActionsBase):
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
-        
-        # FIXME?
+        print machine
+
         vspace = self.api.getCloudspaceObj(spacesecret)
         pubIP = vspace['publicipaddress']
 
@@ -213,7 +213,8 @@ class Actions(ActionsBase):
             'instance.master.name': 'jumpscale__node.ssh__ovc_master',
             'instance.reflector.ip.priv': privIP,
             'instance.reflector.ip.pub': pubIP,
-            'instance.reflector.port': sshPort,
+            # 'instance.reflector.port': sshPort,
+            'instance.reflector.port': 1500,
             'instance.reflector.name': 'jumpscale__node.ssh__ovc_reflector',
             'instance.reflector.user': 'guest'
         }
