@@ -10,7 +10,7 @@ dep.args.agentcontroller2_client =
 
 dep.args.arakoon                 =
     cfg: '/opt/arakoon//cfg/settings.cfg',
-    clusterid: 'grid',
+    clusterid: 'vnas',
     home: '/opt/arakoon/',
     nodename: 'master',
     nodes: 'master',

@@ -1,10 +1,17 @@
 dep.args.agent2                =
-    agentcontroller:'http://$(instance.agentcontroller.address):8966/',
+    agentcontroller:'http://$(instance.master.address):8966/',
     gid:'100',
     nid:'$(instance.agent.nid)',
+    roles:'vnas',
 
 dep.args.arakoon_client        =
+    cluster:'master',
     clusterid:'vnas',
+    master.client_port:'7080',
+    master.home:'/opt/arakoon/data',
+    master.ip:'$(instance.master.address)',
+    master.messaging_port:'10000',
+    master.name:'master',
 
 dep.args.samba4_member         =
     param.ad.adminpwd:'jsR00t3r',
@@ -15,9 +22,10 @@ dep.args.samba4_member         =
 
 dep.args.vnaslb                =
     arakoon.instance:'main',
-    param.vdiskmount:'/storage/vnas',
+    param.blocksize:'$(instance.vnas.blocksize)',
+    param.cifspath:'/storage/vnas',
+    param.refresh:'$(instance.vnas.refresh)',
     param.vdiskroot:'/mnt/vdisks',
-    param.vdisks:'0',
 
 dependencies.1                 =
     args:'dep.args.samba4_member',
@@ -37,5 +45,3 @@ dependencies.4                 =
 
 platform.supported             =
     'linux',
-
-
