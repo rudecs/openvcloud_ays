@@ -153,9 +153,6 @@ class Actions(ActionsBase):
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        
-        # FIXME
-        cl.run('cd /opt/code/github/jumpscale/jumpscale_core7; git fetch --depth=10; git checkout ff0f3bef08506212d90f429b37a250fe4435f917')
         print "jumpscale installed"
 
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
@@ -257,9 +254,6 @@ class Actions(ActionsBase):
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        
-        # FIXME
-        cl.run('cd /opt/code/github/jumpscale/jumpscale_core7; git fetch --depth=10; git checkout ff0f3bef08506212d90f429b37a250fe4435f917')
         print "jumpscale installed"
 
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
@@ -349,9 +343,6 @@ class Actions(ActionsBase):
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        
-        # FIXME
-        cl.run('cd /opt/code/github/jumpscale/jumpscale_core7; git fetch --depth=10; git checkout ff0f3bef08506212d90f429b37a250fe4435f917')
         print "jumpscale installed"
 
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
@@ -433,9 +424,6 @@ class Actions(ActionsBase):
         # install Jumpscale
         print "install jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        
-        # FIXME
-        cl.run('cd /opt/code/github/jumpscale/jumpscale_core7; git fetch --depth=10; git checkout ff0f3bef08506212d90f429b37a250fe4435f917')
         print "jumpscale installed"
 
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
