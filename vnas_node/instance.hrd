@@ -1,4 +1,7 @@
-member.ad.address=@ASK description:'Active directory address'
-member.address=@ASK description:'Active directory member address (address of the local machine')
-agentcontroller.address=@ASK description:'agentcontroller2 address'
+member.ad.address=@ASK type:str description:'Active directory address'
+member.address=@ASK type:str description:'Active directory member address (address of the local machine')
+master.address=@ASK type:str description:'agentcontroller2 address'
 agent.nid=@ASK description:'agent2: node id'
+
+vnas.refresh=@ASK description:'how often to check disk size and choose new best disk. in second' default:5
+vnas.blocksize=@ASK description:'block size of the fuse layer' default:16777216

@@ -148,7 +148,6 @@ class Actions(ActionsBase):
         # make sure nfs server is running
         cl.run('/etc/init.d/nfs-kernel-server restart')
 
-
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas%s' % id
         id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
@@ -176,8 +175,10 @@ class Actions(ActionsBase):
         data = {
             'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
             'instance.member.address': ip,
-            'instance.agentcontroller.address': serviceObj.hrd.get('instance.master.ip'),
+            'instance.master.address': serviceObj.hrd.get('instance.master.ip'),
             'instance.agent.nid': id,
+            'instance.vnas.refresh': 5,  # TODO allow configuration of this value ??
+            'instance.vnas.blocksize': 16777216,
         }
         vnasNode = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
         vnasNode.consume('node', node.instance)

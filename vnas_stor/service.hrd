@@ -1,4 +1,7 @@
 platform.supported             =
     'linux',
 
-ubuntu.packages                = 'nfs-kernel-server'
+ubuntu.packages                =
+    'btrfs-tools',
+    'xfsprogs',
+    'nfs-kernel-server',
