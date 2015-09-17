@@ -147,6 +147,10 @@ class Actions(ActionsBase):
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
+        
+        # FIXME?
+        vspace = self.api.getCloudspaceObj(spacesecret)
+        pubIP = vspace['publicipaddress']
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
@@ -198,6 +202,9 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_reflector')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_reflector', args=data)
         nodeService.install(reinstall=True)
+        
+        print "[+] bootstrap: private ip: %s" % privIP
+        print "[+] bootstrap: public ip : %s" % pubIP
 
         # install bootrapp on git vm
         data = {
