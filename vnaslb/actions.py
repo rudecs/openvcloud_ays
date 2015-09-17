@@ -103,7 +103,7 @@ class Actions(ActionsBase):
         output.write('\nVdisksRoot = "%s"' % vdiskroot)
         output.write('\nCifsRoot = "%s"' % cifspath)
         output.write('\nRefresh = %s' % refresh)
-        output.write('\nBlockSize = "%s"' % blockSize)
+        output.write('\nBlockSize = %s' % blockSize)
         output.write('\n\n')
         output.write('\n[Nodes]')
 
