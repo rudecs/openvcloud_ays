@@ -339,8 +339,9 @@ class Actions(ActionsBase):
         machine = self.api.getMachineObject(spacesecret, 'ovc_master')
         ip = machine['interfaces'][0]['ipAddress']
 
-        # portforward 4444 to 4444 ovc_master
+        # portforward 4444 to 4444 ovc_master and 5544
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
+        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 5544, pubipport=5544)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
