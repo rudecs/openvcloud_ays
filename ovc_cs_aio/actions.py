@@ -24,6 +24,9 @@ class Actions(ActionsBase):
         self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         
+        if self.bootrappServerName == 'auto':
+            self.bootrappServerName = 'bootstrap%s.%s' % self.rootenv
+        
         if serviceObj.hrd.getStr('instance.host') == 'auto':
             self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
             self.portalUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
@@ -32,29 +35,29 @@ class Actions(ActionsBase):
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
         
         if self.dcpmServerName == 'auto':
-            self.dcpmUrl = 'https://dcpm%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.dcpmUrl = 'https://' + self.dcpmServerName
+            self.dcpmServerName = 'dcpm%s' % self.rootenv
+
+        self.dcpmUrl = 'https://' + self.dcpmServerName
         
         if self.ovsServerName == 'auto':
-            self.ovsUrl = 'https://ovs%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.ovsUrl = 'https://' + self.ovsServerName
+            self.ovsServerName = 'ovs%s' % self.rootenv
+        
+        self.ovsUrl = 'https://' + self.ovsServerName
         
         if self.defenseServerName == 'auto':
-            self.defenseUrl = 'https://defense%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.defenseUrl = 'https://' + self.defenseServerName
+            self.defenseServerName = 'defense%s' % self.rootenv
+            
+        self.defenseUrl = 'https://' + self.defenseServerName
         
         if self.novncServerName == 'auto':
-            self.novncUrl = 'https://novnc%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.novncUrl = 'https://' + self.novncServerName
+            self.novncServerName = 'novnc%s' % self.rootenv
+        
+        self.novncUrl = 'https://' + self.novncServerName
         
         if self.grafanaServerName == 'auto':
-            self.grafanaUrl = 'https://grafana%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.grafanaUrl = 'https://' + self.grafanaServerName
+            self.grafanaServerName = 'graphana%s' % self.rootenv
+        
+        self.grafanaUrl = 'https://' + self.grafanaServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
