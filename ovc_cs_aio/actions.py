@@ -147,7 +147,12 @@ class Actions(ActionsBase):
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
-        print machine
+        
+        # FIXME: why sshPort not well defined ?
+        ports = self.api.listPortforwarding(spacesecret, 'ovc_reflector')
+        for fw in ports:
+            if fw['localPort'] == '22':
+                sshPort = fw['publicPort']
 
         vspace = self.api.getCloudspaceObj(spacesecret)
         pubIP = vspace['publicipaddress']
@@ -181,6 +186,9 @@ class Actions(ActionsBase):
         content = cl.file_read('/etc/ssh/sshd_config')
         if content.find('GatewayPorts clientspecified') == -1:
             cl.file_append('/etc/ssh/sshd_config', "\nGatewayPorts clientspecified\n")
+            
+            print '[+] restarting ssh'
+            cl.run('service ssh restart')
 
 
         # create service required to connect to ovc reflector with ays
@@ -205,6 +213,7 @@ class Actions(ActionsBase):
         
         print "[+] bootstrap: private ip: %s" % privIP
         print "[+] bootstrap: public ip : %s" % pubIP
+        print "[+] reflector ssh port: %s" % sshPort
 
         # install bootrapp on git vm
         data = {
@@ -213,8 +222,7 @@ class Actions(ActionsBase):
             'instance.master.name': 'jumpscale__node.ssh__ovc_master',
             'instance.reflector.ip.priv': privIP,
             'instance.reflector.ip.pub': pubIP,
-            # 'instance.reflector.port': sshPort,
-            'instance.reflector.port': 1500,
+            'instance.reflector.port': sshPort,
             'instance.reflector.name': 'jumpscale__node.ssh__ovc_reflector',
             'instance.reflector.user': 'guest'
         }
