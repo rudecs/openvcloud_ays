@@ -27,9 +27,10 @@ class Actions(ActionsBase):
         if self.bootrappServerName == 'auto':
             self.bootrappServerName = 'bootstrap-%s.%s' % (self.rootenv, self.rootdomain)
         
-        if serviceObj.hrd.getStr('instance.host') == 'auto':
-            self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
-            self.portalUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
+        if self.host == 'auto':
+            self.host = '%s.%s' % (self.rootenv, self.rootdomain)
+            self.oauthUrl = 'https://%s' % (self.host)
+            self.portalUrl = 'https://%s' % (self.host)
         else:
             self.oauthUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
