@@ -25,7 +25,7 @@ class Actions(ActionsBase):
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         
         if self.bootrappServerName == 'auto':
-            self.bootrappServerName = 'bootstrap%s.%s' % self.rootenv
+            self.bootrappServerName = 'bootstrap-%s.%s' % self.rootenv
         
         if serviceObj.hrd.getStr('instance.host') == 'auto':
             self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
@@ -35,27 +35,27 @@ class Actions(ActionsBase):
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
         
         if self.dcpmServerName == 'auto':
-            self.dcpmServerName = 'dcpm%s' % self.rootenv
+            self.dcpmServerName = 'dcpm-%s' % self.rootenv
 
         self.dcpmUrl = 'https://' + self.dcpmServerName
         
         if self.ovsServerName == 'auto':
-            self.ovsServerName = 'ovs%s' % self.rootenv
+            self.ovsServerName = 'ovs-%s' % self.rootenv
         
         self.ovsUrl = 'https://' + self.ovsServerName
         
         if self.defenseServerName == 'auto':
-            self.defenseServerName = 'defense%s' % self.rootenv
+            self.defenseServerName = 'defense-%s' % self.rootenv
             
         self.defenseUrl = 'https://' + self.defenseServerName
         
         if self.novncServerName == 'auto':
-            self.novncServerName = 'novnc%s' % self.rootenv
+            self.novncServerName = 'novnc-%s' % self.rootenv
         
         self.novncUrl = 'https://' + self.novncServerName
         
         if self.grafanaServerName == 'auto':
-            self.grafanaServerName = 'graphana%s' % self.rootenv
+            self.grafanaServerName = 'graphana-%s' % self.rootenv
         
         self.grafanaUrl = 'https://' + self.grafanaServerName
 
