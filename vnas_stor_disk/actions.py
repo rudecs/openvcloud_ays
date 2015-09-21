@@ -50,7 +50,7 @@ class Actions(ActionsBase):
         share.addClient(nfsHost, nfsOptions)
         nfs.commit()
 
-        output = j.system.fs.joinPaths(path, '.vnas.toml')
+        output = j.system.fs.joinPaths(path, '.vnasdisk.toml')
         j.system.fs.createEmptyFile(output)
 
         disk = {'id': diskID, 'pool': ''}
