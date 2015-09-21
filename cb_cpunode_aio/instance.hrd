@@ -4,7 +4,7 @@ param.master.addr=@ASK descr:'Master node address'
 #gw_mgmt_ip
 param.network.gw_mgmt_ip=@ASK default:10.199.0.2/22 descr:'IP for gw_mgmt'
 
-autossh.port=@ASK descr:'autossh for http proxy. 21000 + $nid' type:int
+autossh.port=@ASK descr:'autossh for http proxy. 2000 + $nid' type:int
 autossh.reflector.ip=@ASK descr:'ip (private) of the ovc_reflector vm' type:str
 autossh.reflector.port=@ASK descr:'port of the ovc_reflector vm' type:str default:22
 

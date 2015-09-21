@@ -24,6 +24,9 @@ class Actions(ActionsBase):
         self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         
+        if self.bootrappServerName == 'auto':
+            self.bootrappServerName = 'bootstrap-%s.%s' % (self.rootenv, self.rootdomain)
+        
         if serviceObj.hrd.getStr('instance.host') == 'auto':
             self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
             self.portalUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
@@ -32,29 +35,29 @@ class Actions(ActionsBase):
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
         
         if self.dcpmServerName == 'auto':
-            self.dcpmUrl = 'https://dcpm%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.dcpmUrl = 'https://' + self.dcpmServerName
+            self.dcpmServerName = 'dcpm-%s.%s' % (self.rootenv, self.rootdomain)
+
+        self.dcpmUrl = 'https://' + self.dcpmServerName
         
         if self.ovsServerName == 'auto':
-            self.ovsUrl = 'https://ovs%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.ovsUrl = 'https://' + self.ovsServerName
+            self.ovsServerName = 'ovs-%s.%s' % (self.rootenv, self.rootdomain)
+        
+        self.ovsUrl = 'https://' + self.ovsServerName
         
         if self.defenseServerName == 'auto':
-            self.defenseUrl = 'https://defense%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.defenseUrl = 'https://' + self.defenseServerName
+            self.defenseServerName = 'defense-%s.%s' % (self.rootenv, self.rootdomain)
+            
+        self.defenseUrl = 'https://' + self.defenseServerName
         
         if self.novncServerName == 'auto':
-            self.novncUrl = 'https://novnc%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.novncUrl = 'https://' + self.novncServerName
+            self.novncServerName = 'novnc-%s.%s' % (self.rootenv, self.rootdomain)
+        
+        self.novncUrl = 'https://' + self.novncServerName
         
         if self.grafanaServerName == 'auto':
-            self.grafanaUrl = 'https://grafana%s.%s' % (self.rootenv, self.rootdomain)
-        else:
-            self.grafanaUrl = 'https://' + self.grafanaServerName
+            self.grafanaServerName = 'graphana-%s.%s' % (self.rootenv, self.rootdomain)
+        
+        self.grafanaUrl = 'https://' + self.grafanaServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
@@ -104,10 +107,11 @@ class Actions(ActionsBase):
         def master():
             # install
             rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
+            ipGateway = serviceObj.hrd.getStr('instance.publicip.gateway')
             ipStart = serviceObj.hrd.getStr('instance.publicip.start')
             ipEnd = serviceObj.hrd.getStr('instance.publicip.end')
             self.initMasterVM(spacesecret, rootpasswd,
-                              ipStart, ipEnd,
+                              ipGateway, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
                               self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
@@ -147,6 +151,15 @@ class Actions(ActionsBase):
                 raise e
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
+        
+        # FIXME: why sshPort not well defined ?
+        ports = self.api.listPortforwarding(spacesecret, 'ovc_reflector')
+        for fw in ports:
+            if fw['localPort'] == '22':
+                sshPort = fw['publicPort']
+
+        vspace = self.api.getCloudspaceObj(spacesecret)
+        pubIP = vspace['publicipaddress']
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
@@ -177,6 +190,9 @@ class Actions(ActionsBase):
         content = cl.file_read('/etc/ssh/sshd_config')
         if content.find('GatewayPorts clientspecified') == -1:
             cl.file_append('/etc/ssh/sshd_config', "\nGatewayPorts clientspecified\n")
+            
+            print '[+] restarting ssh'
+            cl.run('service ssh restart')
 
 
         # create service required to connect to ovc reflector with ays
@@ -198,6 +214,10 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_reflector')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_reflector', args=data)
         nodeService.install(reinstall=True)
+        
+        print "[+] bootstrap: private ip: %s" % privIP
+        print "[+] bootstrap: public ip : %s" % pubIP
+        print "[+] reflector ssh port: %s" % sshPort
 
         # install bootrapp on git vm
         data = {
@@ -299,7 +319,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -323,8 +343,9 @@ class Actions(ActionsBase):
         machine = self.api.getMachineObject(spacesecret, 'ovc_master')
         ip = machine['interfaces'][0]['ipAddress']
 
-        # portforward 4444 to 4444 ovc_master
+        # portforward 4444 to 4444 ovc_master and 5544
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
+        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 5544, pubipport=5544)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -371,7 +392,9 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.param.rootpasswd': masterPasswd,
-            'instance.param.publicip.gateway': cloudspaceObj['publicipaddress'],
+            # FIXME
+            # 'instance.param.publicip.gateway': cloudspaceObj['publicipaddress'],
+            'instance.param.publicip.gateway': publicGateway,
             'instance.param.publicip.netmask': '255.255.255.0',
             'instance.param.publicip.start': publicipStart,
             'instance.param.publicip.end': publicipEnd,

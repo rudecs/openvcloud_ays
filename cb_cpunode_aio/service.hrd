@@ -17,14 +17,14 @@ dep.args.osis_client           =
 
 dep.args.portal_client         =
     param.addr:'$(instance.param.master.addr)',
-    param.port:'82',
+    param.port:'443',
     param.secret:'$(instance.param.rootpasswd)',
     openvcloud.supportemail:'support@greenitglobe.com',
 
 dep.args.redis                 =
     param.disk:'0',
     param.mem:'100',
-    param.passwd:'$(instance.param.rootpasswd)',
+    param.passwd:'',
     param.port:'9999',
     param.unixsocket:'0',
 
@@ -36,7 +36,7 @@ dep.args.vfwnode               =
 
 dep.args.autossh = 
     local.address: 'localhost',
-    local.port: $(instance.autossh.port),
+    local.port: '2001',
     remote.address: '$(instance.param.master.addr)',
     remote.bind: '$(instance.autossh.reflector.ip)',
     remote.connection.port: $(instance.autossh.reflector.port),
@@ -44,7 +44,7 @@ dep.args.autossh =
     remote.port: $(instance.autossh.port),
 
 dep.args.vncproxy =
-    param.vncproxy.publichostport:'$(vnc.url)',
+    param.vncproxy.publichostport:'$(instance.vnc.url)',
     param.portal.connection:'main',
 
 dependencies.1                 =
