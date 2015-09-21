@@ -25,7 +25,7 @@ class Actions(ActionsBase):
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         
         if self.bootrappServerName == 'auto':
-            self.bootrappServerName = 'bootstrap-%s.%s' % self.rootenv
+            self.bootrappServerName = 'bootstrap-%s.%s' % (self.rootenv, self.rootdomain)
         
         if serviceObj.hrd.getStr('instance.host') == 'auto':
             self.oauthUrl = 'https://%s.%s' % (self.rootenv, self.rootdomain)
@@ -35,27 +35,27 @@ class Actions(ActionsBase):
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
         
         if self.dcpmServerName == 'auto':
-            self.dcpmServerName = 'dcpm-%s' % self.rootenv
+            self.dcpmServerName = 'dcpm-%s.%s' % (self.rootenv, self.rootdomain)
 
         self.dcpmUrl = 'https://' + self.dcpmServerName
         
         if self.ovsServerName == 'auto':
-            self.ovsServerName = 'ovs-%s' % self.rootenv
+            self.ovsServerName = 'ovs-%s.%s' % (self.rootenv, self.rootdomain)
         
         self.ovsUrl = 'https://' + self.ovsServerName
         
         if self.defenseServerName == 'auto':
-            self.defenseServerName = 'defense-%s' % self.rootenv
+            self.defenseServerName = 'defense-%s.%s' % (self.rootenv, self.rootdomain)
             
         self.defenseUrl = 'https://' + self.defenseServerName
         
         if self.novncServerName == 'auto':
-            self.novncServerName = 'novnc-%s' % self.rootenv
+            self.novncServerName = 'novnc-%s.%s' % (self.rootenv, self.rootdomain)
         
         self.novncUrl = 'https://' + self.novncServerName
         
         if self.grafanaServerName == 'auto':
-            self.grafanaServerName = 'graphana-%s' % self.rootenv
+            self.grafanaServerName = 'graphana-%s.%s' % (self.rootenv, self.rootdomain)
         
         self.grafanaUrl = 'https://' + self.grafanaServerName
 
@@ -107,10 +107,11 @@ class Actions(ActionsBase):
         def master():
             # install
             rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
+            ipGateway = serviceObj.hrd.getStr('instance.publicip.gateway')
             ipStart = serviceObj.hrd.getStr('instance.publicip.start')
             ipEnd = serviceObj.hrd.getStr('instance.publicip.end')
             self.initMasterVM(spacesecret, rootpasswd,
-                              ipStart, ipEnd,
+                              ipGateway, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
                               self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
@@ -318,7 +319,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -391,7 +392,9 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.param.rootpasswd': masterPasswd,
-            'instance.param.publicip.gateway': cloudspaceObj['publicipaddress'],
+            # FIXME
+            # 'instance.param.publicip.gateway': cloudspaceObj['publicipaddress'],
+            'instance.param.publicip.gateway': publicGateway,
             'instance.param.publicip.netmask': '255.255.255.0',
             'instance.param.publicip.start': publicipStart,
             'instance.param.publicip.end': publicipEnd,

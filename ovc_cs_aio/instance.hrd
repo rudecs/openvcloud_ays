@@ -4,6 +4,7 @@ ms1_client.connection = @ASK default:'main' descr:'instance name of the ms1_clie
 gitlab_client.connection = @ASK default:'main' descr:'instance name of the gitlab_client service' type:str
 
 master.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
+publicip.gateway = @ASK type:str
 publicip.start = @ASK type:str
 publicip.end = @ASK type:str
 
