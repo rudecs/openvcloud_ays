@@ -132,7 +132,7 @@ class Actions(ActionsBase):
             'instance.disk.number': nbrDisk,
             'instance.disk.size': 2000,
         }
-        vnasStor = j.atyourservice.new(name='vnas_stor', instance='main', args=data, parent=node)
+        vnasStor = j.atyourservice.new(name='vnas_stor', instance=id, args=data, parent=node)
         vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True, deps=True)
 
@@ -180,7 +180,7 @@ class Actions(ActionsBase):
             'instance.vnas.refresh': 5,  # TODO allow configuration of this value ??
             'instance.vnas.blocksize': 16777216,
         }
-        vnasNode = j.atyourservice.new(name='vnas_node', instance='main', args=data, parent=node)
+        vnasNode = j.atyourservice.new(name='vnas_node', instance=id, args=data, parent=node)
         vnasNode.consume('node', node.instance)
         vnasNode.install(reinstall=True, deps=True)
 
