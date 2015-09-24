@@ -49,7 +49,31 @@ class Actions(ActionsBase):
         serviceObj.hrd.applyOnFile("/tmp/openvstorage_preconfig.cfg")
 
         j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
+        
+        if serviceObj.hrd.get('instance.oauth.id') != '':
+            # setting up oauth
+            config = None
 
+            with open('/opt/OpenvStorage/config/ovs.json', 'r') as f:
+                config = json.load(f)
+                
+                oauth = {
+                    'mode': 'remote',
+                    'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
+                    'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
+                    'client_id': serviceObj.hrd.get('instance.oauth.id'),
+                    'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
+                    'scope': 'ovs_admin'
+                }
+                
+                config['webapps']['oauth2'] = oauth
+
+            with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
+                json.dump(config, f, indent=4)
+
+
+
+        """
         try:
             services = j.atyourservice.findServices(name='oauthserver')
             if len(services) > 0:
@@ -76,6 +100,7 @@ class Actions(ActionsBase):
         except:
             # oauthserver is not installed, so don't configure oauth in ovs
             pass
+        """
 
         j.do.execute('ovs setup')
 
