@@ -12,7 +12,6 @@ param.main.host = @ASK type:str descr='root hostname (environment name)'
 
 host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded (use auto to autodetect)'
 dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at (use auto to autodetect)'
-dcpm.ipadress = @ASK type:str default:'192.168.103.252'  descr:'internal ip address DCPM is running on'
 dcpm.port = @ASK type:int default:80  descr:'port DCPM is listenning on'
 
 bootstrapp.ipadress = @ASK  type:str default:'192.168.103.251'  descr:'internal ip address bootrapp is running on'
