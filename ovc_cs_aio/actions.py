@@ -14,7 +14,7 @@ class Actions(ActionsBase):
         self.novncServerName = serviceObj.hrd.getStr('instance.novnc.servername')
         self.grafanaServerName = serviceObj.hrd.getStr('instance.grafana.servername')
 
-        self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
+        # self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
         self.dcpmPort = serviceObj.hrd.getStr('instance.dcpm.port')
 
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
@@ -125,8 +125,7 @@ class Actions(ActionsBase):
         
         def proxy():
             # install proxy
-            self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
-                             self.dcpmIpAddress, self.dcpmPort,
+            self.initProxyVM(spacesecret, self.host, self.dcpmServerName, self.dcpmPort,
                              self.ovsServerName,
                              self.defenseServerName, self.novncServerName,
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
@@ -248,7 +247,7 @@ class Actions(ActionsBase):
         # expose port of bootrapp
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_git', 5000, pubipport=5000)
 
-    def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmIpAddress, dcpmPort, ovsServerName, defenseServerName, novncServerName, bootrappIpAddress, bootrappPort, bootrappServerName,
+    def initProxyVM(self, spacesecret, host, dcpmServerName, dcpmPort, ovsServerName, defenseServerName, novncServerName, bootrappIpAddress, bootrappPort, bootrappServerName,
         grafanaServerName, delete=False):
         """
         this methods need to be run from the ovc_git VM
