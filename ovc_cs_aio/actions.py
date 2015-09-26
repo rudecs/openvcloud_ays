@@ -179,8 +179,8 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
-        installJumpscale(cl)
-        setupGit(cl)
+        self.installJumpscale(cl)
+        self.setupGit(cl)
 
         # genretate keypair on the vm
         cl.ssh_keygen('root', keytype='rsa')
@@ -285,8 +285,8 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
-        installJumpscale(cl)
-        setupGit(cl)
+        self.installJumpscale(cl)
+        self.setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -370,8 +370,8 @@ class Actions(ActionsBase):
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
 
-        installJumpscale(cl)
-        setupGit(cl)
+        self.installJumpscale(cl)
+        self.setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -448,8 +448,8 @@ class Actions(ActionsBase):
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
 
-        installJumpscale(cl)
-        setupGit(cl)
+        self.installJumpscale(cl)
+        self.setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
