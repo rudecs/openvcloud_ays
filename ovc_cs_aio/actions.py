@@ -117,6 +117,12 @@ class Actions(ActionsBase):
                               self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
+        def dcpm():
+            # install reflector
+            rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
+            self.initDCPMVM(spacesecret, self.repoPath, delete=delete)
+        j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
+        
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
@@ -126,12 +132,6 @@ class Actions(ActionsBase):
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              self.grafanaServerName, delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
-        
-        def dcpm():
-            # install reflector
-            rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
-            self.initDCPMVM(spacesecret, self.repoPath, delete=delete)
-        j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
     
     def installJumpscale(self, cl):
         # install Jumpscale
@@ -276,6 +276,9 @@ class Actions(ActionsBase):
         
         reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         reflectip = reflectvm['interfaces'][0]['ipAddress']
+        
+        dcpmvm = self.api.getMachineObject(spacesecret, 'ovc_dcpm')
+        dcpmip = dcpmvm['interfaces'][0]['ipAddress']
 
         # portforward 80 and 443 to 80 and 442 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
@@ -311,7 +314,7 @@ class Actions(ActionsBase):
             'instance.host': host,
             'instance.master.ipadress': masterip,
             'instance.dcpm.servername': dcpmServerName,
-            'instance.dcpm.ipadress': dcpmIpAddress,
+            'instance.dcpm.ipadress': dcpmip,
             'instance.dcpm.port': dcpmPort,
             'instance.bootstrapp.ipadress': bootrappIpAddress,
             'instance.bootstrapp.port': bootrappPort,
