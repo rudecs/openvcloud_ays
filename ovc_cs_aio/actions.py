@@ -126,6 +126,22 @@ class Actions(ActionsBase):
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              self.grafanaServerName, delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
+        
+        def dcpm():
+            # install reflector
+            rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
+            self.initDCPMVM(spacesecret, self.repoPath, delete=delete)
+        j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
+    
+    def installJumpscale(self, cl):
+        # install Jumpscale
+        print "[+] installing jumpscale"
+        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
+        print "[+] jumpscale installed"
+        
+    def setupGit(self, cl):
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -164,13 +180,8 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
-        # install Jumpscale
-        print "install jumpscale"
-        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        print "jumpscale installed"
-
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+        installJumpscale(cl)
+        setupGit(cl)
 
         # genretate keypair on the vm
         cl.ssh_keygen('root', keytype='rsa')
@@ -272,13 +283,8 @@ class Actions(ActionsBase):
 
         cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
-        # install Jumpscale
-        print "install jumpscale"
-        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        print "jumpscale installed"
-
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+        installJumpscale(cl)
+        setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -362,13 +368,8 @@ class Actions(ActionsBase):
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
 
-        # install Jumpscale
-        print "install jumpscale"
-        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        print "jumpscale installed"
-
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+        installJumpscale(cl)
+        setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -410,7 +411,7 @@ class Actions(ActionsBase):
         master.consume('node', nodeService.instance)
         master.install(deps=True)
 
-    def initDCPMVM(self, spacesecret, masterPasswd, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, delete=False):
+    def initDCPMVM(self, spacesecret, repoPath, delete=False):
         """
         this methods need to be run from the ovc_dcpm VM
 
@@ -445,13 +446,8 @@ class Actions(ActionsBase):
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
 
-        # install Jumpscale
-        print "install jumpscale"
-        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        print "jumpscale installed"
-
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+        installJumpscale(cl)
+        setupGit(cl)
 
         # create service required to connect to ovc reflector with ays
         data = {
@@ -472,6 +468,9 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_dcpm')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_dcpm', args=data)
         nodeService.install(reinstall=True)
-
+        
+        """
         dcpm = j.atyourservice.new(name='dcpm', parent=nodeService)
         dcpm.consume('node', nodeService.instance)
+        dcpm.install()
+        """
