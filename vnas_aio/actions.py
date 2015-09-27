@@ -96,7 +96,7 @@ class Actions(ActionsBase):
 
     def createBackend(self, id, stackID, nbrDisk):
         vmName = 'vnas_backend%s' % id
-        id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
         ip = obj['interfaces'][0]['ipAddress']
 
@@ -152,7 +152,7 @@ class Actions(ActionsBase):
 
     def createFrontend(self, id, stackID, serviceObj):
         vmName = 'vnas_frontend%s' % id
-        id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
+        self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
         ip = obj['interfaces'][0]['ipAddress']
 
