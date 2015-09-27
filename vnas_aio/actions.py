@@ -134,7 +134,7 @@ class Actions(ActionsBase):
             'instance.disk.number': nbrDisk,
             'instance.disk.size': 2000,
         }
-        vnasStor = j.atyourservice.new(name='vnas_stor', instance=id, args=data, parent=node)
+        vnasStor = j.atyourservice.new(name='vnas_stor', instance=str(id), args=data, parent=node)
         vnasStor.consume('node', node.instance)
         vnasStor.install(reinstall=True, deps=True)
 
@@ -151,7 +151,7 @@ class Actions(ActionsBase):
         cl.run('/etc/init.d/nfs-kernel-server restart')
 
     def createFrontend(self, id, stackID, serviceObj):
-        vmName = 'vnas%s' % id
+        vmName = 'vnas_frontend%s' % id
         id, _, _ = self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
         ip = obj['interfaces'][0]['ipAddress']
@@ -182,7 +182,7 @@ class Actions(ActionsBase):
             'instance.vnas.refresh': 5,  # TODO allow configuration of this value ??
             'instance.vnas.blocksize': 16777216,
         }
-        vnasNode = j.atyourservice.new(name='vnas_node', instance=id, args=data, parent=node)
+        vnasNode = j.atyourservice.new(name='vnas_node', instance=str(id), args=data, parent=node)
         vnasNode.consume('node', node.instance)
         vnasNode.install(reinstall=True, deps=True)
 
