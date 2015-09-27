@@ -51,6 +51,8 @@ class Actions(ActionsBase):
 
         nbrFrontend = serviceObj.hrd.getInt('instance.nbr.front')
         for i in range(1, nbrFrontend+1):
+            id = i
+            stackID = 2+i
             j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
     def createMaster(self , serviceObj):
