@@ -1,8 +1,8 @@
 dep.args.agent2                =
     agentcontroller:'http://$(instance.master.address):8966/',
-    gid:'100',
+    gid:'111',
     nid:'$(instance.agent.nid)',
-    roles:'vnas',
+    roles:'vnas,vnas-frontend',
 
 dep.args.arakoon_client        =
     cluster:'master',
@@ -45,3 +45,7 @@ dependencies.4                 =
 
 platform.supported             =
     'linux',
+
+
+ubuntu.packages                =
+    'nfs-common',

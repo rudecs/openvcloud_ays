@@ -5,3 +5,14 @@ ubuntu.packages                =
     'btrfs-tools',
     'xfsprogs',
     'nfs-kernel-server',
+
+
+dep.args.agent2                =
+    agentcontroller:'http://$(instance.master.address):8966/',
+    gid:'111',
+    nid:'$(instance.agent.nid)',
+    roles:'vnas,vnas-backend',
+
+dependencies.1                 =
+    args:'dep.args.agent2',
+    name:'agent2',

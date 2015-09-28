@@ -22,6 +22,9 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
+    def __init__(self):
+        self.stores = []
+
     def configure(self, serviceObj):
         ovcClientHRD = j.atyourservice.get(name='ovc_client', instance='$(instance.ovc_client)').hrd
         self.ovc = j.tools.ms1.get(apiURL=ovcClientHRD.getStr('instance.param.apiurl'))
@@ -42,20 +45,26 @@ class Actions(ActionsBase):
 
         j.actions.start(description='create vnas Active directory', action=self.createAD, actionArgs={'serviceObj': serviceObj}, category='vnas', name='vnas_ad', serviceObj=serviceObj)
 
+        nid = 0
         nbrBackend = serviceObj.hrd.getInt('instance.nbr.stor')
         nbrDisk = serviceObj.hrd.getInt('instance.nbr.disk')
         for i in range(1, nbrBackend+1):
             id = i
             stackID = 2+i
-            j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID, 'nbrDisk': nbrDisk}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
+            nid++
+            j.actions.start(description='create vnas stor %s' % i, action=self.createBackend, actionArgs={'id': id, 'stackID': stackID, 'nbrDisk': nbrDisk, 'masterSerivceObj': serviceObj, 'nid': nid}, category='vnas', name='vnas_stor %s' % i, serviceObj=serviceObj)
 
         nbrFrontend = serviceObj.hrd.getInt('instance.nbr.front')
         for i in range(1, nbrFrontend+1):
             id = i
             stackID = 2+i
-            j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'serviceObj': serviceObj}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
+            nid++
+            j.actions.start(description='create vnas frontend %s' % i, action=self.createFrontend, actionArgs={'id': id, 'stackID': stackID, 'masterSerivceObj': serviceObj, 'nid': nid}, category='vnas', name='vnas_node %s' % i, serviceObj=serviceObj)
 
-    def createMaster(self , serviceObj):
+        # schedule jobs into agentcontroller2
+        self.sheduleJobs(self.stores)
+
+    def createMaster(self, serviceObj):
         _, ip = j.system.net.getDefaultIPConfig()
         serviceObj.hrd.set('instance.master.ip', ip)
         data = {
@@ -78,6 +87,7 @@ class Actions(ActionsBase):
             'instance.password': '',
             'instance.sshkey': 'vnas',
             'instance.jumpscale': True,
+            'instance.branch': '$(instance.branch)',
             'instance.ssh.shell': '/bin/bash -l -c'
         }
         j.atyourservice.remove(name='node.ssh', instance='vnas_ad')
@@ -94,7 +104,7 @@ class Actions(ActionsBase):
         vnasAD.consume('node', nodeAD.instance)
         vnasAD.install(reinstall=True, deps=True)
 
-    def createBackend(self, id, stackID, nbrDisk):
+    def createBackend(self, id, stackID, nbrDisk, masterSerivceObj, nid):
         vmName = 'vnas_backend%s' % id
         self.ovc.createMachine(self.spacesecret, vmName, memsize=4, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
@@ -116,6 +126,7 @@ class Actions(ActionsBase):
             'instance.password': '',
             'instance.sshkey': 'vnas',
             'instance.jumpscale': True,
+            'instance.branch': '$(instance.branch)',
             'instance.ssh.shell': '/bin/bash -l -c'
         }
         j.atyourservice.remove(name='node.ssh', instance=vmName)
@@ -133,6 +144,8 @@ class Actions(ActionsBase):
             'instance.stor.export.dir': '/mnt/disks',
             'instance.disk.number': nbrDisk,
             'instance.disk.size': 2000,
+            'instance.master.address': masterSerivceObj.hrd.get('instance.master.ip'),
+            'instance.agent.nid': nid,
         }
         vnasStor = j.atyourservice.new(name='vnas_stor', instance=str(id), args=data, parent=node)
         vnasStor.consume('node', node.instance)
@@ -140,9 +153,9 @@ class Actions(ActionsBase):
 
         for i in range(nbrDisk):
             data = {
-                'instance.disk.id': i,
+                'instance.disk.id': (id*100)+i,
                 'instance.nfs.host': '192.168.103.0/24',
-                'instance.nfs.options': 'no_root_squash, no_subtree_check',
+                'instance.nfs.options': 'rw, no_root_squash, no_subtree_check',
             }
             stor_disk = j.atyourservice.new(name='vnas_stor_disk', instance="disk%s" % i, args=data, parent=vnasStor)
             stor_disk.consume('node', node.instance)
@@ -150,7 +163,9 @@ class Actions(ActionsBase):
         # make sure nfs server is running
         cl.run('/etc/init.d/nfs-kernel-server restart')
 
-    def createFrontend(self, id, stackID, serviceObj):
+        self.store.append({'addr': ip, 'id': id})
+
+    def createFrontend(self, id, stackID, masterSerivceObj, nid):
         vmName = 'vnas_frontend%s' % id
         self.ovc.createMachine(self.spacesecret, vmName, memsize=2, ssdsize=10, imagename='Ubuntu 14.04 x64', delete=True, sshkey=self.keypub)
         obj = self.ovc.getMachineObject(self.spacesecret, vmName)
@@ -163,6 +178,7 @@ class Actions(ActionsBase):
             'instance.password': '',
             'instance.sshkey': 'vnas',
             'instance.jumpscale': True,
+            'instance.branch': '$(instance.branch)',
             'instance.ssh.shell': '/bin/bash -l -c'
         }
         j.atyourservice.remove(name='node.ssh', instance=vmName)
@@ -175,10 +191,10 @@ class Actions(ActionsBase):
         self.setGitCredentials(cl)
 
         data = {
-            'instance.member.ad.address': serviceObj.hrd.get('instance.ad.ip'),
+            'instance.member.ad.address': masterSerivceObj.hrd.get('instance.ad.ip'),
             'instance.member.address': ip,
-            'instance.master.address': serviceObj.hrd.get('instance.master.ip'),
-            'instance.agent.nid': id,
+            'instance.master.address': masterSerivceObj.hrd.get('instance.master.ip'),
+            'instance.agent.nid': nid,
             'instance.vnas.refresh': 5,  # TODO allow configuration of this value ??
             'instance.vnas.blocksize': 16777216,
         }
@@ -209,3 +225,9 @@ class Actions(ActionsBase):
     def setGitCredentials(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % j.application.config.getStr('whoami.git.login'))
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(j.application.config.getStr('whoami.git.passwd')))
+
+    def sheduleJobs(self, stores):
+        cl = j.clients.ac.getByInstance('main')
+        args = j.clients.ac.getRunArgs(domain='vnas', name='mount_vdisks', recurring_period=60, max_restart=3)
+        data = {'stores': stores}
+        job = cl.execute_jumpscript(None, None, 'vnas', 'mount_vdisks', args=args, role='vnas-backend')
