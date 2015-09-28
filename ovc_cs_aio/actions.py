@@ -13,6 +13,7 @@ class Actions(ActionsBase):
         self.defenseServerName = serviceObj.hrd.getStr('instance.defense.servername')
         self.novncServerName = serviceObj.hrd.getStr('instance.novnc.servername')
         self.grafanaServerName = serviceObj.hrd.getStr('instance.grafana.servername')
+        self.safekeeperServerName = serviceObj.hrd.getStr('instance.safekeeper.servername')
 
         # self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
         self.dcpmPort = serviceObj.hrd.getStr('instance.dcpm.port')
@@ -59,6 +60,11 @@ class Actions(ActionsBase):
             self.grafanaServerName = 'graphana-%s.%s' % (self.rootenv, self.rootdomain)
         
         self.grafanaUrl = 'https://' + self.grafanaServerName
+        
+        if self.safekeeperServerName == 'auto':
+            self.safekeeperServerName = 'safekeeper-%s.%s' % (self.rootenv, self.rootdomain)
+        
+        self.safekeeperUrl = 'https://' + self.safekeeperServerName
 
         gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
         gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
@@ -267,19 +273,28 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
+        
+        print '[+] grabbing ovc_proxy address'
         proxyvm = self.api.getMachineObject(spacesecret, 'ovc_proxy')
         proxyip = proxyvm['interfaces'][0]['ipAddress']
+        print '[+] ovc_proxy is %s' % proxyip
         
+        print '[+] grabbing ovc_master address'
         mastervm = self.api.getMachineObject(spacesecret, 'ovc_master')
         masterip = mastervm['interfaces'][0]['ipAddress']
+        print '[+] ovc_master is %s' % masterip
         
+        print '[+] grabbing ovc_reflector address'
         reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         reflectip = reflectvm['interfaces'][0]['ipAddress']
+        print '[+] ovc_reflector is %s' % reflectip
         
+        print '[+] grabbing ovc_dcpm address'
         dcpmvm = self.api.getMachineObject(spacesecret, 'ovc_dcpm')
         dcpmip = dcpmvm['interfaces'][0]['ipAddress']
+        print '[+] ovc_dcpm is %s' % dcpmip
 
-        # portforward 80 and 443 to 80 and 442 on ovc_proxy
+        # portforward 80 and 443 to 80 and 443 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
 
@@ -472,6 +487,7 @@ class Actions(ActionsBase):
         nodeService.install(reinstall=True)
         
         """
+        # FIXME: manual installation until fixed
         dcpm = j.atyourservice.new(name='dcpm', parent=nodeService)
         dcpm.consume('node', nodeService.instance)
         dcpm.install()
