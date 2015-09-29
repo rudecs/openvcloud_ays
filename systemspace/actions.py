@@ -9,7 +9,7 @@ class Actions(ActionsBase):
         privateKey = j.system.fs.fileGetContents("/root/.ssh/id_rsa")
         publicKey = j.system.fs.fileGetContents("/root/.ssh/id_rsa.pub")
 
-        cl = j.tools.ms1.get('$(instance.apiurl)')
+        cl = j.tools.ms1.get('$(instance.api.url)', '$(instance.api.port)')
         spaceSecret = cl.getCloudspaceSecret('$(instance.ovc.login)','$(instance.ovc.passwd)','$(instance.ovc.cloudspace)',location='$(instance.ovc.location)')
         id, ip, port = cl.createMachine(spaceSecret, 'master', memsize=2, ssdsize=40, vsansize=0, description='master vm of system space', imagename='ubuntu 14.04 x64', delete=True, sshkey=publicKey, hostname='master')
 

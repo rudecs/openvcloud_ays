@@ -1,4 +1,5 @@
-apiurl=@ASK description:'url of the openvcloud api' default:'du-conv-1.demo.greenitglobe.com'
+api.url=@ASK description:'url of the openvcloud api' default:'du-conv-1.demo.greenitglobe.com'
+api.port=@ASK description:'url of the openvcloud api' default:'du-conv-1.demo.greenitglobe.com'
 ovc.login=@ASK description:'login on the openvcloud environment'
 ovc.passwd=@ASK description:'password on the openvcloud environment'
 ovc.cloudspace='system'
