@@ -35,17 +35,43 @@ class Actions(ActionsBase):
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
         portalurl = serviceObj.hrd.get('instance.param.portal.url')
-        links = {
-                'System': '/system',
-                'End User': portalurl,
-                'Storage': '%s' % serviceObj.hrd.get('instance.param.ovs.url'),
-                'Statistics': '/grafana',
-                'Power Management': '%s' % serviceObj.hrd.get('instance.param.dcpm.url'),
-                'At Your Service': '/AYS',
-                'Grid': '/grid',
-                'Cloud Broker': '/cbgrid',
+        portallinks = {
+                'ays', {
+                    'name': 'At Your Service',
+                    'url': '/AYS',
+                    'theme': 'light',
+                    },
+                'wiki_gcb', {
+                    'name': 'End User',
+                    'url': portalurl,
+                    'theme': 'dark',
+                    'external': 'true'},
+                'ovs', {
+                    'name': 'Storage',
+                    'url': serviceObj.hrd.get('instance.param.ovs.url'),
+                    'theme': 'light',
+                    'external': 'true'},
+                'grafana', {
+                    'name': 'Statistics',
+                    'url': '/grafana',
+                    'theme': 'light',
+                    'external': 'true'},
+                'dcpm', {
+                    'name': 'Power Management',
+                    'url': serviceObj.hrd.get('instance.param.dcpm.url'),
+                    'theme': 'light',
+                    'external': 'true'},
+                'grid', {
+                    'name': 'Grid',
+                    'url': '/grid',
+                    'theme': 'light'},
+                'cbgrid', {
+                    'name': 'Cloud Broker',
+                    'url': '/cbgrid',
+                    'theme': 'light'},
                 }
-        portal.hrd.set('instance.navigationlinks.Portals', links)
+        for linkid, data in portallinks.iteritems():
+            portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
         portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
         portal.start()
 
