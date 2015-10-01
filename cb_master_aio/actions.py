@@ -36,36 +36,36 @@ class Actions(ActionsBase):
         portal.stop()
         portalurl = serviceObj.hrd.get('instance.param.portal.url')
         portallinks = {
-                'ays', {
+                'ays': {
                     'name': 'At Your Service',
                     'url': '/AYS',
                     'theme': 'light',
                     },
-                'wiki_gcb', {
+                'wiki_gcb': {
                     'name': 'End User',
                     'url': portalurl,
                     'theme': 'dark',
                     'external': 'true'},
-                'ovs', {
+                'ovs': {
                     'name': 'Storage',
                     'url': serviceObj.hrd.get('instance.param.ovs.url'),
                     'theme': 'light',
                     'external': 'true'},
-                'grafana', {
+                'grafana': {
                     'name': 'Statistics',
                     'url': '/grafana',
                     'theme': 'light',
                     'external': 'true'},
-                'dcpm', {
+                'dcpm': {
                     'name': 'Power Management',
                     'url': serviceObj.hrd.get('instance.param.dcpm.url'),
                     'theme': 'light',
                     'external': 'true'},
-                'grid', {
+                'grid': {
                     'name': 'Grid',
                     'url': '/grid',
                     'theme': 'light'},
-                'cbgrid', {
+                'cbgrid': {
                     'name': 'Cloud Broker',
                     'url': '/cbgrid',
                     'theme': 'light'},
