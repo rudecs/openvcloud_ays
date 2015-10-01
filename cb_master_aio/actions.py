@@ -65,6 +65,10 @@ class Actions(ActionsBase):
                     'name': 'Grid',
                     'url': '/grid',
                     'theme': 'light'},
+                'system': {
+                    'name': 'System',
+                    'url': '/system',
+                    'theme': 'light'},
                 'cbgrid': {
                     'name': 'Cloud Broker',
                     'url': '/cbgrid',
