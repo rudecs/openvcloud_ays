@@ -5,6 +5,7 @@ import StringIO
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
+
 class Actions(ActionsBase):
     """
     process for install
@@ -26,36 +27,14 @@ class Actions(ActionsBase):
         print '[+] loading configuration'
 
         instance = serviceObj.hrd.get("instance.arakoon.instance")
-        hrd = j.application.getAppInstanceHRD("arakoon_client", instance)
-        arakoon = hrd.getList("instance.cluster")
+        arakoonHRD = j.application.getAppInstanceHRD("arakoon_client", instance)
+        arakoon = arakoonHRD.getList("instance.cluster")
 
-        vdiskroot = serviceObj.hrd.get("instance.param.vdiskroot")
-        cifspath = serviceObj.hrd.get("instance.param.cifspath")
-        refresh = serviceObj.hrd.get("instance.param.refresh")
-        blockSize = serviceObj.hrd.get("instance.param.blocksize")
-
-        # print '[+] building arakoon config files'
-
-        # config = ConfigParser.RawConfigParser()
-
-        # config.add_section('global')
-        # config.set('global', 'cluster_id', hrd.get("instance.clusterid"))
-        # config.set('global', 'cluster', hrd.get("instance.cluster"))
-
-        # for node in arakoon:
-        #     item = hrd.getDictFromPrefix("instance." + node)
-
-        #     config.add_section(node)
-        #     config.set(node, 'ip', item['ip'])
-        #     config.set(node, 'client_port', item['client_port'])
-        #     config.set(node, 'messaging_port', item['messaging_port'])
-        #     config.set(node, 'home', item['home'])
-        #     config.set(node, 'log_level', 'info')
-
-
-        # with open('/tmp/arakoon.ini', 'wb') as configfile:
-        #     config.write(configfile)
-
+        vdiskroot = serviceObj.hrd.getStr("instance.param.vdiskroot")
+        cifspath = serviceObj.hrd.getStr("instance.param.cifspath")
+        refresh = serviceObj.hrd.getInt("instance.param.refresh")
+        blockSize = serviceObj.hrd.getInt("instance.param.blocksize")
+        timeout = serviceObj.hrd.getInt('instance.param.timeout')
 
         print '[+] configuring samba'
 
@@ -65,59 +44,31 @@ class Actions(ActionsBase):
 
         print '[+] building this vnaslb settings'
 
-        """
-        !! FIXME !!
-        toml = contoml.new()
-
-        # global
-        toml['']['ClusterID']  = hrd.get("instance.clusterid")
-        toml['']['ClientID']   = "vdisk_client"
-        toml['']['VdisksRoot'] = vdiskroot
-        toml['']['VdisksMountpoint']  = vdiskmount
-        toml['']['CifsMountedVolume'] = cifspath
-
-        # nodes
-        for i in range(0, nodes):
-            name = 'node%d' % (i + 1)
-
-            toml['Nodes'][name] = {
-                'ID': name,
-                'Host': address[i],
-                'Port': 4000
+        fn = j.system.fs.joinPaths(serviceObj.hrd.get('service.git.export.1')['dest'], 'config.toml')
+        cfg = contoml.new()
+        cfg['Gobal'] = {'Debug': False}
+        cfg['Fuse'] = {
+            'nVdisksRoot': vdiskroot,
+            'CifsRoot': cifspath,
+            'Refresh': refresh,
+            'BlockSize': blockSize,
+            'Timeout': timeout,
+        }
+        cfg['Arakoon'] = {
+            'ClientID': arakoonHRD.getStr('instance.clusterid'),
+            'ClusterID': arakoonHRD.getStr('instance.clusterid')
+        }
+        cfg['Arakoon.Nodes'] = {}
+        from ipdb import set_trace;set_trace()
+        for node in arakoon:
+            item = arakoonHRD.get("instance." + node)
+            cfg['Arakoon.Nodes.%s' % node] = {
+                'ID': node,
+                'Host': item['ip'],
+                'Port': item['client_port']
             }
 
-        # vdisk
-        for i in range(0, vdisks):
-            diskid = i + 1
-            name = 'vdisk%d' % diskid
-            toml['vdisks'][name] = {'id':  diskid}
-
-        toml.dump('/tmp/config.toml')
-        """
-
-        fn = j.system.fs.joinPaths(serviceObj.hrd.get('service.git.export.1')['dest'], 'config.toml')
-
-        output = StringIO.StringIO()
-        output.write('ClusterID = "%s"' % hrd.get("instance.clusterid"))
-        output.write('\nClientID = "vdisk_client"')
-        output.write('\nVdisksRoot = "%s"' % vdiskroot)
-        output.write('\nCifsRoot = "%s"' % cifspath)
-        output.write('\nRefresh = %s' % refresh)
-        output.write('\nBlockSize = %s' % blockSize)
-        output.write('\n\n')
-        output.write('\n[Nodes]')
-
-        for node in arakoon:
-            item = hrd.getDictFromPrefix("instance." + node)
-
-            output.write('\n[Nodes.%s]' % node)
-            output.write('\nHost = "%s"' % item['ip'])
-            output.write('\nID = "%s"' % node)
-            output.write('\nPort = %s' % item['client_port'])
-
-        output.write("\n\n")
-        j.system.fs.writeFile(filename=fn, contents=output.getvalue(), append=False)
-        output.close()
+        j.system.fs.writeFile(filename=fn, contents=cfg.dumps())
 
         print '[+] creating paths'
 
@@ -128,3 +79,13 @@ class Actions(ActionsBase):
             j.system.fs.createDir(cifspath)
 
         return True
+
+    def build(self, serviceObj):
+        go = j.atyourservice.getService(name='go')
+        go.actions.buildProjectGodep(go, 'https://git.aydo.com/0-complexity/vnaslb')
+        gopath = go.hrd.getStr('instance.gopath')
+
+        binary = j.system.fs.joinPaths(gopath, 'bin', 'vnaslb')
+        dest = '/opt/code/git/binary/vnaslb'
+        j.system.fs.createDir(dest)
+        j.system.fs.copyFile(binary, dest)

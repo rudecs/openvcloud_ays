@@ -5,17 +5,15 @@ git.export.1                   =
     source:,
     url:'http://git.aydo.com/binary/vnaslb',
 
-platform.supported             = 'generic'
-
 process.1                      =
-    args:,
+    args:'-c config.toml',
     cmd:'./vnaslb',
-    cwd:'$(system.paths.base)/apps/vnaslb/',
-    filterstr:'vnaslb',
-    ports:,
-    prio:'100',
+    cwd:'$(system.paths.base)/apps/vnaslb',
+    filterstr:'./vnaslb -c config.toml',
+    name:'$(service.name)__$(service.instance)',
+    prio:'50',
     startupmanager:'tmux',
-    timeout_start:'20',
-    timeout_stop:'20',
+    timeout_start:'10',
+    timeout_stop:'10',
 
-ubuntu.packages                = 'fuse'
+platform.supported             = 'generic'
