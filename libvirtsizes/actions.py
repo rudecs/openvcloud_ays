@@ -37,8 +37,7 @@ class Actions(ActionsBase):
                  ('10GB at SSD Speed, Unlimited Transfer - 36 USD/month', 4096, 2),
                  ('10GB at SSD Speed, Unlimited Transfer - 70 USD/month', 8192, 4),
                  ('10GB at SSD Speed, Unlimited Transfer - 140 USD/month', 16384, 8)]
-
-        disksizes = [10,15,20,25,30,40,50,60,70,80,90,100]
+        disksizes = [10, 20, 50, 100, 250, 500, 1000, 2000]
         for i in disksizes:
             for sizecb in sizecbs:
                 if osis_lsize.search({'memory': sizecb[1], 'disk': i})[0]:
