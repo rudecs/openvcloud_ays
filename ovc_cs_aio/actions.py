@@ -380,6 +380,9 @@ class Actions(ActionsBase):
         # portforward 4444 to 4444 ovc_master and 5544
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 5544, pubipport=5544)
+        
+        # FIXME: should not expose statsd port
+        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 8127, pubipport=8127)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
