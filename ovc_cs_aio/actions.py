@@ -120,7 +120,7 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, rootpasswd,
                               ipGateway, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
-                              self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
+                              self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
         def dcpm():
@@ -343,7 +343,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -423,6 +423,7 @@ class Actions(ActionsBase):
             'instance.param.oauth.url': oauthUrl,
             'instance.param.defense.url': defenseUrl,
             'instance.param.grafana.url': grafanaUrl,
+            'instance.param.safekeeper.url': safekeeperUrl,
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)

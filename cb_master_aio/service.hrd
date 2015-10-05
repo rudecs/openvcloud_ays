@@ -20,6 +20,7 @@ dep.args.oauthserver           =
     ovs.url:'$(instance.param.ovs.url)',
     portal.url:'$(instance.param.portal.url)',
     grafana.url:'$(instance.param.grafana.url)',
+    safekeeper.url:'$(instance.param.safekeeper.url)',
 
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
