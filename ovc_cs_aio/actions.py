@@ -74,6 +74,14 @@ class Actions(ActionsBase):
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
+        self.smtp = {
+            'server': serviceObj.hrd.getStr('instance.smtp.server'),
+            'port': serviceObj.hrd.getStr('instance.smtp.port'),
+            'login': serviceObj.hrd.getStr('instance.smtp.login'),
+            'passwd': serviceObj.hrd.getStr('instance.smtp.passwd'),
+            'sender': serviceObj.hrd.getStr('instance.smtp.sender'),
+        }
+        
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] oauth   url: %s' % self.oauthUrl
@@ -83,6 +91,7 @@ class Actions(ActionsBase):
         print '[+] defense url: %s' % self.defenseUrl
         print '[+] novnc   url: %s' % self.novncUrl
         print '[+] grafana url: %s' % self.grafanaUrl
+        print '[+] smtp server: %s' % self.smtp['server']
 
     def configure(self, serviceObj):
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
@@ -120,7 +129,8 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, rootpasswd,
                               ipGateway, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
-                              self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, delete=delete)
+                              self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, self.smtp,
+                              delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
         def dcpm():
@@ -343,7 +353,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, smtp, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -424,6 +434,11 @@ class Actions(ActionsBase):
             'instance.param.defense.url': defenseUrl,
             'instance.param.grafana.url': grafanaUrl,
             'instance.param.safekeeper.url': safekeeperUrl,
+            'instance.param.smtp.server': smtp['server'],
+            'instance.param.smtp.port': smtp['port'],
+            'instance.param.smtp.login': smtp['login'],
+            'instance.param.smtp.passwd': smtp['passwd'],
+            'instance.param.smtp.sender': smtp['sender'],
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)

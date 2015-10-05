@@ -22,6 +22,13 @@ dep.args.oauthserver           =
     grafana.url:'$(instance.param.grafana.url)',
     safekeeper.url:'$(instance.param.safekeeper.url)',
 
+dep.args.mailclient           =
+    'smtp.login':'$(instance.param.smtp.login)',
+    'smtp.passwd':'$(instance.param.smtp.passwd)',
+    'smtp.port':'$(instance.param.smtp.port)',
+    'smtp.sender':'$(instance.param.smtp.sender)',
+    'smtp.server':'$(instance.param.smtp.server)',
+    
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
@@ -83,6 +90,11 @@ dependencies.16                =
 dependencies.17                =
     domain:'openvcloud',
     name:'portal_branding',
+
+dependencies.18                =
+    args:'dep.args.mailclient',
+    domain:'jumpscale',
+    name:'mailclient',
 
 dependencies.2                 =
     args:'dep.args.portal_client',

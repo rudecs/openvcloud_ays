@@ -9,3 +9,9 @@ param.portal.url = @ASK type:str default:'https://customer.demo.greenitglobe.com
 param.oauth.url = @ASK type:str default:'https://environment.demo.greenitglobe.com' descr:'public url of the oauth server'
 param.defense.url = @ASK type:str default:'htttp://defensecurtomer.demo.greenitglobe.com' descr:'url for the defense shield'
 param.safekeeper.url = @ASK type:str default:'htttp://safekeepercustomer.demo.greenitglobe.com' descr:'url for the safekeeper'
+
+param.smtp.server=@ASK default:'smtp.mandrillapp.com'  descr:'MAILCLIENT: SMTP Server'
+param.smtp.port=@ASK default:587 descr:'MAILCLIENT: SMTP Server port'
+param.smtp.login=@ASK  descr:'MAILCLIENT: SMTP Server username'
+param.smtp.passwd=@ASK descr:'MAILCLIENT: SMTP Server password'
+param.smtp.sender=@ASK default:'' descr:'MAILCLIENT: SMTP Server sender(can be empty.)'
