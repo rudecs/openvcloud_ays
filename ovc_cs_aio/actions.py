@@ -159,9 +159,9 @@ class Actions(ActionsBase):
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
     
     def setupHost(self, host, address):
-        content = cl.file_read('/etc/hosts')
-        if content.find(host) == -1:
-            cl.file_append('/etc/hosts', ("\n%s\t%s\n" % (host, address)))
+        hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
+        if not host in hosts:
+            j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (host, address)), True)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
