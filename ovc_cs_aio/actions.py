@@ -157,6 +157,11 @@ class Actions(ActionsBase):
     def setupGit(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+    
+    def setupHost(self, host, address):
+        content = cl.file_read('/etc/hosts')
+        if content.find(host) == -1:
+            cl.file_append('/etc/hosts', ("\n%s\t%s\n" % (host, address)))
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -192,6 +197,9 @@ class Actions(ActionsBase):
 
         vspace = self.api.getCloudspaceObj(spacesecret)
         pubIP = vspace['publicipaddress']
+        
+        # saving ip to hosts
+        self.setupHost('reflector', privIP)
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
@@ -307,6 +315,9 @@ class Actions(ActionsBase):
         # portforward 80 and 443 to 80 and 443 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
+        
+        # saving ip to hosts
+        self.setupHost('proxy', proxyip)
 
         cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -383,6 +394,9 @@ class Actions(ActionsBase):
         
         # FIXME: should not expose statsd port
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 8127, pubipport=8127)
+        
+        # saving ip to hosts
+        self.setupHost('master', ip)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -469,6 +483,9 @@ class Actions(ActionsBase):
         ip = machine['interfaces'][0]['ipAddress']
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+        
+        # saving ip to hosts
+        self.setupHost('dcpm', ip)
 
 
         # generate key pair on the vm
