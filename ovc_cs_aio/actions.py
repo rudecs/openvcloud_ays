@@ -1,5 +1,6 @@
 from JumpScale import j
 import urllib
+from StringIO import StringIO
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -160,8 +161,10 @@ class Actions(ActionsBase):
     
     def setupHost(self, host, address):
         hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
+        
+        # FIXME: should replace ip if already exists
         if not host in hosts:
-            j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (host, address)), True)
+            j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
