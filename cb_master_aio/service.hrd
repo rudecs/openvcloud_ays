@@ -45,6 +45,8 @@ dep.args.portalalone          =
     param.dcpm.url:'$(instance.param.dcpm.url)',
     param.ovs.url:'$(instance.param.ovs.url)',
     param.portal.url:'$(instance.param.portal.url)',
+
+dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
     param.osis.client.passwd:'$(instance.param.rootpasswd)',
@@ -67,52 +69,57 @@ dep.args.vfwmanager            =
 dep.args.vncproxy              =
     param.portal.connection:'main',
 
-dependencies.2                =
+dependencies.2                 =
+    args:'dep.args.osis_client',
+    domain:'jumpscale',
+    name:'osis_client',
+    
+dependencies.3                =
     args:'dep.args.portalalone',
     domain:'jumpscale',
     name:'portal',
     
-dependencies.3                 =
+dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
     name:'singlenode_grid',
 
-dependencies.12                =
+dependencies.13                =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'ms1_frontend',
 
-dependencies.13                =
+dependencies.14                =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'cbportal',
 
-dependencies.14                =
+dependencies.15                =
     args:'dep.args.portal',
     domain:'jumpscale',
     name:'gridportal',
 
-dependencies.15                =
+dependencies.16                =
     domain:'openvcloud',
     name:'libvirtsizes',
 
-dependencies.16                =
+dependencies.17                =
     args:'dep.args.vfwmanager',
     domain:'openvcloud',
     name:'vfwmanager',
 
-dependencies.17                =
+dependencies.18                =
     args:'dep.args.oauthserver',
     domain:'openvcloud',
     name:'oauthserver',
 
-dependencies.18                =
+dependencies.19                =
     args:'dep.args.oauthclient',
     domain:'jumpscale',
     name:'oauth_client',
     instance:'oauth',
 
-dependencies.19                =
+dependencies.20                =
     domain:'openvcloud',
     name:'portal_branding',
 
@@ -121,37 +128,37 @@ dependencies.1                =
     domain:'jumpscale',
     name:'mailclient',
 
-dependencies.4                 =
+dependencies.5                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
     name:'portal_client',
 
-dependencies.5                 =
+dependencies.6                 =
     domain:'openvcloud',
     name:'cloudbroker_model',
 
-dependencies.6                 =
+dependencies.7                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.7                 =
+dependencies.8                 =
     domain:'openvcloud',
     name:'billingenginelib',
 
-dependencies.8                 =
+dependencies.9                 =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'billingengine',
 
-dependencies.9                 =
+dependencies.10                 =
     domain:'openvcloud',
     name:'cloudbrokerlib',
 
-dependencies.10                 =
+dependencies.11                 =
     domain:'openvcloud',
     name:'libcloudlibvirt',
 
-dependencies.11                 =
+dependencies.12                 =
     args:'dep.args.cloudborker',
     domain:'openvcloud',
     name:'cloudbroker',
