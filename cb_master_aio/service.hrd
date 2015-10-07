@@ -28,6 +28,23 @@ dep.args.mailclient           =
     'smtp.port':'$(instance.param.smtp.port)',
     'smtp.sender':'$(instance.param.smtp.sender)',
     'smtp.server':'$(instance.param.smtp.server)',
+
+dep.args.portalalone          =
+    param.cfg.admingroups:'admin,',
+    param.cfg.authentication.method:'osis',
+    param.cfg.contentdirs:,
+    param.cfg.defaultspace:'home',
+    param.cfg.force_oauth_instance:'oauth',
+    param.cfg.gitlab.connection:'main',
+    param.cfg.ipaddr:'localhost',
+    param.cfg.port:'82',
+    param.cfg.secret:'$(instance.param.rootpasswd)',
+    param.osis.connection:'main',
+    param.portal.name:'main',
+    param.portal.rootpasswd:'$(instance.param.rootpasswd)',
+    param.dcpm.url:'$(instance.param.dcpm.url)',
+    param.ovs.url:'$(instance.param.ovs.url)',
+    param.portal.url:'$(instance.param.portal.url)',
     
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
@@ -47,86 +64,91 @@ dep.args.vfwmanager            =
 dep.args.vncproxy              =
     param.portal.connection:'main',
 
-dependencies.2                 =
+dependencies.1                =
+    args:'dep.args.portalalone',
+    domain:'jumpscale',
+    name:'portal',
+    
+dependencies.3                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
     name:'singlenode_grid',
 
-dependencies.11                =
+dependencies.12                =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'ms1_frontend',
 
-dependencies.12                =
+dependencies.13                =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'cbportal',
 
-dependencies.13                =
+dependencies.14                =
     args:'dep.args.portal',
     domain:'jumpscale',
     name:'gridportal',
 
-dependencies.14                =
+dependencies.15                =
     domain:'openvcloud',
     name:'libvirtsizes',
 
-dependencies.15                =
+dependencies.16                =
     args:'dep.args.vfwmanager',
     domain:'openvcloud',
     name:'vfwmanager',
 
-dependencies.16                =
+dependencies.17                =
     args:'dep.args.oauthserver',
     domain:'openvcloud',
     name:'oauthserver',
 
-dependencies.17                =
+dependencies.18                =
     args:'dep.args.oauthclient',
     domain:'jumpscale',
     name:'oauth_client',
     instance:'oauth',
 
-dependencies.18                =
+dependencies.19                =
     domain:'openvcloud',
     name:'portal_branding',
 
-dependencies.1                =
+dependencies.2                =
     args:'dep.args.mailclient',
     domain:'jumpscale',
     name:'mailclient',
 
-dependencies.3                 =
+dependencies.4                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
     name:'portal_client',
 
-dependencies.4                 =
+dependencies.5                 =
     domain:'openvcloud',
     name:'cloudbroker_model',
 
-dependencies.5                 =
+dependencies.6                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.6                 =
+dependencies.7                 =
     domain:'openvcloud',
     name:'billingenginelib',
 
-dependencies.7                 =
+dependencies.8                 =
     args:'dep.args.portal',
     domain:'openvcloud',
     name:'billingengine',
 
-dependencies.8                 =
+dependencies.9                 =
     domain:'openvcloud',
     name:'cloudbrokerlib',
 
-dependencies.9                 =
+dependencies.10                 =
     domain:'openvcloud',
     name:'libcloudlibvirt',
 
-dependencies.10                 =
+dependencies.11                 =
     args:'dep.args.cloudborker',
     domain:'openvcloud',
     name:'cloudbroker',
