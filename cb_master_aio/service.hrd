@@ -23,11 +23,11 @@ dep.args.oauthserver           =
     safekeeper.url:'$(instance.param.safekeeper.url)',
 
 dep.args.mailclient           =
-    'smtp.login':'$(instance.param.smtp.login)',
-    'smtp.passwd':'$(instance.param.smtp.passwd)',
-    'smtp.port':'$(instance.param.smtp.port)',
-    'smtp.sender':'$(instance.param.smtp.sender)',
-    'smtp.server':'$(instance.param.smtp.server)',
+    smtp.login:'$(instance.param.smtp.login)',
+    smtp.passwd:'$(instance.param.smtp.passwd)',
+    smtp.port:'$(instance.param.smtp.port)',
+    smtp.sender:'$(instance.param.smtp.sender)',
+    smtp.server:'$(instance.param.smtp.server)',
 
 dep.args.portalalone          =
     param.cfg.admingroups:'admin,',
@@ -45,6 +45,9 @@ dep.args.portalalone          =
     param.dcpm.url:'$(instance.param.dcpm.url)',
     param.ovs.url:'$(instance.param.ovs.url)',
     param.portal.url:'$(instance.param.portal.url)',
+    param.osis.client.addr:'localhost',
+    param.osis.client.login:'root',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
     
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
@@ -64,7 +67,7 @@ dep.args.vfwmanager            =
 dep.args.vncproxy              =
     param.portal.connection:'main',
 
-dependencies.1                =
+dependencies.2                =
     args:'dep.args.portalalone',
     domain:'jumpscale',
     name:'portal',
@@ -113,7 +116,7 @@ dependencies.19                =
     domain:'openvcloud',
     name:'portal_branding',
 
-dependencies.2                =
+dependencies.1                =
     args:'dep.args.mailclient',
     domain:'jumpscale',
     name:'mailclient',
