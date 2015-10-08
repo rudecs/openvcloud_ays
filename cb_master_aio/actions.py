@@ -75,7 +75,8 @@ class Actions(ActionsBase):
                     'theme': 'light'},
                 }
         for linkid, data in portallinks.iteritems():
-            portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
+            if data['url']:
+                portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
         portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
         portal.start()
 
