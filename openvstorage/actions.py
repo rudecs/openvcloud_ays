@@ -72,6 +72,8 @@ class Actions(ActionsBase):
                 json.dump(config, f, indent=4)
         
         # fix listen interface for alba
+        alba = None
+        
         with open('/opt/alba-asdmanager/config/config.json', 'r') as f:
             alba = json.load(f)
             alba['network']['ips'] = [serviceObj.hrd.getStr('instance.targetip')]
