@@ -39,39 +39,47 @@ class Actions(ActionsBase):
                 'ays': {
                     'name': 'At Your Service',
                     'url': '/AYS',
+                    'scope': 'admin',
                     'theme': 'light',
                     },
                 'wiki_gcb': {
                     'name': 'End User',
                     'url': portalurl,
+                    'scope': 'user',
                     'theme': 'dark',
                     'external': 'true'},
                 'ovs': {
                     'name': 'Storage',
                     'url': serviceObj.hrd.get('instance.param.ovs.url'),
+                    'scope': 'ovs_admin',
                     'theme': 'light',
                     'external': 'true'},
                 'grafana': {
                     'name': 'Statistics',
                     'url': '/grafana',
+                    'scope': 'admin',
                     'theme': 'light',
                     'external': 'true'},
                 'dcpm': {
                     'name': 'Power Management',
                     'url': serviceObj.hrd.get('instance.param.dcpm.url'),
+                    'scope': 'dcpm_admin',
                     'theme': 'light',
                     'external': 'true'},
                 'grid': {
                     'name': 'Grid',
                     'url': '/grid',
+                    'scope': 'admin',
                     'theme': 'light'},
                 'system': {
                     'name': 'System',
                     'url': '/system',
+                    'scope': 'admin',
                     'theme': 'light'},
                 'cbgrid': {
                     'name': 'Cloud Broker',
                     'url': '/cbgrid',
+                    'scope': 'admin',
                     'theme': 'light'},
                 }
         for linkid, data in portallinks.iteritems():
