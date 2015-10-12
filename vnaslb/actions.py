@@ -74,7 +74,7 @@ class Actions(ActionsBase):
             clientID=cluster_id
         )
         for node in arakoon:
-            item = arakoonHRD.get("instance." + node)
+            item = arakoonHRD.getDictFromPrefix("instance." + node)
             cfg += "\n" + tmpl_node.format(
                 name=node,
                 host=item['ip'],
