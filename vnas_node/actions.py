@@ -19,4 +19,31 @@ class Actions(ActionsBase):
     step7b: do monitor_local to see if package healthy installed & running
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
-    pass
+    def configure(self, service_obj):
+
+        def showmount(addr):
+            cmd = 'showmount -e --no-headers %s' % addr
+            _, output = j.system.process.execute(cmd)
+            lines = output.splitlines()
+            return [l.split(' ')[0] for l in lines]
+
+        def mount(remoteHost, remoteDir, localDir):
+            cmd = 'mount %s:%s %s' % (remoteHost, remoteDir, localDir)
+            j.system.process.execute(cmd)
+
+        stores = service_obj.hrd.getDictFromPrefix('instance.stores')
+        for id, addr in stores.iteritems():
+            availableDisks = showmount(addr)
+
+            for disk in availableDisks:
+                diskID = disk.split('/')[-1]
+                mountID = int(id) * 100 + int(diskID)
+                localDir = '/mnt/vdisks/%s' % mountID
+
+                if not j.system.fs.exists(path=localDir):
+                    j.system.fs.createDir(localDir)
+
+                mount(addr, disk, localDir)
+
+        vnaslb = j.atyourservice.get(name='vnaslb')
+        vnaslb.restart()
