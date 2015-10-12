@@ -21,6 +21,9 @@ class Actions(ActionsBase):
     """
     def configure(self, service_obj):
 
+        cmd = 'mount'
+        rc, mounted = j.system.process.execute(cmd)
+
         def showmount(addr):
             cmd = 'showmount -e --no-headers %s' % addr
             _, output = j.system.process.execute(cmd)
@@ -28,8 +31,11 @@ class Actions(ActionsBase):
             return [l.split(' ')[0] for l in lines]
 
         def mount(remoteHost, remoteDir, localDir):
-            cmd = 'mount %s:%s %s' % (remoteHost, remoteDir, localDir)
-            j.system.process.execute(cmd)
+            # only mounted if not exists yet
+            if mounted.find(localDir) == -1:
+                cmd = 'mount %s:%s %s' % (remoteHost, remoteDir, localDir)
+                j.system.process.execute(cmd)
+
 
         stores = service_obj.hrd.getDictFromPrefix('instance.stores')
         for id, addr in stores.iteritems():
