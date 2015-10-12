@@ -42,7 +42,7 @@ class Actions(ActionsBase):
         if not j.system.fs.exists(path=path):
             j.system.fs.createDir(path)
 
-        cmd = 'mount %s %s' %(devName, path)
+        cmd = 'mount %s %s\n' %(devName, path)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
 
         if not j.system.fs.exists(path="/etc/exports"):
