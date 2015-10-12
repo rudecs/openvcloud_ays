@@ -45,10 +45,14 @@ class Actions(ActionsBase):
         cmd = 'mount %s %s' %(devName, path)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
 
-        nfs = j.ssh.nfs.get(j.ssh.connect())
-        share = nfs.add(path)
-        share.addClient(nfsHost, nfsOptions)
-        nfs.commit()
+        if not j.system.fs.exists(path="/etc/exports"):
+            j.system.fs.createEmptyFile('/etc/exports')
+        exports = '%s %s(%s)' % (path, nfsHost, nfsOptions)
+        j.system.fs.writeFile(filename="/etc/exports", contents=exports, append=True)
+        # nfs = j.ssh.nfs.get(j.ssh.connect())
+        # share = nfs.add(path)
+        # share.addClient(nfsHost, nfsOptions)
+        # nfs.commit()
 
         output = j.system.fs.joinPaths(path, '.vnasdisk.toml')
         j.system.fs.createEmptyFile(output)
