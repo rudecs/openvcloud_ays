@@ -42,12 +42,12 @@ class Actions(ActionsBase):
         if not j.system.fs.exists(path=path):
             j.system.fs.createDir(path)
 
-        cmd = 'mount %s %s\n' %(devName, path)
+        cmd = 'mount %s %s' %(devName, path)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
 
         if not j.system.fs.exists(path="/etc/exports"):
             j.system.fs.createEmptyFile('/etc/exports')
-        exports = '%s %s(%s)' % (path, nfsHost, nfsOptions)
+        exports = '%s %s(%s)\n' % (path, nfsHost, nfsOptions)
         j.system.fs.writeFile(filename="/etc/exports", contents=exports, append=True)
         # nfs = j.ssh.nfs.get(j.ssh.connect())
         # share = nfs.add(path)
