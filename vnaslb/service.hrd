@@ -8,10 +8,10 @@ git.export.1                   =
 platform.supported             = 'generic'
 
 process.1                      =
-    args:,
+    args:'-c config.toml',
     cmd:'./vnaslb',
     cwd:'$(system.paths.base)/apps/vnaslb/',
-    filterstr:'vnaslb',
+    filterstr:'./vnaslb -c config.toml',
     ports:,
     prio:'100',
     startupmanager:'tmux',
