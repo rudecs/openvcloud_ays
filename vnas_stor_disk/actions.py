@@ -55,5 +55,5 @@ class Actions(ActionsBase):
         output = j.system.fs.joinPaths(path, '.vnasdisk.toml')
         j.system.fs.createEmptyFile(output)
 
-        disk = {'id': diskID, 'pool': ''}
+        disk = {'id': globalDiskID, 'pool': ''}
         contoml.dump(disk, output, prettify=True)
