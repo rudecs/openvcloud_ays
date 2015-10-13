@@ -27,7 +27,7 @@ class Actions(ActionsBase):
             j.events.opserror_critical(msg="can't find vnas_stor. install vnas_stor first", category="vnas_stor_disk")
 
         storHRD = services[0].hrd
-        storID = stor.storHRD.getInt('instance.stor.id')
+        storID = storHRD.getInt('instance.stor.id')
         disksDir = storHRD.get('instance.stor.export.dir')
         diskID = serviceObj.hrd.getInt('instance.disk.id')
         globalDiskID = (storID*100)+diskID
