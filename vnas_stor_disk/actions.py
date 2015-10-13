@@ -49,8 +49,10 @@ class Actions(ActionsBase):
 
         if not j.system.fs.exists(path="/etc/exports"):
             j.system.fs.createEmptyFile('/etc/exports')
+        content = j.system.fs.fileGetContents("/etc/exports")
         exports = '%s %s(%s)\n' % (path, nfsHost, nfsOptions)
-        j.system.fs.writeFile(filename="/etc/exports", contents=exports, append=True)
+        if content.find(exports) == -1:
+            j.system.fs.writeFile(filename="/etc/exports", contents=exports, append=True)
 
         output = j.system.fs.joinPaths(path, '.vnasdisk.toml')
         j.system.fs.createEmptyFile(output)
