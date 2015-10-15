@@ -33,6 +33,7 @@ dep.args.statsd-collector      =
 
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
+    vfw.admin.newpasswd:'$(instance.param.rootpasswd)',
 
 dep.args.autossh = 
     local.address: 'localhost',

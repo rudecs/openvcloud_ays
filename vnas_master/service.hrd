@@ -8,17 +8,17 @@ dep.args.agentcontroller2_client =
     param.redis.password:,
     param.redis.port:'9999',
 
-dep.args.arakoon                 =
-    cfg: '/opt/arakoon//cfg/settings.cfg',
-    clusterid: 'vnas',
-    home: '/opt/arakoon/',
-    nodename: 'master',
-    nodes: 'master',
-    nodes.master.client_port: '7080',
-    nodes.master.home: '/opt/arakoon/data/',
-    nodes.master.ip: '$(instance.ip)',
-    nodes.master.messaging_port: '10000',
-    nodes.master.name: 'master',
+dep.args.arakoon               =
+    cfg:'/opt/arakoon//cfg/settings.cfg',
+    clusterid:'vnas',
+    home:'/opt/arakoon/',
+    nodename:'master',
+    nodes:'master',
+    nodes.master.client_port:'7080',
+    nodes.master.home:'/opt/arakoon/data/',
+    nodes.master.ip:'$(instance.ip)',
+    nodes.master.messaging_port:'10000',
+    nodes.master.name:'master',
 
 dep.args.grafana               =
     param.influxdb.connection:'main',
@@ -78,6 +78,7 @@ dep.args.portal_client         =
 
 dep.args.redis                 =
     param.disk:'1',
+    param.ip:'0.0.0.0',
     param.mem:'100',
     param.passwd:,
     param.port:'9999',
@@ -100,7 +101,7 @@ dependencies.12                =
     args:'dep.args.grafana',
     name:'grafana',
 
-dependencies.13                = 
+dependencies.13                =
     args:'dep.args.arakoon',
     name:'arakoon',
 
@@ -136,4 +137,3 @@ dependencies.9                 =
 
 platform.supported             =
     'linux',
-

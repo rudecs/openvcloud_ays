@@ -1,5 +1,6 @@
 from JumpScale import j
 import urllib
+from StringIO import StringIO
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -74,6 +75,14 @@ class Actions(ActionsBase):
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
+        self.smtp = {
+            'server': serviceObj.hrd.getStr('instance.smtp.server'),
+            'port': serviceObj.hrd.getStr('instance.smtp.port'),
+            'login': serviceObj.hrd.getStr('instance.smtp.login'),
+            'passwd': serviceObj.hrd.getStr('instance.smtp.passwd'),
+            'sender': serviceObj.hrd.getStr('instance.smtp.sender'),
+        }
+        
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] oauth   url: %s' % self.oauthUrl
@@ -83,6 +92,7 @@ class Actions(ActionsBase):
         print '[+] defense url: %s' % self.defenseUrl
         print '[+] novnc   url: %s' % self.novncUrl
         print '[+] grafana url: %s' % self.grafanaUrl
+        print '[+] smtp server: %s' % self.smtp['server']
 
     def configure(self, serviceObj):
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
@@ -120,7 +130,8 @@ class Actions(ActionsBase):
             self.initMasterVM(spacesecret, rootpasswd,
                               ipGateway, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
-                              self.defenseUrl, self.repoPath, self.grafanaUrl, delete=delete)
+                              self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, self.smtp,
+                              delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
         
         def dcpm():
@@ -147,6 +158,13 @@ class Actions(ActionsBase):
     def setupGit(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+    
+    def setupHost(self, host, address):
+        hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
+        
+        # FIXME: should replace ip if already exists
+        if not host in hosts:
+            j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -182,6 +200,9 @@ class Actions(ActionsBase):
 
         vspace = self.api.getCloudspaceObj(spacesecret)
         pubIP = vspace['publicipaddress']
+        
+        # saving ip to hosts
+        self.setupHost('reflector', privIP)
 
         cl = j.ssh.connect(privIP, 22, keypath='/root/.ssh/id_rsa')
 
@@ -297,6 +318,9 @@ class Actions(ActionsBase):
         # portforward 80 and 443 to 80 and 443 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
+        
+        # saving ip to hosts
+        self.setupHost('proxy', proxyip)
 
         cl = j.ssh.connect(proxyip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -343,7 +367,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, smtp, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -370,6 +394,12 @@ class Actions(ActionsBase):
         # portforward 4444 to 4444 ovc_master and 5544
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 5544, pubipport=5544)
+        
+        # FIXME: should not expose statsd port
+        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 8127, pubipport=8127)
+        
+        # saving ip to hosts
+        self.setupHost('master', ip)
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
 
@@ -423,6 +453,12 @@ class Actions(ActionsBase):
             'instance.param.oauth.url': oauthUrl,
             'instance.param.defense.url': defenseUrl,
             'instance.param.grafana.url': grafanaUrl,
+            'instance.param.safekeeper.url': safekeeperUrl,
+            'instance.param.smtp.server': smtp['server'],
+            'instance.param.smtp.port': smtp['port'],
+            'instance.param.smtp.login': smtp['login'],
+            'instance.param.smtp.passwd': smtp['passwd'],
+            'instance.param.smtp.sender': smtp['sender'],
         }
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
@@ -450,6 +486,9 @@ class Actions(ActionsBase):
         ip = machine['interfaces'][0]['ipAddress']
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
+        
+        # saving ip to hosts
+        self.setupHost('dcpm', ip)
 
 
         # generate key pair on the vm

@@ -70,6 +70,16 @@ class Actions(ActionsBase):
 
             with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
                 json.dump(config, f, indent=4)
+        
+        # fix listen interface for alba
+        alba = None
+        
+        with open('/opt/alba-asdmanager/config/config.json', 'r') as f:
+            alba = json.load(f)
+            alba['network']['ips'] = [serviceObj.hrd.getStr('instance.targetip')]
+
+        with open('/opt/alba-asdmanager/config/config.json', 'w') as f:
+            json.dump(alba, f, indent=4)
 
 
 

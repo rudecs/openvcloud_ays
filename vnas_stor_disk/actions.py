@@ -27,8 +27,10 @@ class Actions(ActionsBase):
             j.events.opserror_critical(msg="can't find vnas_stor. install vnas_stor first", category="vnas_stor_disk")
 
         storHRD = services[0].hrd
+        storID = storHRD.getInt('instance.stor.id')
         disksDir = storHRD.get('instance.stor.export.dir')
         diskID = serviceObj.hrd.getInt('instance.disk.id')
+        globalDiskID = (storID*100)+diskID
         path = j.system.fs.joinPaths(disksDir, str(diskID))
         nfsHost = serviceObj.hrd.getStr('instance.nfs.host')
         nfsOptions = serviceObj.hrd.getStr('instance.nfs.options')
@@ -45,13 +47,15 @@ class Actions(ActionsBase):
         cmd = 'mount %s %s' %(devName, path)
         j.system.process.execute(cmd, dieOnNonZeroExitCode=True, outputToStdout=True)
 
-        nfs = j.ssh.nfs.get(j.ssh.connect())
-        share = nfs.add(path)
-        share.addClient(nfsHost, nfsOptions)
-        nfs.commit()
+        if not j.system.fs.exists(path="/etc/exports"):
+            j.system.fs.createEmptyFile('/etc/exports')
+        content = j.system.fs.fileGetContents("/etc/exports")
+        exports = '%s %s(%s)\n' % (path, nfsHost, nfsOptions)
+        if content.find(exports) == -1:
+            j.system.fs.writeFile(filename="/etc/exports", contents=exports, append=True)
 
         output = j.system.fs.joinPaths(path, '.vnasdisk.toml')
         j.system.fs.createEmptyFile(output)
 
-        disk = {'id': diskID, 'pool': ''}
+        disk = {'id': globalDiskID, 'pool': ''}
         contoml.dump(disk, output, prettify=True)

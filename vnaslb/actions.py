@@ -28,6 +28,7 @@ class Actions(ActionsBase):
 
         instance = serviceObj.hrd.get("instance.arakoon.instance")
         arakoonHRD = j.application.getAppInstanceHRD("arakoon_client", instance)
+        cluster_id = arakoonHRD.getStr('instance.clusterid')
         arakoon = arakoonHRD.getList("instance.cluster")
 
         vdiskroot = serviceObj.hrd.getStr("instance.param.vdiskroot")
@@ -43,6 +44,7 @@ class Actions(ActionsBase):
         smb.commitShare()
 
         print '[+] building this vnaslb settings'
+<<<<<<< HEAD
 
         fn = j.system.fs.joinPaths(serviceObj.hrd.get('service.git.export.1')['dest'], 'config.toml')
         cfg = contoml.new()

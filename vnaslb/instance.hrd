@@ -1,4 +1,4 @@
-arakoon.instance = @ASK type:str default:vnas descr:'Arakoon settings instance name'
+arakoon.instance = @ASK type:str default:main descr:'Arakoon settings instance name'
 param.vdiskroot = @ASK type:str default:/mnt/vdisks/ descr:'vDisk root path'
 param.cifspath = @ASK type:str default:/storage/vnas descr:'cifs path'
 param.refresh = @ASK type:int default:20 description:'how often to check disk size and choose new best disk. in second'
