@@ -47,7 +47,7 @@ class Actions(ActionsBase):
                     'url': portalurl,
                     'scope': 'user',
                     'theme': 'dark',
-                    'external': 'true'},
+                    'external': 'false'},
                 'ovs': {
                     'name': 'Storage',
                     'url': serviceObj.hrd.get('instance.param.ovs.url'),
