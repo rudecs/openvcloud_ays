@@ -125,10 +125,11 @@ class Actions(ActionsBase):
             # install
             rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
             ipGateway = serviceObj.hrd.getStr('instance.publicip.gateway')
+            ipNetmask = serviceObj.hrd.getStr('instance.publicip.netmask')
             ipStart = serviceObj.hrd.getStr('instance.publicip.start')
             ipEnd = serviceObj.hrd.getStr('instance.publicip.end')
             self.initMasterVM(spacesecret, rootpasswd,
-                              ipGateway, ipStart, ipEnd,
+                              ipGateway, ipNetmask, ipStart, ipEnd,
                               self.dcpmUrl, self.ovsUrl, self.portalUrl, self.oauthUrl,
                               self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, self.smtp,
                               delete=delete)
@@ -367,7 +368,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', nodeService.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, smtp, delete=False):
+    def initMasterVM(self, spacesecret, masterPasswd, publicGateway, publicNetmask, publicipStart, publicipEnd, dcpmUrl, ovsUrl, portalUrl, oauthUrl, defenseUrl, repoPath, grafanaUrl, safekeeperUrl, smtp, delete=False):
         """
         this methods need to be run from the ovc_git VM
 
@@ -441,10 +442,8 @@ class Actions(ActionsBase):
         cloudspaceObj = self.api.getCloudspaceObj(spacesecret)
         data = {
             'instance.param.rootpasswd': masterPasswd,
-            # FIXME
-            # 'instance.param.publicip.gateway': cloudspaceObj['publicipaddress'],
             'instance.param.publicip.gateway': publicGateway,
-            'instance.param.publicip.netmask': '255.255.255.0',
+            'instance.param.publicip.netmask': publicNetmask,
             'instance.param.publicip.start': publicipStart,
             'instance.param.publicip.end': publicipEnd,
             'instance.param.dcpm.url': dcpmUrl,
