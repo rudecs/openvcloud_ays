@@ -25,7 +25,7 @@ class Actions(ActionsBase):
 
     def installOVS(self):
         packages = ['ntp', 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
-        j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt-ovs.cloudfounders.com alpha/", append=False)
+        j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://testapt.openvstorage.com chicago-community main", append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
         j.system.platform.ubuntu.install(' '.join(packages))
 
