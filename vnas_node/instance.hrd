@@ -5,3 +5,4 @@ agent.nid=@ASK description:'agent2: node id'
 
 vnas.refresh=@ASK description:'how often to check disk size and choose new best disk. in second' default:5
 vnas.blocksize=@ASK description:'block size of the fuse layer' default:16777216
+vnas.timeout=@ASK description:'timeout before considering a disk not responding. in second' default:10
