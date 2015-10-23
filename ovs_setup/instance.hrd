@@ -1,0 +1,1 @@
+ovs.master = @ASK type:str descr:'master ip address'
