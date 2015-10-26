@@ -57,8 +57,9 @@ class Actions(ActionsBase):
         
         self.novncUrl = 'https://' + self.novncServerName
         
+        # grafana is redirected with /grafana/...
         if self.grafanaServerName == 'auto':
-            self.grafanaServerName = 'graphana-%s.%s' % (self.rootenv, self.rootdomain)
+            self.grafanaServerName = '%s.%s/grafana' % (self.rootenv, self.rootdomain)
         
         self.grafanaUrl = 'https://' + self.grafanaServerName
         

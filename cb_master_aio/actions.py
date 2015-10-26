@@ -159,8 +159,8 @@ class Actions(ActionsBase):
         parser.set('auth.github', 'client_secret', grafanaSecret)
         parser.set('auth.github', 'scopes', 'admin')
         parser.set('auth.github', 'auth_url', '%s/login/oauth/authorize' % portalurl)
-        parser.set('auth.github', 'token_url', '%s/login/oauth/access_token' % portalurl)
-        parser.set('auth.github', 'api_url', '%s/user' % portalurl)
+        parser.set('auth.github', 'token_url', 'http://127.0.0.1:8010/login/oauth/access_token')
+        parser.set('auth.github', 'api_url', 'http://127.0.0.1:8010/user')
 
         fpout = StringIO.StringIO()
         parser.write(fpout)
