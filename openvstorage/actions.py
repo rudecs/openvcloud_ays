@@ -77,6 +77,11 @@ class Actions(ActionsBase):
         with open('/opt/alba-asdmanager/config/config.json', 'r') as f:
             alba = json.load(f)
             alba['network']['ips'] = [serviceObj.hrd.getStr('instance.targetip')]
+            
+            if alba.get('extra_parameters') is None:
+                alba['extra_parameters'] = {}
+            
+            alba['extra_parameters']['__sync_dont_use'] = False
 
         with open('/opt/alba-asdmanager/config/config.json', 'w') as f:
             json.dump(alba, f, indent=4)
