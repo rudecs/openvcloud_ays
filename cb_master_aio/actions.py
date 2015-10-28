@@ -92,7 +92,7 @@ class Actions(ActionsBase):
         scl = j.clients.osis.getNamespace('system')
 
         # setup user/groups
-        for groupname in ('user', 'dcpm_admin', 'ovs_admin'):
+        for groupname in ('user', 'ovs_admin'):
             if not scl.group.search({'id': groupname})[0]:
                 group = scl.group.new()
                 group.gid = j.application.whoAmI.gid
