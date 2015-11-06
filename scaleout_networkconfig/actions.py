@@ -38,7 +38,8 @@ class Actions(ActionsBase):
             if hrd.exists(key):
                 ip = hrd.get(key).strip()
                 if ip:
-                    j.system.ovsnetconfig.configureStaticAddress(network, ip)
+                    mtu = None if network != 'vxbackend' else 2000
+                    j.system.ovsnetconfig.configureStaticAddress(network, ip, mtu=mtu)
 
         j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newVlanBridge('gw_mgmt', gw_mgmt_backplane, gw_mgmt_vlan)
