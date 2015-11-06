@@ -1,0 +1,2 @@
+name = @ASK type:str descr:'environment name'
+grid.id = @ASK type:str descr:'grid id'
