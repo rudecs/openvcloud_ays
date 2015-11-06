@@ -1,1 +1,2 @@
 ovs.master = @ASK type:str descr:'master ip address'
+ovs.masternode = @ASK type:str descr:'master node name (eg: be-conv-2-03)'
