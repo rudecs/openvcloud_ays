@@ -1,0 +1,4 @@
+addr.frontend.master = @ASK type:str descr:'frontend master ip address'
+addr.frontend.fallback = @ASK type:str descr:'frontend fallvack ip address'
+addr.master = @ASK type:str descr:'master ip address'
+addr.ad = @ASK type:str descr:'active directory ip address'
