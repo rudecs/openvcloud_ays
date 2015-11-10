@@ -26,6 +26,7 @@ dep.args.vnaslb                =
     param.cifspath:'/storage/vnas',
     param.refresh:'$(instance.vnas.refresh)',
     param.vdiskroot:'/mnt/vdisks',
+    param.timeout:'10',
 
 dependencies.1                 =
     args:'dep.args.samba4_member',
