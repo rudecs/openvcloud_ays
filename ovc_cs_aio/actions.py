@@ -449,6 +449,7 @@ class Actions(ActionsBase):
             'instance.param.publicip.end': publicipEnd,
             'instance.param.dcpm.url': dcpmUrl,
             'instance.param.ovs.url': ovsUrl,
+            'instance.param.ovc.environment': self.rootenv,
             'instance.param.portal.url': portalUrl,
             'instance.param.oauth.url': oauthUrl,
             'instance.param.defense.url': defenseUrl,

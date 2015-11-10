@@ -26,6 +26,7 @@ class Actions(ActionsBase):
         import JumpScale.portal
         # set billing role
         roles = j.application.config.getList('grid.node.roles')
+        ovcEnvironment = serviceObj.hrd.get('instance.param.ovc.environment')
         if 'billing' not in roles:
             roles.append('billing')
             j.application.config.set('grid.node.roles', roles)
@@ -104,9 +105,9 @@ class Actions(ActionsBase):
         if not ccl.location.search({'gid': j.application.whoAmI.gid})[0]:
             loc = ccl.location.new()
             loc.gid = j.application.whoAmI.gid
-            loc.name = 'Development'
+            loc.name = ovcEnvironment
             loc.flag = 'black'
-            loc.locationCode = 'dev'
+            loc.locationCode = ovcEnvironment
             ccl.location.set(loc)
 
         j.clients.portal.getByInstance('main')
