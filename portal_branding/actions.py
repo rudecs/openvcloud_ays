@@ -26,7 +26,7 @@ class Actions(ActionsBase):
             editor = j.codetools.getTextFileEditor(path)
             regex = "^{{logo.*$"
             if not editor.existsLine(regex):
-                editor.appendReplaceLine("^{{find.*$", "{{find}}\n{{logo:/cbgrid/.files/green.png}}\n{{PortalsHamburgerMenu}}\n")
+                editor.appendReplaceLine("^{{find.*$", "{{find}}\n{{logo:/cbgrid/.files/green.png}}\n")
                 editor.save()
 
         for space in ['home', 'Grid', 'AYS']:
