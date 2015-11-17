@@ -2,7 +2,7 @@ git.url='https://git.aydo.com/binary/sentry_client.git'
 git.export.1=
     url:$(git.url),
     source:'logging',
-    dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/',
+    dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/logging',
     link:True,
 
 dependencies.1 =
