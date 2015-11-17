@@ -1,9 +1,6 @@
 dep.args.basenetwork           =
     netconfig.backplanes.names:'backplane1',
     netconfig.gw_mgmt.ipaddr:'10.199.0.2/22',
-    netconfig.gw_mgmt.vlanid:'103',
-    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
-    netconfig.mgmt.vlanid:'201',
     netconfig.public.vlanid:'0',
     netconfig.public_backplane.interfacename:'backplane1',
     netconfig.vxbackend.interfacename:'backplane1',

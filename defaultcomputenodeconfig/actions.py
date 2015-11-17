@@ -30,11 +30,8 @@ class Actions(ActionsBase):
 
 
         public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
-        gw_mgmt_backplane = hrd.get('instance.netconfig.gw_mgmt_backplane.interfacename')
         vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
 
-        mgmt_vlan = hrd.get('instance.netconfig.mgmt.vlanid')
-        gw_mgmt_vlan = hrd.get('instance.netconfig.gw_mgmt.vlanid')
         vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
         public_vlan= hrd.get('instance.netconfig.public.vlanid')
 
@@ -46,7 +43,7 @@ class Actions(ActionsBase):
                     j.system.ovsnetconfig.configureStaticAddress(network, ip)
 
         j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
-        j.system.ovsnetconfig.newVlanBridge('gw_mgmt', gw_mgmt_backplane, gw_mgmt_vlan)
+        j.system.ovsnetconfig.newBridge('gw_mgmt')
         j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan,mtu=2000)
 
         publicxml = '''
