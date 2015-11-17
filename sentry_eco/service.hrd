@@ -8,5 +8,8 @@ git.export.1=
 dependencies.1 =
     name:'agentcontroller',
 
-platform.supported=generic
+dependencies.2 =
+    name:'sentry_client',
+    domain:'openvcloud',
 
+platform.supported=generic
