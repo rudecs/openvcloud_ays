@@ -109,6 +109,12 @@ class Actions(ActionsBase):
             loc.flag = 'black'
             loc.locationCode = ovcEnvironment
             ccl.location.set(loc)
+        # set grid
+        if not scl.grid.exists(j.application.whoAmI.gid):
+            grid = scl.grid.new()
+            grid.id = j.application.whoAmI.gid
+            grid.name = ovcEnvironment
+            scl.grid.set(grid)
 
         j.clients.portal.getByInstance('main')
 
