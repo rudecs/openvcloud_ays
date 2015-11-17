@@ -10,6 +10,6 @@ dependencies.1 =
 
 dependencies.2 =
     name:'sentry_client',
-    domain:'openvcloud',
+    domain:'jumpscale',
 
 platform.supported=generic
