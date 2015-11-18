@@ -1,0 +1,2 @@
+client_id=@ASK type:str  descr:'OVS: ALBA oauth client ID'
+client_secret=@ASK type:str  descr:'OVS: ALBA oauth secret'
