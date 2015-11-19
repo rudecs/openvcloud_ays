@@ -167,6 +167,16 @@ class Actions(ActionsBase):
         # FIXME: should replace ip if already exists
         if not host in hosts:
             j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
+    
+    def copyBack(self, remote, service):
+        remoteHrd  = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
+        remoteHost = remoteHrd.getStr('instance.ip')
+        
+        remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
+        localPath  = '%s/services/jumpscale__node.ssh__%s/%s/' % (self.repoPath, remote, service)
+        
+        print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
+        j.do.execute('scp %s:%s %s', (remoteHost, remotePath, localPath))
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
@@ -464,6 +474,12 @@ class Actions(ActionsBase):
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
         master.install(deps=True)
+        
+        # FIXME
+        # Copy needed file from master to ovcgit
+        # Theses files are generated on the master and not synced back to ovcgit
+        copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
+        copyBack('ovc_master', 'jumpscale__portal__main')
 
     def initDCPMVM(self, spacesecret, repoPath, delete=False):
         """
