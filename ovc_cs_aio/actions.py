@@ -176,7 +176,7 @@ class Actions(ActionsBase):
         localPath  = '%s/services/jumpscale__node.ssh__%s/%s/' % (self.repoPath, remote, service)
         
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
-        j.do.execute('scp %s:%s %s', (remoteHost, remotePath, localPath))
+        j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
 
     def initReflectorVM(self, spacesecret, passphrase, repoPath, delete=False):
         """
