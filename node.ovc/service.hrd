@@ -1,3 +1,4 @@
-category                       = 'node'
+depencencies.node = portal_lib,ovc_client
+
 
 description                    = 'is a node running on mothership1'
