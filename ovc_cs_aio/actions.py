@@ -478,8 +478,8 @@ class Actions(ActionsBase):
         # FIXME
         # Copy needed file from master to ovcgit
         # Theses files are generated on the master and not synced back to ovcgit
-        copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
-        copyBack('ovc_master', 'jumpscale__portal__main')
+        self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
+        self.copyBack('ovc_master', 'jumpscale__portal__main')
 
     def initDCPMVM(self, spacesecret, repoPath, delete=False):
         """
