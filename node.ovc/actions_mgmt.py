@@ -35,6 +35,8 @@ class Actions(ActionsBase):
         sshkey = findDep('sshkey')
         serviceObj.consume(sshkey)
         args["ssh.key.public"] = sshkey.hrd.get("key.pub")
+        serviceObj.consume(findDep('ovc_client'))
+	
 
     def consume(self, serviceObj, producer):
         if producer.role == 'ovc_client':
