@@ -35,11 +35,11 @@ class Actions(ActionsBase):
         sshkey = findDep('sshkey')
         serviceObj.consume(sshkey)
         args["ssh.key.public"] = sshkey.hrd.get("key.pub")
-	
-        ovc_client = findDep('ovc_client')
-        serviceObj.consume(ovc_client)
-        args['ovc.cloudspace.secret'] = ovc_client.hrd.getStr('param.secret')
-        args['ovc.api.url'] = ovc_client.hrd.getStr('param.apiurl')
+
+    def consume(self, serviceObj, producer):
+        if producer.role == 'ovc_client':
+            serviceObj.hrd.set('ovc.cloudspace.secret', producer.hrd.getStr('param.secret'))
+            serviceObj.hrd.set('ovc.api.url', producer.hrd.getStr('param.apiurl'))
  
     def getCloudClient(self, serviceObj):
         return j.tools.ms1.get(serviceObj.hrd.get('ovc.api.url'))
