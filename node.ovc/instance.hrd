@@ -5,7 +5,7 @@ stackid=@ASK type:int descr:'Stack id on which to deploy the VM. if emty choosen
 disks.nbr=@ASK type:int descr:'number of extra data disk'
 disks.size=@ASK type:int descr:'size of the exta disks'
 imagename='ubuntu 14.04 x64'
-
+force=@ASK type:bool descr:'delete vm if already exists?'
 machine.id=
 node.tcp.addr=
 ip=

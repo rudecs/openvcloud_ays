@@ -55,10 +55,11 @@ class Actions(ActionsBase):
         stackId = serviceObj.hrd.get('stackid', None)
 	diskNbr = serviceObj.hrd.getInt('disks.nbr')
 	diskSize = serviceObj.hrd.getInt('disks.size')
+        delete = serviceObj.hrd.getBool('force')
 	disks = [diskSize for _ in range(diskNbr)]
         machineid, ip, port = cloudCl.createMachine(spacesecret, "$(instance)", memsize="$(memsize)", \
             ssdsize='$(ssdsize)', vsansize=0, description='',imagename="$(imagename)",
-            delete=False, sshkey='$(ssh.key.public)', stackId=stackId, datadisks=disks)
+            delete=delete, sshkey='$(ssh.key.public)', stackId=stackId, datadisks=disks)
 
         serviceObj.hrd.set("machine.id",machineid)
         serviceObj.hrd.set("node,tcp.addr",ip)
