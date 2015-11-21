@@ -62,7 +62,7 @@ class Actions(ActionsBase):
             delete=delete, sshkey='$(ssh.key.public)', stackId=stackId, datadisks=disks)
 
         serviceObj.hrd.set("machine.id",machineid)
-        serviceObj.hrd.set("node,tcp.addr",ip)
+        serviceObj.hrd.set("node.tcp.addr",ip)
         serviceObj.hrd.set("ssh.port",port)
 
         # only do the rest if we want to install jumpscale
