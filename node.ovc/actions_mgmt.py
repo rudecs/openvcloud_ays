@@ -68,6 +68,7 @@ class Actions(ActionsBase):
         # only do the rest if we want to install jumpscale
         #if serviceObj.hrd.getBool('jumpscale'):
         #    self.installJumpscale(serviceObj)
+	return 'nr' # don't restart service after install
 
     def removedata(self, serviceObj):
         """
