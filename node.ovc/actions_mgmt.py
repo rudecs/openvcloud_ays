@@ -36,13 +36,13 @@ class Actions(ActionsBase):
         serviceObj.consume(sshkey)
         args["ssh.key.public"] = sshkey.hrd.get("key.pub")
         serviceObj.consume(findDep('ovc_client'))
-	
+
 
     def consume(self, serviceObj, producer):
         if producer.role == 'ovc_client':
             serviceObj.hrd.set('ovc.cloudspace.secret', producer.hrd.getStr('param.secret'))
             serviceObj.hrd.set('ovc.api.url', producer.hrd.getStr('param.apiurl'))
- 
+
     def getCloudClient(self, serviceObj):
         return j.tools.ms1.get(serviceObj.hrd.get('ovc.api.url'))
 
@@ -53,10 +53,10 @@ class Actions(ActionsBase):
         cloudCl = self.getCloudClient(serviceObj)
         spacesecret = serviceObj.hrd.getStr('ovc.cloudspace.secret')
         stackId = serviceObj.hrd.get('stackid', None)
-	diskNbr = serviceObj.hrd.getInt('disks.nbr')
-	diskSize = serviceObj.hrd.getInt('disks.size')
+        diskNbr = serviceObj.hrd.getInt('disks.nbr')
+        diskSize = serviceObj.hrd.getInt('disks.size')
         delete = serviceObj.hrd.getBool('force')
-	disks = [diskSize for _ in range(diskNbr)]
+        disks = [diskSize for _ in range(diskNbr)]
         machineid, ip, port = cloudCl.createMachine(spacesecret, "$(instance)", memsize="$(memsize)", \
             ssdsize='$(ssdsize)', vsansize=0, description='',imagename="$(imagename)",
             delete=delete, sshkey='$(ssh.key.public)', stackId=stackId, datadisks=disks)
@@ -65,10 +65,64 @@ class Actions(ActionsBase):
         serviceObj.hrd.set("node.tcp.addr",ip)
         serviceObj.hrd.set("ssh.port",port)
 
-        # only do the rest if we want to install jumpscale
-        #if serviceObj.hrd.getBool('jumpscale'):
-        #    self.installJumpscale(serviceObj)
+        cl = self.getSSHClient(serviceObj)
+        cl.run("rm -f /root/.ssh/known_hosts")
+        cl.run("ssh-keyscan github.com >> /root/.ssh/known_hosts")
+        cl.run("ssh-keyscan git.aydo.com >> /root/.ssh/known_hosts")
+        cl.run("mkdir -p /etc/ays/local/")
+
+        jsbranch = serviceObj.hrd.get('jumpscale.branch')
+
+        if  serviceObj.hrd.getBool('jumpscale.install',default=False):
+            print "apt-get update & upgrade, can take a while"
+            cl.run("apt-get update")
+            # cl.run("apt-get upgrade -fy")
+            cl.run("apt-get install curl tmux git -fy")
+
+            cl.fabric.api.env['shell_env']["JSBRANCH"] = jsbranch
+            cl.fabric.api.env['shell_env']["AYSBRANCH"] = jsbranch
+
+            if  serviceObj.hrd.getBool('jumpscale.reset',default=False):
+                print "WILL RESET JUMPSCALE"
+                cl.run("rm -rf /opt/jumpscale7/hrd/apps")
+                cl.run("rm -rf /opt/code/github/jumpscale/jumpscale_core7")
+                cl.run("rm -rf /opt/code/github/jumpscale/ays_jumpscale7")
+
+            elif serviceObj.hrd.getBool('jumpscale.update',default=True):
+                cl.run("cd /opt/code/github/jumpscale/jumpscale_core7;git pull origin %s"%jsbranch)
+
+            cl.run('git config --global user.name "jumpscale"')
+            cl.run('git config --global user.email "jumpscale@fake.com"')
+
+            cl.run("curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/%s/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh" % jsbranch)
+
+        elif serviceObj.hrd.getBool('jumpscale.update',default=False):
+            print "update jumpscale (git)"
+            cl.run("cd /opt/code/github/jumpscale/jumpscale_core7;git pull origin %s"%jsbranch)
+
 	return 'nr' # don't restart service after install
+
+    def getSSHClient(self, serviceObj):
+        """
+        @rvalue ssh client object connected to the node
+        """
+        ip=serviceObj.hrd.get("node.tcp.addr")
+        port=serviceObj.hrd.getInt("ssh.port")
+        login = 'root'
+        password = ''
+
+        c = j.remote.cuisine
+        c.fabric.env['forward_agent'] = True
+
+        if login and login.strip() != '':
+            c.fabric.env['user'] = login
+
+        if password and password.strip() != '':
+            connection = c.connect(ip, port, passwd=password)
+        else:
+            connection = c.connect(ip, port)
+
+        return connection
 
     def removedata(self, serviceObj):
         """
