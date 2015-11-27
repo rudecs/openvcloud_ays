@@ -52,12 +52,13 @@ class Actions(ActionsBase):
         j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
         
         if serviceObj.hrd.get('instance.oauth.id') != '':
-            # setting up oauth
+            # setting up ovs.json
             config = None
 
             with open('/opt/OpenvStorage/config/ovs.json', 'r') as f:
                 config = json.load(f)
                 
+                # oauth2 stuff
                 oauth = {
                     'mode': 'remote',
                     'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
@@ -68,6 +69,9 @@ class Actions(ActionsBase):
                 }
                 
                 config['webapps']['oauth2'] = oauth
+                
+                # register stuff
+                config['core']['registered'] = True
 
             with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
                 json.dump(config, f, indent=4)
