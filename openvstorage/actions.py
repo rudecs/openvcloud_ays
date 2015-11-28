@@ -96,12 +96,11 @@ class Actions(ActionsBase):
         size = 128 * 1024 * 1024
         swap = 5
         
-        j.system.fs.writeFile('/proc/sys/vm/dirty_background_bytes', "%d\n" % size, False)
-        j.system.fs.writeFile('/proc/sys/vm/swappiness', "%d\n" % swap, False)
-
         j.system.fs.writeFile('/etc/sysctl.conf', "\n# ovs-tuning\n", True)
         j.system.fs.writeFile('/etc/sysctl.conf', "vm.dirty_background_bytes = %d\n" % size, True)
         j.system.fs.writeFile('/etc/sysctl.conf', "vm.swappiness = %d\n" % swap, True)
+
+        j.system.process.execute('sysctl --system')
 
         """
         try:
