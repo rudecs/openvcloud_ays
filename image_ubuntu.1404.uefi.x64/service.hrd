@@ -1,0 +1,8 @@
+web.export.1=
+    url:'ftp://jpackages:rooter@jpackages.vscalers.com/',
+    source:'/jpackages/Ubuntu.1404.uefi.x64.qcow2',
+    checkmd5: 'true',
+    dest:'/opt/jumpscale7/var/tmp/templates/Ubuntu.1404.uefi.x64.qcow2',
+
+platform.supported=generic
+
