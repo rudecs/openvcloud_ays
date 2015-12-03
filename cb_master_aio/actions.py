@@ -87,6 +87,7 @@ class Actions(ActionsBase):
             if data['url']:
                 portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
         portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
+        portal.hrd.set('instance.param.cfg.force_oauth_instance', 'oauth')
         portal.start()
 
         ccl = j.clients.osis.getNamespace('cloudbroker')

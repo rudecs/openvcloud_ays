@@ -235,6 +235,7 @@ class Actions(ActionsBase):
         for source, destination in keys.iteritems():
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
+            j.system.fs.chmod(destination, 0o600)
 
         # configure ssh to let master connect to the node through reflector
         content = cl.file_read('/etc/ssh/sshd_config')
@@ -426,6 +427,7 @@ class Actions(ActionsBase):
         for source, destination in keys.iteritems():
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
+            j.system.fs.chmod(destination, 0o600)
 
         self.installJumpscale(cl)
         self.setupGit(cl)
@@ -518,6 +520,7 @@ class Actions(ActionsBase):
         for source, destination in keys.iteritems():
             content = cl.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
+            j.system.fs.chmod(destination, 0o600)
 
         self.installJumpscale(cl)
         self.setupGit(cl)

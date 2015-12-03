@@ -24,8 +24,9 @@ class Actions(ActionsBase):
     DJANGO_SETTINGS = '/opt/OpenvStorage/webapps/api/settings.py'
 
     def installOVS(self):
+        release = 'eugene'
         packages = ['ntp', 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
-        j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt.openvstorage.org denver main", append=False)
+        j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt.openvstorage.org %s main" % release, append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
         j.system.platform.ubuntu.install(' '.join(packages))
 
@@ -51,12 +52,13 @@ class Actions(ActionsBase):
         j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
         
         if serviceObj.hrd.get('instance.oauth.id') != '':
-            # setting up oauth
+            # setting up ovs.json
             config = None
 
             with open('/opt/OpenvStorage/config/ovs.json', 'r') as f:
                 config = json.load(f)
                 
+                # oauth2 stuff
                 oauth = {
                     'mode': 'remote',
                     'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
@@ -67,6 +69,9 @@ class Actions(ActionsBase):
                 }
                 
                 config['webapps']['oauth2'] = oauth
+                
+                # register stuff
+                config['core']['registered'] = True
 
             with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
                 json.dump(config, f, indent=4)
@@ -91,12 +96,11 @@ class Actions(ActionsBase):
         size = 128 * 1024 * 1024
         swap = 5
         
-        j.system.fs.writeFile('/proc/sys/vm/dirty_background_bytes', "%d\n" % size, False)
-        j.system.fs.writeFile('/proc/sys/vm/swappiness', "%d\n" % swap, False)
-
         j.system.fs.writeFile('/etc/sysctl.conf', "\n# ovs-tuning\n", True)
         j.system.fs.writeFile('/etc/sysctl.conf', "vm.dirty_background_bytes = %d\n" % size, True)
         j.system.fs.writeFile('/etc/sysctl.conf', "vm.swappiness = %d\n" % swap, True)
+
+        j.system.process.execute('sysctl --system')
 
         """
         try:

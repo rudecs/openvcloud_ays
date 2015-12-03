@@ -29,23 +29,6 @@ dep.args.mailclient           =
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
 
-dep.args.portalalone          =
-    param.cfg.admingroups:'admin,',
-    param.cfg.authentication.method:'osis',
-    param.cfg.contentdirs:,
-    param.cfg.defaultspace:'home',
-    param.cfg.force_oauth_instance:'oauth',
-    param.cfg.gitlab.connection:'main',
-    param.cfg.ipaddr:'localhost',
-    param.cfg.port:'82',
-    param.cfg.secret:'$(instance.param.rootpasswd)',
-    param.osis.connection:'main',
-    param.portal.name:'main',
-    param.portal.rootpasswd:'$(instance.param.rootpasswd)',
-    param.dcpm.url:'$(instance.param.dcpm.url)',
-    param.ovs.url:'$(instance.param.ovs.url)',
-    param.portal.url:'$(instance.param.portal.url)',
-
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
@@ -73,11 +56,6 @@ dependencies.2                 =
     args:'dep.args.osis_client',
     domain:'jumpscale',
     name:'osis_client',
-    
-dependencies.3                =
-    args:'dep.args.portalalone',
-    domain:'jumpscale',
-    name:'portal',
     
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
