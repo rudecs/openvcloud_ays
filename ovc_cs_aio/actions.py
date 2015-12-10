@@ -68,11 +68,11 @@ class Actions(ActionsBase):
         
         self.safekeeperUrl = 'https://' + self.safekeeperServerName
 
-        gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
-        gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
+        # gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
+        # gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
         
-        self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
-        self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
+        # self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
+        # self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
@@ -158,8 +158,8 @@ class Actions(ActionsBase):
         print "[+] jumpscale installed"
         
     def setupGit(self, cl):
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % self.gitlabLogin)
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % urllib.quote_plus(self.gitlabPasswd))
+        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % 'ssh')
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % 'ssh')
     
     def setupHost(self, host, address):
         hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
