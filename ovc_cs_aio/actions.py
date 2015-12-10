@@ -68,12 +68,6 @@ class Actions(ActionsBase):
         
         self.safekeeperUrl = 'https://' + self.safekeeperServerName
 
-        # gitlabConnection = serviceObj.hrd.getStr('instance.gitlab_client.connection')
-        # gitlabClientHRD = j.application.getAppInstanceHRD(name='gitlab_client', instance=gitlabConnection)
-        
-        # self.gitlabLogin = gitlabClientHRD.getStr('instance.gitlab.client.login')
-        # self.gitlabPasswd = gitlabClientHRD.getStr('instance.gitlab.client.passwd')
-
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
         self.smtp = {
@@ -108,19 +102,6 @@ class Actions(ActionsBase):
             reflectorPassphrase = serviceObj.hrd.getStr('instance.reflector.root.passphrase')
             self.initReflectorVM(spacesecret, reflectorPassphrase, self.repoPath, delete=delete)
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
-
-
-        """
-        def proxy():
-            # install proxy
-            self.initProxyVM(spacesecret, self.host, self.dcpmServerName,
-                             self.dcpmIpAddress, self.dcpmPort,
-                             self.ovsServerName,
-                             self.defenseServerName, self.novncServerName,
-                             self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
-                             delete=delete)
-        j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
-        """
 
         def master():
             # install
@@ -158,8 +139,15 @@ class Actions(ActionsBase):
         print "[+] jumpscale installed"
         
     def setupGit(self, cl):
-        cl.run('jsconfig hrdset -n whoami.git.login -v "%s"' % 'ssh')
-        cl.run('jsconfig hrdset -n whoami.git.passwd -v "%s"' % 'ssh')
+        cl.run('jsconfig hrdset -n whoami.git.login -v "ssh"')
+        cl.run('jsconfig hrdset -n whoami.git.passwd -v "ssh"')
+        
+        allowhosts = ["github.com", "git.aydo.com"]
+            
+        for host in allowhosts:
+            cl.run('echo "Host %s" >> /root/.ssh/config' % host)
+            cl.run('echo "    StrictHostKeyChecking no" >> /root/.ssh/config')
+            cl.run('echo "" >> /root/.ssh/config')
     
     def setupHost(self, host, address):
         hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
@@ -201,6 +189,7 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
+                
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
         
