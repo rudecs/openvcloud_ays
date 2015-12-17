@@ -19,12 +19,13 @@ class Actions(ActionsBase):
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
         # FIXME
-        self.target = 'node.ssh'
+        self.target = 'node.docker'
         
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
 
     def configure(self, serviceObj):
+        """
         ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
         ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance=ms1Connection)
         
@@ -32,10 +33,17 @@ class Actions(ActionsBase):
         self.ms1_cloudspace  = ms1clHRD.getStr('instance.param.cloudspace')
         self.ms1_baseimage   = 'ubuntu.14.04.x64'
         self.ms1_location    = ms1clHRD.getStr('instance.param.location')
-
+        
         print '[+] loading mothiership1 settings'
         self.ms1_api = j.tools.ms1.get()
         self.ms1_api.setCloudspace(self.ms1_spacesecret, self.ms1_cloudspace, self.ms1_location)
+        """
+        
+        print '[+] loading docker settings'
+        self.docker = j.tools.docker
+        self.docker.connectRemoteTCP('172.17.0.1', 2375)
+        self.dock_baseimage = 'jumpscale/ubuntu1404'
+        self.docking = {}
         
         delete = serviceObj.hrd.getBool('instance.param.override')
         
@@ -72,13 +80,22 @@ class Actions(ActionsBase):
     """
     Console tools
     """
-    def enableQuiet(self):
+    def enableQuiet(self, remote=None):
         j.remote.cuisine.api.fabric.state.output['stdout'] = False
         j.remote.cuisine.api.fabric.state.output['running'] = False
+        
+        if remote:
+            remote.fabric.state.output['stdout'] = False
+            remote.fabric.state.output['running'] = False
     
-    def disableQuiet(self):
+    def disableQuiet(self, remote=None):
         j.remote.cuisine.api.fabric.state.output['stdout'] = True
         j.remote.cuisine.api.fabric.state.output['running'] = True
+        
+        if remote:
+            remote.fabric.state.output['stdout'] = True
+            remote.fabric.state.output['running'] = True
+        
     
     # FIXME: move me
     def info(self, text):
@@ -133,8 +150,8 @@ class Actions(ActionsBase):
             'instance.ssh.shell': '/bin/bash -l -c'
         }
         
-        j.atyourservice.remove(name=self.target, instance=hostname)
-        nodeService = j.atyourservice.new(name=self.target, instance=hostname, args=data)
+        j.atyourservice.remove(name='node.ssh', instance=hostname)
+        nodeService = j.atyourservice.new(name='node.ssh', instance=hostname, args=data)
         nodeService.install(reinstall=True)
         
         return nodeService
@@ -180,6 +197,8 @@ class Actions(ActionsBase):
             remote.run('service ssh restart')
     
     def defaultConfig(self, remote, hostname, machinename, network, repoPath):
+        self.enableQuiet(remote)
+        
         print '[+] setting up host configuration'
         self.setupHost(hostname, network['localip'])
         
@@ -198,6 +217,9 @@ class Actions(ActionsBase):
         
         return service
     
+    #
+    # machine creation
+    #
     def _ms1_createMachine(self, hostname, memsize, ssdsize, delete):
         try:
             self.ms1_api.createMachine(self.ms1_spacesecret, hostname, memsize=memsize, ssdsize=ssdsize, imagename=self.ms1_baseimage, sshkey=self.basessh, delete=delete)
@@ -206,6 +228,18 @@ class Actions(ActionsBase):
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
     
+    def _docker_createMachine(self, hostname, memsize):
+        self.docking[hostname] = {
+            'memsize': memsize,
+            'status': 'waiting',
+            'ports': []
+        }
+        
+        return self.docking[hostname]
+    
+    #
+    # machine grabber
+    #
     def _ms1_getMachine(self, hostname):
         item = self.ms1_api.getMachineObject(self.ms1_spacesecret, hostname)
         ports = self.ms1_api.listPortforwarding(self.ms1_spacesecret, hostname)
@@ -225,39 +259,96 @@ class Actions(ActionsBase):
         
         return data
     
+    def _docker_getMachine(self, hostname):
+        dock = self.docker.client.inspect_container(hostname)
+        
+        data = {
+            'hostname': dock['Config']['Hostname'],
+            'localport': 22,
+            'localip': dock['NetworkSettings']['IPAddress'],
+            'publicip': '192.168.0.9', # FIXME
+            'publicport': dock['HostConfig']['PortBindings']['22/tcp'][0]['HostPort'],
+            'image': dock['Config']['Image']
+        }
+        
+        return data
+    
+    #
+    # machine commit
+    #
+    def _docker_commit(self, hostname):
+        if self.docking.get(hostname) == None:
+            return False
+        
+        # building exposed ports
+        ports = ' '.join(self.docking[hostname]['ports'])
+        
+        port = self.docker.create(name=hostname, ports=ports, base=self.dock_baseimage)
+        return self._docker_getMachine(hostname)
+    
+    #
+    # ports forwarder
+    #
     def _ms1_portForward(self, hostname, localport, publicport):
         return self.ms1_api.createTcpPortForwardRule(self.ms1_spacesecret, hostname, localport, pubipport=publicport)
     
+    def _docker_portForward(self, hostname, localport, publicport):
+        if self.docking.get(hostname) == None:
+            raise NameError('Hostname "%s" seems not ready for docker settings' % hostname)
+            
+        self.docking[hostname]['ports'].append('%s:%s' % (publicport, localport))
+        return True
+    
+    #
+    # public interface
+    #
     def getMachine(self, hostname):
         print '[+] grabbing settings for: %s' % hostname
         
-        # FIXME: check self.target
-        return self._ms1_getMachine(hostname)
+        if self.target == 'node.ssh':
+            return self._ms1_getMachine(hostname)
+        
+        raise NameError('Target "%s" is not supported' % self.target)
     
     def createMachine(self, hostname, memsize, ssdsize, delete):
         self.info('initializing: %s (RAM: %s GB, Disk: %s GB)' % (hostname, memsize, ssdsize))
         
-        # FIXME: check self.target
-        return self._ms1_createMachine(hostname, str(memsize), str(ssdsize), delete)
+        if self.target == 'node.ssh':
+            return self._ms1_createMachine(hostname, str(memsize), str(ssdsize), delete)
+        
+        if self.target == 'node.docker':
+            return self._docker_createMachine(hostname, memsize)
+        
+        raise NameError('Target "%s" is not supported' % self.target)
     
     def createPortForward(self, hostname, localport, publicport):
         self.info('port forwarding: %s (%s -> %s)' % (hostname, publicport, localport))
         
-        # FIXME: check self.target
-        return self._ms1_portForward(hostname, localport, publicport)
+        if self.target == 'node.ssh':
+            return self._ms1_portForward(hostname, localport, publicport)
+        
+        if self.target == 'node.docker':
+            return self._docker_portForward(hostname, localport, publicport)
+        
+        raise NameError('Target "%s" is not supported' % self.target)
     
     def commitMachine(self, hostname):
         self.info('commit: %s' % hostname)
         
-        # FIXME: check self.target
-        return self.getMachine(hostname)
+        if self.target == 'node.ssh':
+            return self.getMachine(hostname)
+        
+        if self.target == 'node.docker':
+            return self._docker_commit(hostname)
+        
+        raise NameError('Target "%s" is not supported' % self.target)
         
     """
     Machines settings
     """
     def initReflectorVM(self, bootstrapPort, repoPath, delete=False):
         self.createMachine('ovc_reflector', 0.5, 10, delete)
-        self.createPortForward('ovc_git', bootstrapPort, bootstrapPort)
+        self.createPortForward('ovc_reflector', bootstrapPort, bootstrapPort)
         machine = self.commitMachine('ovc_reflector')        
 
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')

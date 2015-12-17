@@ -8,8 +8,6 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 class Actions(ActionsBase):
 
     def prepare(self, serviceObj):
-        self.target = 'node.ssh'
-        
         self.host = serviceObj.hrd.getStr('instance.host')
         self.rootpwd = serviceObj.hrd.getStr('instance.master.rootpasswd')
 
@@ -187,11 +185,11 @@ class Actions(ActionsBase):
         return None
         
     def copyBack(self, remote, service):
-        remoteHrd  = j.application.getAppInstanceHRD(name=self.target, instance=remote)
+        remoteHrd  = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
         remoteHost = remoteHrd.getStr('instance.ip')
         
         remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
-        localPath  = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, self.target, remote, service)
+        localPath  = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, 'node.ssh', remote, service)
         
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
@@ -209,11 +207,11 @@ class Actions(ActionsBase):
         data = {
             'instance.listen.port': 5000,
             'instance.ovc_git': repoPath,
-            'instance.master.name': 'jumpscale__%s__ovc_master' % self.target,
+            'instance.master.name': 'jumpscale__%s__ovc_master' % 'node.ssh',
             'instance.reflector.ip.priv': reflector['localip'],
             'instance.reflector.ip.pub': reflector['publicip'],
             'instance.reflector.port': reflector['publicport'],
-            'instance.reflector.name': 'jumpscale__%s__ovc_reflector' % self.target,
+            'instance.reflector.name': 'jumpscale__%s__ovc_reflector' % 'node.ssh',
             'instance.reflector.user': 'guest'
         }
         
