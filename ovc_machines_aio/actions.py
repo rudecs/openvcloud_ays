@@ -7,7 +7,6 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 
 
 class Actions(ActionsBase):
-
     def prepare(self, serviceObj):
         self.basessh = '/root/.ssh/id_rsa.pub'
         
@@ -39,35 +38,63 @@ class Actions(ActionsBase):
         self.ms1_api.setCloudspace(self.ms1_spacesecret, self.ms1_cloudspace, self.ms1_location)
         
         delete = serviceObj.hrd.getBool('instance.param.override')
+        
+        # FIXME
+        self.enableQuiet()
 
         def reflector():
             self.initReflectorVM(self.bootstrappPort, self.repoPath, delete=delete)
         
         j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
+        self.success('reflector spawned')
 
         def master():
             self.initMasterVM(self.repoPath, delete=delete)
         
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
-        
-        def dcpm():
-            self.initDCPMVM(self.repoPath, delete=delete)
-        
-        j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
+        self.success('master spawned')
         
         def proxy():
             self.initProxyVM(self.repoPath, delete=delete)
         
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
+        self.success('proxy spawned')
+        
+        def dcpm():
+            self.initDCPMVM(self.repoPath, delete=delete)
+        
+        j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
+        self.success('dcpm spawned')
+        
+        # FIXME
+        self.disableQuiet()
     
     """
-    Setup Tools
+    Console tools
+    """
+    def enableQuiet(self):
+        j.remote.cuisine.api.fabric.state.output['stdout'] = False
+        j.remote.cuisine.api.fabric.state.output['running'] = False
+    
+    def disableQuiet(self):
+        j.remote.cuisine.api.fabric.state.output['stdout'] = True
+        j.remote.cuisine.api.fabric.state.output['running'] = True
+    
+    # FIXME: move me
+    def info(self, text):
+        print '\033[1;36m[*] %s\033[0m' % text
+        
+    def warning(self, text):
+        print '\033[1;33m[-] %s\033[0m' % text
+
+    def success(self, text):
+        print '\033[1;32m[+] %s\033[0m' % text
+    
+    """
+    Setup tools
     """
     def installJumpscale(self, cl):
-        # install Jumpscale
-        print "[+] installing jumpscale"
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
-        print "[+] jumpscale installed"
         
     def setupGit(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "ssh"')
@@ -91,12 +118,14 @@ class Actions(ActionsBase):
         print '[+] updating local /etc/hosts'
         j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
     
-    def nodeInstall(self, hostname, ip, keyInstance):
-        print '[+] installing node service: %s, %s' % (hostname, ip)
+    def nodeInstall(self, hostname, network, keyInstance):
+        print '[+] installing node service: %s, %s' % (hostname, network['localip'])
         
         data = {
-            'instance.ip': ip,
-            'instance.ssh.port': 22,
+            'instance.ip': network['localip'],
+            'instance.ssh.port': network['localport'],
+            'instance.publicip': network['publicip'],
+            'instance.ssh.publicport': network['publicport'],
             'instance.login': 'root',
             'instance.password': '',
             'instance.sshkey': keyInstance,
@@ -107,6 +136,8 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name=self.target, instance=hostname)
         nodeService = j.atyourservice.new(name=self.target, instance=hostname, args=data)
         nodeService.install(reinstall=True)
+        
+        return nodeService
     
     def keyInstall(self, hostname):
         data = {
@@ -126,8 +157,6 @@ class Actions(ActionsBase):
             j.system.fs.chmod(destination, 0o600)
         
     def sshKeygen(self, remote, hostname, repo, extrakeys=None):
-        print '[+] generating ssh keys'
-        
         remote.ssh_keygen('root', keytype='rsa')
         
         keys = {
@@ -150,15 +179,24 @@ class Actions(ActionsBase):
             print '[+] restarting ssh'
             remote.run('service ssh restart')
     
-    def defaultConfig(self, remote, hostname, machinename, localip, repoPath):
-        self.setupHost(hostname, localip)
+    def defaultConfig(self, remote, hostname, machinename, network, repoPath):
+        print '[+] setting up host configuration'
+        self.setupHost(hostname, network['localip'])
+        
+        print '[+] generating ssh keys'
         self.sshKeygen(remote, hostname, repoPath)
 
+        print '[+] installing jumpscale'
         self.installJumpscale(remote)
+        
+        print '[+] setting up git credentials'
         self.setupGit(remote)
 
+        print '[+] initializing node sshkey'
         keyInstance = self.keyInstall(machinename)
-        self.nodeInstall(machinename, localip, keyInstance)
+        service = self.nodeInstall(machinename, network, keyInstance)
+        
+        return service
     
     def _ms1_createMachine(self, hostname, memsize, ssdsize, delete):
         try:
@@ -170,9 +208,18 @@ class Actions(ActionsBase):
     
     def _ms1_getMachine(self, hostname):
         item = self.ms1_api.getMachineObject(self.ms1_spacesecret, hostname)
+        ports = self.ms1_api.listPortforwarding(self.ms1_spacesecret, hostname)
+        
+        for fw in ports:
+            if fw['localPort'] == '22':
+                sshforward = fw
+        
         data = {
             'hostname': item['name'],
-            'localip': item['interfaces'][0]['ipAddress'],
+            'localport': sshforward['localPort'],
+            'localip': str(item['interfaces'][0]['ipAddress']),
+            'publicip': sshforward['publicIp'],
+            'publicport': str(sshforward['publicPort']),
             'image': item['osImage']
         }
         
@@ -188,29 +235,34 @@ class Actions(ActionsBase):
         return self._ms1_getMachine(hostname)
     
     def createMachine(self, hostname, memsize, ssdsize, delete):
-        print '[+] initializing: %s (RAM: %s GB, Disk: %s GB)' % (hostname, memsize, ssdsize)
+        self.info('initializing: %s (RAM: %s GB, Disk: %s GB)' % (hostname, memsize, ssdsize))
         
         # FIXME: check self.target
         return self._ms1_createMachine(hostname, str(memsize), str(ssdsize), delete)
     
     def createPortForward(self, hostname, localport, publicport):
-        print '[+] port forwarding: %s (%s -> %s)' % (hostname, publicport, localport)
+        self.info('port forwarding: %s (%s -> %s)' % (hostname, publicport, localport))
         
         # FIXME: check self.target
         return self._ms1_portForward(hostname, localport, publicport)
+    
+    def commitMachine(self, hostname):
+        self.info('commit: %s' % hostname)
+        
+        # FIXME: check self.target
+        return self.getMachine(hostname)
         
     """
     Machines settings
     """
     def initReflectorVM(self, bootstrapPort, repoPath, delete=False):
         self.createMachine('ovc_reflector', 0.5, 10, delete)
-        machine = self.getMachine('ovc_reflector')
-        
         self.createPortForward('ovc_git', bootstrapPort, bootstrapPort)
+        machine = self.commitMachine('ovc_reflector')        
 
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
         
-        self.defaultConfig(cl, 'reflector', 'ovc_reflector', machine['localip'], repoPath)
+        self.defaultConfig(cl, 'reflector', 'ovc_reflector', machine, repoPath)
         
         # extra gest user and sshkey
         cl.user_ensure('guest', home='/home/guest', shell='/bin/bash')
@@ -225,31 +277,29 @@ class Actions(ActionsBase):
 
     def initProxyVM(self, repoPath, delete=False):
         self.createMachine('ovc_proxy', 0.5, 10, delete)
-        machine = self.getMachine('ovc_proxy')
-        
         self.createPortForward('ovc_proxy', 80, 80)
         self.createPortForward('ovc_proxy', 443, 443)
+        machine = self.commitMachine('ovc_proxy')
         
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
         
-        self.defaultConfig(cl, 'proxy', 'ovc_proxy', machine['localip'], repoPath)
+        self.defaultConfig(cl, 'proxy', 'ovc_proxy', machine, repoPath)
 
     def initMasterVM(self, repoPath, delete=False):
         self.createMachine('ovc_master', 4, 40, delete)
-        machine = self.getMachine('ovc_master')
-        
         self.createPortForward('ovc_master', 4444, 4444)
         self.createPortForward('ovc_master', 5544, 5544)
         self.createPortForward('ovc_master', 8127, 8127)
+        machine = self.commitMachine('ovc_master')
         
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
         
-        self.defaultConfig(cl, 'master', 'ovc_master', machine['localip'], repoPath)
+        self.defaultConfig(cl, 'master', 'ovc_master', machine, repoPath)
 
     def initDCPMVM(self, repoPath, delete=False):
         self.createMachine('ovc_dcpm', 0.5, 10, delete)
-        machine = self.getMachine('ovc_dcpm')
+        machine = self.commitMachine('ovc_dcpm')
 
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
         
-        self.defaultConfig(cl, 'dcpm', 'ovc_dcpm', machine['localip'], repoPath)
+        self.defaultConfig(cl, 'dcpm', 'ovc_dcpm', machine, repoPath)
