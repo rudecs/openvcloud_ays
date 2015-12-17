@@ -152,7 +152,7 @@ class Actions(ActionsBase):
     
     def defaultConfig(self, remote, hostname, machinename, localip, repoPath):
         self.setupHost(hostname, localip)
-        self.sshKeygen(cl, hostname, repoPath)
+        self.sshKeygen(remote, hostname, repoPath)
 
         self.installJumpscale(remote)
         self.setupGit(remote)
