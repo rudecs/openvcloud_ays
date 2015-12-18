@@ -17,38 +17,47 @@ class Actions(ActionsBase):
         self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
+        self.quiet = serviceObj.hrd.getBool('instance.param.quiet')
         
-        # FIXME
+        # default to docker
         self.target = 'node.docker'
+        
+        clients = j.atyourservice.findServices(name='ms1_client', instance='main')
+        if len(clients) > 0:
+            self.target = 'node.ssh'
         
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
+        print '[+] target node: %s' % self.target
 
     def configure(self, serviceObj):
-        """
-        ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
-        ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance=ms1Connection)
+        if self.target == 'node.ssh':
+            ms1Connection = serviceObj.hrd.getStr('instance.ms1_client.connection')
+            ms1clHRD = j.application.getAppInstanceHRD(name='ms1_client', instance=ms1Connection)
+            
+            self.ms1_spacesecret = ms1clHRD.getStr('instance.param.secret')
+            self.ms1_cloudspace  = ms1clHRD.getStr('instance.param.cloudspace')
+            self.ms1_baseimage   = 'ubuntu.14.04.x64'
+            self.ms1_location    = ms1clHRD.getStr('instance.param.location')
+            
+            print '[+] loading mothiership1 settings'
+            self.ms1_api = j.tools.ms1.get()
+            self.ms1_api.setCloudspace(self.ms1_spacesecret, self.ms1_cloudspace, self.ms1_location)
+
+        elif self.target == 'node.docker':
+            print '[+] loading docker settings'
+            self.docker = j.tools.docker
+            self.docker.connectRemoteTCP('172.17.0.1', 2375)
+            self.dock_baseimage = 'jumpscale/ubuntu1404'
+            self.docking = {}
         
-        self.ms1_spacesecret = ms1clHRD.getStr('instance.param.secret')
-        self.ms1_cloudspace  = ms1clHRD.getStr('instance.param.cloudspace')
-        self.ms1_baseimage   = 'ubuntu.14.04.x64'
-        self.ms1_location    = ms1clHRD.getStr('instance.param.location')
-        
-        print '[+] loading mothiership1 settings'
-        self.ms1_api = j.tools.ms1.get()
-        self.ms1_api.setCloudspace(self.ms1_spacesecret, self.ms1_cloudspace, self.ms1_location)
-        """
-        
-        print '[+] loading docker settings'
-        self.docker = j.tools.docker
-        self.docker.connectRemoteTCP('172.17.0.1', 2375)
-        self.dock_baseimage = 'jumpscale/ubuntu1404'
-        self.docking = {}
+        else:
+            raise NameError('Target "%s" is not supported' % self.target)
         
         delete = serviceObj.hrd.getBool('instance.param.override')
         
-        # FIXME
-        self.enableQuiet()
+        if self.quiet:
+            self.enableQuiet()
 
         def reflector():
             self.initReflectorVM(self.bootstrappPort, self.repoPath, delete=delete)
@@ -73,9 +82,6 @@ class Actions(ActionsBase):
         
         j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
         self.success('dcpm spawned')
-        
-        # FIXME
-        self.disableQuiet()
     
     """
     Console tools
@@ -197,7 +203,8 @@ class Actions(ActionsBase):
             remote.run('service ssh restart')
     
     def defaultConfig(self, remote, hostname, machinename, network, repoPath):
-        self.enableQuiet(remote)
+        if self.quiet:
+            self.enableQuiet(remote)
         
         print '[+] setting up host configuration'
         self.setupHost(hostname, network['localip'])
@@ -283,7 +290,7 @@ class Actions(ActionsBase):
         # building exposed ports
         ports = ' '.join(self.docking[hostname]['ports'])
         
-        port = self.docker.create(name=hostname, ports=ports, base=self.dock_baseimage)
+        port = self.docker.create(name=hostname, ports=ports, base=self.dock_baseimage, mapping=False)
         return self._docker_getMachine(hostname)
     
     #
@@ -296,7 +303,7 @@ class Actions(ActionsBase):
         if self.docking.get(hostname) == None:
             raise NameError('Hostname "%s" seems not ready for docker settings' % hostname)
             
-        self.docking[hostname]['ports'].append('%s:%s' % (publicport, localport))
+        self.docking[hostname]['ports'].append('%s:%s' % (localport, publicport))
         return True
     
     #

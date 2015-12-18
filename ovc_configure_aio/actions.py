@@ -1,9 +1,9 @@
 from JumpScale import j
 import urllib
 from StringIO import StringIO
+import os
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
-
 
 class Actions(ActionsBase):
 
@@ -20,6 +20,11 @@ class Actions(ActionsBase):
         self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
+        
+        # checking for ssh-agent
+        if not os.environ.get('SSH_AUTH_SOCK'):
+            print '[-] ssh agent seems not loaded, please check your keys'
+            j.application.stop()
         
         # custom servers name
         if self.host == 'auto':
