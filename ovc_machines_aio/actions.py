@@ -48,6 +48,7 @@ class Actions(ActionsBase):
                 'remote': dockconfig.getStr('instance.remote.host'),
                 'port': dockconfig.getStr('instance.remote.port'),
                 'public': dockconfig.getStr('instance.public.address'),
+                'image': dockconfig.getStr('instance.image.base'),
             }
             
             self.vm = j.clients.vm.get(self.target, docker)
@@ -88,6 +89,10 @@ class Actions(ActionsBase):
     Setup tools
     """
     def installJumpscale(self, cl):
+        if cl.file_exists('/opt/jumpscale7'):
+            self.vm.warning('jumpscale already installed, skipping')
+            return
+            
         cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
         
     def setupGit(self, cl):
