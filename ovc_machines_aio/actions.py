@@ -173,7 +173,9 @@ class Actions(ActionsBase):
         content = remote.file_read('/etc/ssh/sshd_config')
         
         if content.find('GatewayPorts clientspecified') == -1:
-            remote.file_append('/etc/ssh/sshd_config', "\nGatewayPorts clientspecified\n")
+            remote.file_append('/etc/ssh/sshd_config', "\n")
+            remote.file_append('/etc/ssh/sshd_config', "UsePAM yes\n")
+            remote.file_append('/etc/ssh/sshd_config', "GatewayPorts clientspecified\n")
             
             self.vm.message('restarting ssh')
             remote.run('service ssh restart')
@@ -205,12 +207,12 @@ class Actions(ActionsBase):
     """
     def initReflectorVM(self, bootstrapPort, repoPath, delete=False):
         self.vm.createMachine('ovc_reflector', 0.5, 10, delete)
-        self.vm.createPortForward('ovc_reflector', bootstrapPort, bootstrapPort)
         machine = self.vm.commitMachine('ovc_reflector')        
 
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
         
         self.defaultConfig(cl, 'reflector', 'ovc_reflector', machine, repoPath)
+        self.sshSetup(cl)
         
         # extra gest user and sshkey
         cl.user_ensure('guest', home='/home/guest', shell='/bin/bash')
