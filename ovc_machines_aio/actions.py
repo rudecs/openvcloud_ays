@@ -31,8 +31,7 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         if self.target == 'ms1':
-            instance = serviceObj.hrd.getStr('instance.ms1_client.connection')
-            ms1config = j.application.getAppInstanceHRD(name='ms1_client', instance=instance)
+            ms1config = j.application.getAppInstanceHRD(name='ms1_client', instance='main')
             
             ms1 = {
                 'secret': ms1config.getStr('instance.param.secret'),
@@ -41,32 +40,17 @@ class Actions(ActionsBase):
             }
             
             self.vm = j.clients.vm.get(self.target, ms1)
-            """
-            self.ms1_spacesecret = ms1clHRD.getStr('instance.param.secret')
-            self.ms1_cloudspace  = ms1clHRD.getStr('instance.param.cloudspace')
-            self.ms1_baseimage   = 'ubuntu.14.04.x64'
-            self.ms1_location    = ms1clHRD.getStr('instance.param.location')
-            
-            print '[+] loading mothiership1 settings'
-            self.ms1_api = j.tools.ms1.get()
-            self.ms1_api.setCloudspace(self.ms1_spacesecret, self.ms1_cloudspace, self.ms1_location)
-            """
 
         elif self.target == 'docker':
+            dockconfig = j.application.getAppInstanceHRD(name='docker_client', instance='main')
+            
             docker = {
-                'remote': '172.17.0.1',
-                'port': '2375',
-                'public': '192.168.0.9'
+                'remote': dockconfig.getStr('instance.remote.host'),
+                'port': dockconfig.getStr('instance.remote.port'),
+                'public': dockconfig.getStr('instance.public.address'),
             }
             
             self.vm = j.clients.vm.get(self.target, docker)
-            """
-            print '[+] loading docker settings'
-            self.docker = j.tools.docker
-            self.docker.connectRemoteTCP('172.17.0.1', 2375)
-            self.dock_baseimage = 'jumpscale/ubuntu1404'
-            self.docking = {}
-            """
         
         else:
             raise NameError('Target "%s" is not supported' % self.target)
@@ -99,39 +83,6 @@ class Actions(ActionsBase):
         
         j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
         self.vm.success('dcpm spawned')
-    
-    """
-    Console tools
-    """
-    """
-    def enableQuiet(self, remote=None):
-        j.remote.cuisine.api.fabric.state.output['stdout'] = False
-        j.remote.cuisine.api.fabric.state.output['running'] = False
-        
-        if remote:
-            remote.fabric.state.output['stdout'] = False
-            remote.fabric.state.output['running'] = False
-    
-    def disableQuiet(self, remote=None):
-        j.remote.cuisine.api.fabric.state.output['stdout'] = True
-        j.remote.cuisine.api.fabric.state.output['running'] = True
-        
-        if remote:
-            remote.fabric.state.output['stdout'] = True
-            remote.fabric.state.output['running'] = True
-    """
-    
-    """
-    # FIXME: move me
-    def info(self, text):
-        print '\033[1;36m[*] %s\033[0m' % text
-        
-    def warning(self, text):
-        print '\033[1;33m[-] %s\033[0m' % text
-
-    def success(self, text):
-        print '\033[1;32m[+] %s\033[0m' % text
-    """
     
     """
     Setup tools
@@ -242,137 +193,7 @@ class Actions(ActionsBase):
         keyInstance = self.keyInstall(machinename)
         service = self.nodeInstall(machinename, network, keyInstance)
         
-        return service
-    
-    """
-    #
-    # machine creation
-    #
-    def _ms1_createMachine(self, hostname, memsize, ssdsize, delete):
-        try:
-            self.ms1_api.createMachine(self.ms1_spacesecret, hostname, memsize=memsize, ssdsize=ssdsize, imagename=self.ms1_baseimage, sshkey=self.basessh, delete=delete)
-        
-        except Exception as e:
-            if e.message.find('Could not create machine it does already exist') == -1:
-                raise e
-    
-    def _docker_createMachine(self, hostname, memsize):
-        self.docking[hostname] = {
-            'memsize': memsize,
-            'status': 'waiting',
-            'ports': []
-        }
-        
-        return self.docking[hostname]
-    
-    #
-    # machine grabber
-    #
-    def _ms1_getMachine(self, hostname):
-        item = self.ms1_api.getMachineObject(self.ms1_spacesecret, hostname)
-        ports = self.ms1_api.listPortforwarding(self.ms1_spacesecret, hostname)
-        
-        for fw in ports:
-            if fw['localPort'] == '22':
-                sshforward = fw
-        
-        data = {
-            'hostname': item['name'],
-            'localport': sshforward['localPort'],
-            'localip': str(item['interfaces'][0]['ipAddress']),
-            'publicip': sshforward['publicIp'],
-            'publicport': str(sshforward['publicPort']),
-            'image': item['osImage']
-        }
-        
-        return data
-    
-    def _docker_getMachine(self, hostname):
-        dock = self.docker.client.inspect_container(hostname)
-        
-        data = {
-            'hostname': dock['Config']['Hostname'],
-            'localport': 22,
-            'localip': dock['NetworkSettings']['IPAddress'],
-            'publicip': '192.168.0.9', # FIXME
-            'publicport': dock['HostConfig']['PortBindings']['22/tcp'][0]['HostPort'],
-            'image': dock['Config']['Image']
-        }
-        
-        return data
-    
-    #
-    # machine commit
-    #
-    def _docker_commit(self, hostname):
-        if self.docking.get(hostname) == None:
-            return False
-        
-        # building exposed ports
-        ports = ' '.join(self.docking[hostname]['ports'])
-        
-        port = self.docker.create(name=hostname, ports=ports, base=self.dock_baseimage, mapping=False)
-        return self._docker_getMachine(hostname)
-    
-    #
-    # ports forwarder
-    #
-    def _ms1_portForward(self, hostname, localport, publicport):
-        return self.ms1_api.createTcpPortForwardRule(self.ms1_spacesecret, hostname, localport, pubipport=publicport)
-    
-    def _docker_portForward(self, hostname, localport, publicport):
-        if self.docking.get(hostname) == None:
-            raise NameError('Hostname "%s" seems not ready for docker settings' % hostname)
-            
-        self.docking[hostname]['ports'].append('%s:%s' % (localport, publicport))
-        return True
-    
-    #
-    # public interface
-    #
-    def getMachine(self, hostname):
-        print '[+] grabbing settings for: %s' % hostname
-        
-        if self.target == 'node.ssh':
-            return self._ms1_getMachine(hostname)
-        
-        raise NameError('Target "%s" is not supported' % self.target)
-    
-    def createMachine(self, hostname, memsize, ssdsize, delete):
-        self.info('initializing: %s (RAM: %s GB, Disk: %s GB)' % (hostname, memsize, ssdsize))
-        
-        if self.target == 'node.ssh':
-            return self._ms1_createMachine(hostname, str(memsize), str(ssdsize), delete)
-        
-        if self.target == 'node.docker':
-            return self._docker_createMachine(hostname, memsize)
-        
-        raise NameError('Target "%s" is not supported' % self.target)
-    
-    def createPortForward(self, hostname, localport, publicport):
-        self.info('port forwarding: %s (%s -> %s)' % (hostname, publicport, localport))
-        
-        if self.target == 'node.ssh':
-            return self._ms1_portForward(hostname, localport, publicport)
-        
-        if self.target == 'node.docker':
-            return self._docker_portForward(hostname, localport, publicport)
-        
-        raise NameError('Target "%s" is not supported' % self.target)
-    
-    def commitMachine(self, hostname):
-        self.info('commit: %s' % hostname)
-        
-        if self.target == 'node.ssh':
-            return self.getMachine(hostname)
-        
-        if self.target == 'node.docker':
-            return self._docker_commit(hostname)
-        
-        raise NameError('Target "%s" is not supported' % self.target)
-    
-    """
-    
+        return service    
     
     """
     Machines settings
