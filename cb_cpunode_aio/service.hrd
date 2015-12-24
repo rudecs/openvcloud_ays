@@ -6,7 +6,7 @@ dep.args.agentcontroller_client =
 
 dep.args.jsagent               =
     agentcontroller.connection:'main',
-    grid.id:'1',
+    grid.id:$(instance.param.grid.id),
     grid.node.roles:'node',
 
 dep.args.osis_client           =
