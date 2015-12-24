@@ -4,36 +4,36 @@ dep.args.cloudborker           =
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
-dep.args.oauthclient           =
-    oauth.client.id:'portal',
-    oauth.client.logout_url:'$(instance.param.portal.url)/logout',
-    oauth.client.redirect_url:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
-    oauth.client.scope:'user',
-    oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
-    oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
-    oauth.client.user_info_url:'http://127.0.0.1:8010/user',
-    oauth.client.secret:'652994f8234c2969ac8d11bebf38ee7792447770',
-
-dep.args.oauthserver           =
-    dcpm.url:'$(instance.param.dcpm.url)',
-    oauth.url:'$(instance.param.oauth.url)',
-    ovs.url:'$(instance.param.ovs.url)',
-    portal.url:'$(instance.param.portal.url)',
-    grafana.url:'$(instance.param.grafana.url)',
-    safekeeper.url:'$(instance.param.safekeeper.url)',
-
-dep.args.mailclient           =
+dep.args.mailclient            =
     smtp.login:'$(instance.param.smtp.login)',
     smtp.passwd:'$(instance.param.smtp.passwd)',
     smtp.port:'$(instance.param.smtp.port)',
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
 
+dep.args.oauthclient           =
+    oauth.client.id:'portal',
+    oauth.client.logout_url:'$(instance.param.portal.url)/logout',
+    oauth.client.redirect_url:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
+    oauth.client.scope:'user',
+    oauth.client.secret:'652994f8234c2969ac8d11bebf38ee7792447770',
+    oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
+    oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
+    oauth.client.user_info_url:'http://127.0.0.1:8010/user',
+
+dep.args.oauthserver           =
+    dcpm.url:'$(instance.param.dcpm.url)',
+    grafana.url:'$(instance.param.grafana.url)',
+    oauth.url:'$(instance.param.oauth.url)',
+    ovs.url:'$(instance.param.ovs.url)',
+    portal.url:'$(instance.param.portal.url)',
+    safekeeper.url:'$(instance.param.safekeeper.url)',
+
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
     param.osis.client.passwd:'$(instance.param.rootpasswd)',
-    
+
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
@@ -53,15 +53,23 @@ dep.args.vfwmanager            =
 dep.args.vncproxy              =
     param.portal.connection:'main',
 
-dependencies.2                 =
-    args:'dep.args.osis_client',
+dependencies.1                 =
+    args:'dep.args.mailclient',
     domain:'jumpscale',
-    name:'osis_client',
-    
-dependencies.4                 =
-    args:'dep.args.singlenode_grid',
-    domain:'jumpscale',
-    name:'singlenode_grid',
+    name:'mailclient',
+
+dependencies.10                =
+    domain:'openvcloud',
+    name:'cloudbrokerlib',
+
+dependencies.11                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
+dependencies.12                =
+    args:'dep.args.cloudborker',
+    domain:'openvcloud',
+    name:'cloudbroker',
 
 dependencies.13                =
     args:'dep.args.portal',
@@ -95,17 +103,22 @@ dependencies.18                =
 dependencies.19                =
     args:'dep.args.oauthclient',
     domain:'jumpscale',
-    name:'oauth_client',
     instance:'oauth',
+    name:'oauth_client',
+
+dependencies.2                 =
+    args:'dep.args.osis_client',
+    domain:'jumpscale',
+    name:'osis_client',
 
 dependencies.20                =
     domain:'openvcloud',
     name:'portal_branding',
 
-dependencies.1                =
-    args:'dep.args.mailclient',
+dependencies.4                 =
+    args:'dep.args.singlenode_grid',
     domain:'jumpscale',
-    name:'mailclient',
+    name:'singlenode_grid',
 
 dependencies.5                 =
     args:'dep.args.portal_client',
@@ -129,19 +142,6 @@ dependencies.9                 =
     domain:'openvcloud',
     name:'billingengine',
 
-dependencies.10                 =
-    domain:'openvcloud',
-    name:'cloudbrokerlib',
-
-dependencies.11                 =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
-dependencies.12                 =
-    args:'dep.args.cloudborker',
-    domain:'openvcloud',
-    name:'cloudbroker',
-
 git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
@@ -155,4 +155,6 @@ git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.g
 platform.supported             =
     'generic',
 
-ubuntu.packages = 'ntp',
+ubuntu.packages                =
+    'ntp',
+

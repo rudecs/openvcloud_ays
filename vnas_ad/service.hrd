@@ -6,7 +6,6 @@ dep.args.samba4_ad             =
 #dep.args.samba4_ad_user        =
 #    user.passwd:'jsR00t3r',
 #    user.username:'gig',
-
 dependencies.1                 =
     args:'dep.args.samba4_ad',
     name:'samba4_ad',
@@ -15,7 +14,6 @@ dependencies.1                 =
 #    args:'dep.args.samba4_ad_user',
 #    name:'samba4_ad_user',
 #    instance:'testuser'
-
 platform.supported             =
     'linux',
 

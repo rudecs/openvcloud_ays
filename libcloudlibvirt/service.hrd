@@ -1,9 +1,9 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
-git.export.1=
-    url:$(git.url),
-    source:'libs/CloudscalerLibcloud/CloudscalerLibcloud',
+git.export.1                   =
     dest:'$(system.paths.python.lib.ext)/CloudscalerLibcloud/',
-    link:True,
+    link:'True',
+    source:'libs/CloudscalerLibcloud/CloudscalerLibcloud',
+    url:'https://git.aydo.com/0-complexity/openvcloud.git',
 
-platform.supported=generic
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
 
+platform.supported             = 'generic'

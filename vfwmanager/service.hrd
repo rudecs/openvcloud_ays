@@ -1,13 +1,14 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
-git.export.1=
-    url:$(git.url),
-    source:'apps/vfw/base/*',
-    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
-    link:True,
-
-
-dependencies.1 =
+dependencies.1                 =
     name:'portal',
 
-platform.supported=generic,
+git.export.1                   =
+    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
+    link:'True',
+    source:'apps/vfw/base/*',
+    url:'https://git.aydo.com/0-complexity/openvcloud.git',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
 

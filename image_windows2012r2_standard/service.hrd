@@ -1,14 +1,7 @@
-web.export.1=
-    url:'ftp://pub:pub1234@ftp.aydo.com',
-<<<<<<< HEAD
-    source:'/images_ms1/windows/image_windows2012r2_standard_new.qcow2',
-    checkmd5: 'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/image_windows2012r2_standard_new.qcow2',
-=======
-    source:'/Windows/windows_2012_standardR2.qcow2',
-    checkmd5: 'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/windows_2012_standardR2.qcow2',
->>>>>>> 898ec31fa1468c9d892e34c09066500489c528dc
+                               = '======'
 
-platform.supported=generic
+platform.supported             = 'generic'
+
+web.export.1                   =
+    url:'ftp://pub:pub1234@ftp.aydo.com',
 

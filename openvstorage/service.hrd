@@ -1,10 +1,9 @@
-git.url='http://git.aydo.com/binary/openvstorage'
-
-git.export.1=
-    url:$(git.url),
-    source:'openvstorage/',
+git.export.1                   =
     dest:'/opt/openvstorage',
-    link:False,
+    link:'False',
+    source:'openvstorage/',
+    url:'http://git.aydo.com/binary/openvstorage',
 
+git.url                        = 'http://git.aydo.com/binary/openvstorage'
 
-platform.supported='linux64'
+platform.supported             = 'linux64'

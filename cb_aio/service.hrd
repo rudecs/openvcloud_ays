@@ -1,125 +1,126 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
-
-dependencies.1               =
-    args:'dep.args.basenetwork',
-    name:'basenetwork',
-    domain:'openvcloud',
-
-dep.args.basenetwork         =
+dep.args.basenetwork           =
     netconfig.backplanes.names:'backplane1',
-    netconfig.mgmt_backplane.interfacename:'backplane1',
-    netconfig.public_backplane.interfacename:'backplane1',
-    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
     netconfig.gw_mgmt.ipaddr:'10.199.0.2/22',
-    netconfig.vxbackend.interfacename:'backplane1',
     netconfig.gw_mgmt.vlanid:'103',
+    netconfig.gw_mgmt_backplane.interfacename:'backplane1',
     netconfig.mgmt.vlanid:'201',
-    netconfig.vxbackend.vlanid:'200',
+    netconfig.mgmt_backplane.interfacename:'backplane1',
     netconfig.public.vlanid:'0',
+    netconfig.public_backplane.interfacename:'backplane1',
+    netconfig.vxbackend.interfacename:'backplane1',
+    netconfig.vxbackend.vlanid:'200',
 
-dep.args.portal         =
-    portal.instance:'main',
+dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
+    portal.instance:'main',
 
-dep.args.portal_client       =
+dep.args.portal_client         =
     param.addr:'localhost',
-    param.port:82,
+    param.port:'82',
     param.secret:'$(instance.param.rootpasswd)',
 
-dep.args.vncproxy =
-    param.portal.connection:'main',
-
-dependencies.2 =
-    name:'compute_kvm_base',
-    domain:'openvcloud',
-
-dependencies.3 =
-    name:'defaultcomputenodeconfig',
-    domain:'openvcloud',
-
-dependencies.4 =
-    name:'singlenode_portal',
-    domain:'jumpscale',
-
-dependencies.5 =
-    name:'portal_client',
-    args:'dep.args.portal_client',
-    instance:'cloudbroker',
-
-dependencies.6 =
-    name:'cloudbroker_model',
-    domain:'openvcloud',
-
-dependencies.7 =
-    name:'cloudbroker_jumpscripts',
-    domain:'openvcloud',
-
-dependencies.8 =
-    name:'billingenginelib',
-    domain:'openvcloud',
-
-dependencies.9 =
-    name:'billingengine',
-    args:'dep.args.portal',
-    domain:'openvcloud',
-
-dependencies.10 =
-    name:'cloudbrokerlib',
-    domain:'openvcloud',
-
-dependencies.11 =
-    name:'libcloudlibvirt',
-    domain:'openvcloud',
-
-dependencies.12 =
-    name:'cloudbroker',
-    args:'dep.args.portal',
-    domain:'openvcloud',
-
-dependencies.13 =
-    name:'ms1_frontend',
-    args:'dep.args.portal',
-    domain:'openvcloud',
-
-dependencies.14 =
-    name:'cbportal',
-    args:'dep.args.portal',
-    domain:'openvcloud',
-
-dependencies.15 =
-    name:'gridportal',
-    args:'dep.args.portal',
-    domain:'jumpscale',
-
-dependencies.16 =
-    name:'vfwmanager',
-    args:'dep.args.portal',
-    domain:'openvcloud',
-
-dependencies.17 =
-    name:'vfwnode',
-    args:'dep.args.vfwnode',
-    domain:'openvcloud',
-
-dep.args.vfwnode =
+dep.args.vfwnode               =
     param.gw_mgmt_ip:'10.199.0.2/22',
 
-dependencies.18 =
+dep.args.vncproxy              =
+    param.portal.connection:'main',
+
+dependencies.1                 =
+    args:'dep.args.basenetwork',
+    domain:'openvcloud',
+    name:'basenetwork',
+
+dependencies.10                =
+    domain:'openvcloud',
+    name:'cloudbrokerlib',
+
+dependencies.11                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
+dependencies.12                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'cloudbroker',
+
+dependencies.13                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'ms1_frontend',
+
+dependencies.14                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'cbportal',
+
+dependencies.15                =
+    args:'dep.args.portal',
+    domain:'jumpscale',
+    name:'gridportal',
+
+dependencies.16                =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'vfwmanager',
+
+dependencies.17                =
+    args:'dep.args.vfwnode',
+    domain:'openvcloud',
+    name:'vfwnode',
+
+dependencies.18                =
+    domain:'openvcloud',
     name:'compute_node',
-    domain:'openvcloud',
 
-dependencies.19 =
+dependencies.19                =
+    domain:'openvcloud',
     name:'image_openwrt',
-    domain:'openvcloud',
 
-dependencies.20 =
+dependencies.2                 =
+    domain:'openvcloud',
+    name:'compute_kvm_base',
+
+dependencies.20                =
+    domain:'openvcloud',
     name:'libvirtsizes',
-    domain:'openvcloud',
 
-dependencies.21 =
-    name:'vncproxy',
-    domain:'openvcloud',
+dependencies.21                =
     args:'dep.args.vncproxy',
+    domain:'openvcloud',
+    name:'vncproxy',
 
-platform.supported=generic,
+dependencies.3                 =
+    domain:'openvcloud',
+    name:'defaultcomputenodeconfig',
+
+dependencies.4                 =
+    domain:'jumpscale',
+    name:'singlenode_portal',
+
+dependencies.5                 =
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+    name:'portal_client',
+
+dependencies.6                 =
+    domain:'openvcloud',
+    name:'cloudbroker_model',
+
+dependencies.7                 =
+    domain:'openvcloud',
+    name:'cloudbroker_jumpscripts',
+
+dependencies.8                 =
+    domain:'openvcloud',
+    name:'billingenginelib',
+
+dependencies.9                 =
+    args:'dep.args.portal',
+    domain:'openvcloud',
+    name:'billingengine',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
 

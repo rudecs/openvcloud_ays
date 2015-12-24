@@ -1,15 +1,16 @@
-git.url='https://git.aydo.com/binary/sentry_client.git'
-git.export.1=
-    url:$(git.url),
-    source:'logging',
-    dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/logging',
-    link:True,
-
-dependencies.1 =
+dependencies.1                 =
     name:'agentcontroller',
 
-dependencies.2 =
-    name:'sentry_client',
+dependencies.2                 =
     domain:'jumpscale',
+    name:'sentry_client',
 
-platform.supported=generic
+git.export.1                   =
+    dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/logging',
+    link:'True',
+    source:'logging',
+    url:'https://git.aydo.com/binary/sentry_client.git',
+
+git.url                        = 'https://git.aydo.com/binary/sentry_client.git'
+
+platform.supported             = 'generic'

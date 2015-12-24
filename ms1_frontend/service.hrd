@@ -1,23 +1,24 @@
-git.url='https://git.aydo.com/0-complexity/openvcloud.git'
-git.url2='https://git.aydo.com/0-complexity/openvcloud-kb.git'
-git.export.1=
-    url:$(git.url),
-    source:'apps/ms1_fe/base/*',
-    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
-    link:True,
-
-git.export.2=
-    url:$(git.url2),
-    source:'apps/kb/base/*',
-    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
-    link:True,
-
-
-dependencies.1 =
+dependencies.1                 =
     name:'portal',
 
-dependencies.2 =
+dependencies.2                 =
     name:'nginx',
 
-platform.supported=generic,
+git.export.1                   =
+    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
+    link:'True',
+    source:'apps/ms1_fe/base/*',
+    url:'https://git.aydo.com/0-complexity/openvcloud.git',
+
+git.export.2                   =
+    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
+    link:'True',
+    source:'apps/kb/base/*',
+    url:'https://git.aydo.com/0-complexity/openvcloud-kb.git',
+
+git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+git.url2                       = 'https://git.aydo.com/0-complexity/openvcloud-kb.git'
+
+platform.supported             =
+    'generic',
 

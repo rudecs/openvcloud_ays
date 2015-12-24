@@ -1,3 +1,1 @@
-
-platform.supported=generic
-
+platform.supported             = 'generic'

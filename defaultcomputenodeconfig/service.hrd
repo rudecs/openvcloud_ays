@@ -1,3 +1,8 @@
-ubuntu.packages=libvirt-bin,python-libvirt,virtinst
-platform.supported=ubuntu64,
+platform.supported             =
+    'ubuntu64',
+
+ubuntu.packages                =
+    'libvirt-bin',
+    'python-libvirt',
+    'virtinst',
 

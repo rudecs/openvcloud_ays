@@ -5,3 +5,4 @@ web.export.1                   =
     dest:'/opt/jumpscale7/var/tmp/templates/image_windows2012r2_standard_updated.qcow2',
     source:'/var/tmp/image_windows2012r2_standard_updated.qcow2',
     url:'file://',
+

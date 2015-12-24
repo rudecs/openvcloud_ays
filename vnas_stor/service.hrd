@@ -1,12 +1,3 @@
-platform.supported             =
-    'linux',
-
-ubuntu.packages                =
-    'btrfs-tools',
-    'xfsprogs',
-    'nfs-kernel-server',
-
-
 dep.args.agent2                =
     agentcontroller:'http://$(instance.master.address):8966/',
     gid:'111',
@@ -16,4 +7,12 @@ dep.args.agent2                =
 dependencies.1                 =
     args:'dep.args.agent2',
     name:'agent2',
+
+platform.supported             =
+    'linux',
+
+ubuntu.packages                =
+    'btrfs-tools',
+    'xfsprogs',
+    'nfs-kernel-server',
 

@@ -25,8 +25,8 @@ dep.args.vnaslb                =
     param.blocksize:'$(instance.vnas.blocksize)',
     param.cifspath:'/storage/vnas',
     param.refresh:'$(instance.vnas.refresh)',
-    param.vdiskroot:'/mnt/vdisks',
     param.timeout:'10',
+    param.vdiskroot:'/mnt/vdisks',
 
 dependencies.1                 =
     args:'dep.args.samba4_member',
@@ -47,6 +47,6 @@ dependencies.4                 =
 platform.supported             =
     'linux',
 
-
 ubuntu.packages                =
     'nfs-common',
+
