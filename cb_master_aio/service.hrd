@@ -44,6 +44,7 @@ dep.args.portal_client         =
     param.secret:'$(instance.param.rootpasswd)',
 
 dep.args.singlenode_grid       =
+    param.grid.id:'$(instance.param.grid.id)',
     param.rootpasswd:'$(instance.param.rootpasswd)',
 
 dep.args.vfwmanager            =

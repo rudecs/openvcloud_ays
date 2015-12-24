@@ -16,3 +16,5 @@ param.smtp.port=@ASK default:587 descr:'MAILCLIENT: SMTP Server port'
 param.smtp.login=@ASK  descr:'MAILCLIENT: SMTP Server username'
 param.smtp.passwd=@ASK descr:'MAILCLIENT: SMTP Server password'
 param.smtp.sender=@ASK default:'' descr:'MAILCLIENT: SMTP Server sender(can be empty.)'
+
+param.grid.id=@ASK descr:'grid id'
