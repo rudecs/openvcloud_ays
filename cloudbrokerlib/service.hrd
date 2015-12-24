@@ -1,4 +1,5 @@
 git.export.1                   =
+    branch:'2.0',
     dest:'$(system.paths.python.lib.ext)/cloudbrokerlib/',
     link:'True',
     source:'apps/cloudbroker/cloudbrokerlib/',
