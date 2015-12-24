@@ -14,7 +14,7 @@ dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com' 
 dcpm.port = @ASK type:int default:80  descr:'port DCPM is listenning on'
 
 bootstrapp.ipadress = @ASK  type:str default:'192.168.103.251'  descr:'internal ip address bootrapp is running on'
-bootstrapp.port = @ASK  type:int descr:'port bootstrapp is listenning on' default:5000
+bootstrapp.port = @ASK type:int descr:'port bootstrapp is listenning on' default:5000
 
 bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.greenitglobe.com' descr:'servername bootstrapp is exposed at (use auto to autodetect)'
 ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at (use auto to autodetect)'
@@ -29,3 +29,5 @@ smtp.port=@ASK default:587 descr:'MAILCLIENT: SMTP Server port'
 smtp.login=@ASK  descr:'MAILCLIENT: SMTP Server username'
 smtp.passwd=@ASK descr:'MAILCLIENT: SMTP Server password'
 smtp.sender=@ASK default:'' descr:'MAILCLIENT: SMTP Server sender(can be empty.)'
+
+grid.id = @ASK type:int descr:'grid id'

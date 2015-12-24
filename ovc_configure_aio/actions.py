@@ -82,6 +82,10 @@ class Actions(ActionsBase):
             'dcpm':      self.getMachineService('ovc_dcpm')
         }
         
+        self.grid = {
+            'id': serviceObj.hrd.getInt('instance.grid.id'),
+        }
+        
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] --------------------------'
@@ -109,7 +113,7 @@ class Actions(ActionsBase):
         j.actions.start(description='configure reflector', action=reflector, category='openvlcoud', name='configure_reflector', serviceObj=serviceObj)
 
         def master():
-            self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls, self.repoPath, self.smtp)
+            self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls, self.repoPath, self.smtp, self.grid)
         
         j.actions.start(description='configure master', action=master, category='openvlcoud', name='configure_master', serviceObj=serviceObj)
         
@@ -260,7 +264,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', parent.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp):
+    def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid):
         self.info('configuring: master')
         
         print '[+] network: %s -> %s' % (network['start'], network['end'])
@@ -286,6 +290,7 @@ class Actions(ActionsBase):
             'instance.param.smtp.login': smtp['login'],
             'instance.param.smtp.passwd': smtp['passwd'],
             'instance.param.smtp.sender': smtp['sender'],
+            'instance.param.grid.id': grid['id'],
         }
         
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=parent)
