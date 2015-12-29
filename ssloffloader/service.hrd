@@ -5,7 +5,7 @@ dependencies.1                 =
     domain:'jumpscale',
     name:'nginx',
 
-git.certurl                    = 'https://git.aydo.com/protected/certificates_demo.greenitglobe.com'
+git.certurl                    = 'https://git.aydo.com/protected/certificates_$(instance.domain)'
 git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/ovc',
     link:'False',
@@ -16,7 +16,7 @@ git.export.2                   =
     dest:'/opt/nginx/cfg/ssl',
     link:'True',
     source:'certs',
-    url:'https://git.aydo.com/protected/certificates_demo.greenitglobe.com',
+    url:'https://git.aydo.com/protected/certificates_$(instance.domain)',
 
 git.url                        = 'https://git.aydo.com/binary/openvcloud_ssloffloader/'
 
