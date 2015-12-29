@@ -10,7 +10,6 @@ class Actions(ActionsBase):
     def prepare(self, serviceObj):
         self.bootstrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         
-        self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         self.quiet = serviceObj.hrd.getBool('instance.param.quiet')
         
@@ -22,7 +21,6 @@ class Actions(ActionsBase):
         if len(clients) > 0:
             self.target = 'ms1'
         
-        print '[+] environment: %s' % self.rootenv
         print '[+] target node: %s' % self.target
 
     def configure(self, serviceObj):
