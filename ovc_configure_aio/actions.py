@@ -86,6 +86,13 @@ class Actions(ActionsBase):
             'id': serviceObj.hrd.getInt('instance.grid.id'),
         }
         
+        self.ssl = {
+            'root':    serviceObj.hrd.getStr('instance.ssl.root'),
+            'ovs':     serviceObj.hrd.getStr('instance.ssl.ovs'),
+            'novnc':   serviceObj.hrd.getStr('instance.ssl.novnc'),
+            'defense': serviceObj.hrd.getStr('instance.ssl.defense'),
+        }
+        
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] --------------------------'
@@ -123,7 +130,7 @@ class Actions(ActionsBase):
         j.actions.start(description='configure dcpm', action=dcpm, category='openvlcoud', name='configure_dcpm', serviceObj=serviceObj)
         
         def proxy():
-            self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort, self.bootrappIpAddress, self.bootrappPort)
+            self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort, self.bootrappIpAddress, self.bootrappPort, self.ssl)
         
         j.actions.start(description='configure proxy', action=proxy, category='openvlcoud', name='configure_proxy', serviceObj=serviceObj)
     
@@ -228,7 +235,7 @@ class Actions(ActionsBase):
         bootrapp = j.atyourservice.new(name='bootstrapp', args=data)
         bootrapp.install()
 
-    def initProxyVM(self, parent, host, servers, dcpmPort, bootrappIpAddress, bootrappPort):
+    def initProxyVM(self, parent, host, servers, dcpmPort, bootrappIpAddress, bootrappPort, ssl):
         self.info('configuring: proxy')
         
         proxyip = self.getMachineAddress('ovc_proxy')
@@ -261,6 +268,11 @@ class Actions(ActionsBase):
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
             'instance.dcpm.servername': servers['dcpm'],
+            
+            'instance.ssl.root': ssl['root'],
+            'instance.ssl.ovs': ssl['ovs'],
+            'instance.ssl.novnc': ssl['novnc'],
+            'instance.ssl.defense': ssl['defense'],
         }
         
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=parent)
