@@ -1,6 +1,5 @@
 param.repo.path= @ASK default:'/opt/code/git/account/reponame' type:str descr:'path to the config git repo'
 param.quiet = @ASK default:False type:bool descr:'quite mode'
-ms1_client.connection = @ASK default:'main' descr:'instance name of the ms1_client service' type:str
 
 master.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
 publicip.gateway = @ASK type:str
@@ -8,6 +7,7 @@ publicip.start = @ASK type:str
 publicip.end = @ASK type:str
 
 param.main.host = @ASK type:str descr='root hostname (environment name)'
+param.domain = @ASK type:str descr='root domain (eg: demo.greenitglobe.com)'
 
 host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded (use auto to autodetect)'
 dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at (use auto to autodetect)'

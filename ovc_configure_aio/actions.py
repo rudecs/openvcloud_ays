@@ -17,7 +17,7 @@ class Actions(ActionsBase):
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         
-        self.rootdomain = 'demo.greenitglobe.com'
+        self.rootdomain = serviceObj.hrd.get('instance.param.domain')
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         
@@ -242,9 +242,12 @@ class Actions(ActionsBase):
         
         dcpmip = self.getMachineAddress('ovc_dcpm')
         print '[+] ovc_dcpm: %s' % dcpmip
+        
+        print '[+] master domain: %s' % self.rootdomain
 
         data = {
             'instance.host': host,
+            'instance.domain': self.rootdomain,
             'instance.master.ipadress': masterip,
             'instance.dcpm.ipadress': dcpmip,
             'instance.dcpm.port': dcpmPort,

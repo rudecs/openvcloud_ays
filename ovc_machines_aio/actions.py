@@ -7,12 +7,9 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 
 
 class Actions(ActionsBase):
-    def prepare(self, serviceObj):        
-        self.host = serviceObj.hrd.getStr('instance.host')
-
+    def prepare(self, serviceObj):
         self.bootstrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         
-        self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         self.quiet = serviceObj.hrd.getBool('instance.param.quiet')
@@ -25,7 +22,6 @@ class Actions(ActionsBase):
         if len(clients) > 0:
             self.target = 'ms1'
         
-        print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] target node: %s' % self.target
 
@@ -92,9 +88,12 @@ class Actions(ActionsBase):
         if cl.file_exists('/opt/jumpscale7'):
             self.vm.warning('jumpscale already installed, skipping')
             return
-        branches = {'jsbranch': j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').branchName,
-                                    'aysbranch': j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').branchName
-                                                        }
+        
+        branches = {
+            'jsbranch': j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').branchName,
+            'aysbranch': j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').branchName
+        }
+        
         cl.run('JSBRANCH="%(jsbranch)s" AYSBRANCH="%(aysbranch)s" curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/%(jsbranch)s/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh' % branches)
         
     def setupGit(self, cl):
