@@ -24,12 +24,25 @@ class Actions(ActionsBase):
     def prepare(self,serviceObj):
         return True
 
-    def configure(self,serviceObj):
+    def configure(self, serviceObj):
         docker = j.tools.docker
         docker.connectRemoteTCP('172.17.0.1', 2375)
         
         source = '/opt/jumpscale7/var/lib/dockers/openvcloud/'
         image = serviceObj.hrd.get('instance.image.name')
+        
+        jsbranch = j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').branchName
+        aysbranch = j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').branchName
+        
+        print '[+] jumpscale branch: %s' % jsbranch
+        print '[+] ays repo branch: %s' % aysbranch
+        
+        # setting hrd info
+        serviceObj.hrd.set('instance.jsbranch', jsbranch)
+        serviceObj.hrd.set('instance.aysbranch', aysbranch)
+        
+        print '[+] patching docker file'
+        serviceObj.hrd.applyOnFile("%s/buildconfig" % source)
         
         print '[+] source: %s' % source
         print '[+] building the image: %s' % image
