@@ -28,6 +28,11 @@ class Actions(ActionsBase):
         data = resp.json()
         j.system.fs.writeFile('/root/.ssh/authorized_keys', '\n'+data['master.key'], append=True)
         j.system.fs.writeFile('/root/.ssh/authorized_keys', '\n'+data['git.key'], append=True)
+        
+        # if we don't have remote port, we don't need ssh tunnel
+        # we skip autossh install
+        if data['autossh.remote.port'] == 0:
+            return True
 
         # create reverse tunnel to reflector
         args = {
