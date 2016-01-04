@@ -4,15 +4,6 @@ dep.args.agentcontroller_client =
     agentcontroller.client.passwd:,
     agentcontroller.client.port:'4444',
 
-dep.args.autossh               =
-    local.address:'localhost',
-    local.port:'2001',
-    remote.address:'$(instance.param.master.addr)',
-    remote.bind:'$(instance.autossh.reflector.ip)',
-    remote.connection.port:'$(instance.autossh.reflector.port)',
-    remote.login:'guest',
-    remote.port:'$(instance.autossh.port)',
-
 dep.args.jsagent               =
     agentcontroller.connection:'main',
     grid.id:'$(instance.param.grid.id)',
@@ -79,12 +70,6 @@ dependencies.15                =
     name:'nginx',
 
 dependencies.16                =
-    args:'dep.args.autossh',
-    domain:'jumpscale',
-    instance:'http_proxy',
-    name:'autossh',
-
-dependencies.17                =
     args:'dep.args.vncproxy',
     instance:'main',
     name:'vncproxy',
