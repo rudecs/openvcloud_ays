@@ -12,6 +12,7 @@ class Actions(ActionsBase):
         
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
         self.quiet = serviceObj.hrd.getBool('instance.param.quiet')
+        self.reflector = not serviceObj.hrd.getBool('instance.skip.reflector')
         
         # default to docker
         self.target = 'docker'
@@ -58,8 +59,13 @@ class Actions(ActionsBase):
         def reflector():
             self.initReflectorVM(self.bootstrappPort, self.repoPath, delete=delete)
         
-        j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
-        self.vm.success('reflector spawned')
+        # deploy reflector of not ignored
+        if self.reflector:
+            j.actions.start(description='install reflector vm', action=reflector, category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
+            self.vm.success('reflector spawned')
+            
+        else:
+            self.vm.warning('reflector skipped')
 
         def master():
             self.initMasterVM(self.repoPath, delete=delete)

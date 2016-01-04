@@ -110,6 +110,9 @@ class Actions(ActionsBase):
         print '[+] reflector: %s' % self.machines['reflector']
         print '[+] dcpm     : %s' % self.machines['dcpm']
         print '[+] --------------------------'
+        
+        if self.machines['reflector'] == None:
+            self.warning('direct access environment, no reflector found')
 
     def configure(self, serviceObj):
         parent = None
@@ -117,7 +120,20 @@ class Actions(ActionsBase):
         def reflector():
             self.initReflectorVM(self.machines['reflector'], self.repoPath)
         
-        j.actions.start(description='configure reflector', action=reflector, category='openvlcoud', name='configure_reflector', serviceObj=serviceObj)
+        if self.machines['reflector']:
+            j.actions.start(description='configure reflector', action=reflector, category='openvlcoud', name='configure_reflector', serviceObj=serviceObj)
+            
+        else:
+            # no reflector, setting up bootstrap without it
+            self.warning('skipping reflector configuration, setting up bootstrap')
+            fakeReflector = {
+                'localip': 'not used (no reflector)',
+                'publicip': 'not used (no reflector)',
+                'publicport': 'not used (no reflector)',
+                'service': '', # need to be empty
+            }
+            self.setupBootstrap(self.repoPath, fakeReflector)
+            
 
         def master():
             self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls, self.repoPath, self.smtp, self.grid)
@@ -210,30 +226,34 @@ class Actions(ActionsBase):
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
 
-    def initReflectorVM(self, parent, repoPath):
-        self.info('configuring: reflector')
-        
-        reflector = self.getMachine('ovc_reflector')
-        
-        print "[+] reflector private ip: %s" % reflector['localip']
-        print "[+] reflector public ip : %s" % reflector['publicip']
-        print "[+] reflector ssh port: %s" % reflector['publicport']
+    def setupBootstrap(self, repoPath, reflector):
+        print "[+] bootstrap reflector private ip: %s" % reflector['localip']
+        print "[+] bootstrap reflector public ip: %s" % reflector['publicip']
+        print "[+] bootstrap reflector ssh port: %s" % reflector['publicport']
 
         # install bootrapp on git vm
         data = {
             'instance.listen.port': 5000,
             'instance.ovc_git': repoPath,
-            'instance.master.name': 'jumpscale__%s__ovc_master' % 'node.ssh',
+            'instance.master.name': 'jumpscale__node.ssh__ovc_master',
             'instance.reflector.ip.priv': reflector['localip'],
             'instance.reflector.ip.pub': reflector['publicip'],
             'instance.reflector.port': reflector['publicport'],
-            'instance.reflector.name': 'jumpscale__%s__ovc_reflector' % 'node.ssh',
+            'instance.reflector.name': reflector['service'],
             'instance.reflector.user': 'guest'
         }
         
         bootrapp = j.atyourservice.remove(name='bootstrapp') # override service
         bootrapp = j.atyourservice.new(name='bootstrapp', args=data)
         bootrapp.install()
+    
+    def initReflectorVM(self, parent, repoPath):
+        self.info('configuring: reflector')
+        
+        reflector = self.getMachine('ovc_reflector')
+        reflector['service'] = 'jumpscale__node.ssh__ovc_reflector'
+        
+        self.setupBootstrap(repoPath, reflector)
 
     def initProxyVM(self, parent, host, servers, dcpmPort, bootrappIpAddress, bootrappPort, ssl):
         self.info('configuring: proxy')
@@ -243,9 +263,6 @@ class Actions(ActionsBase):
         
         masterip = self.getMachineAddress('ovc_master')
         print '[+] ovc_master: %s' % masterip
-        
-        reflectip =self.getMachineAddress('ovc_reflector')
-        print '[+] ovc_reflector: %s' % reflectip
         
         dcpmip = self.getMachineAddress('ovc_dcpm')
         print '[+] ovc_dcpm: %s' % dcpmip
@@ -258,9 +275,7 @@ class Actions(ActionsBase):
             'instance.master.ipadress': masterip,
             'instance.dcpm.ipadress': dcpmip,
             'instance.dcpm.port': dcpmPort,
-            'instance.bootstrapp.ipadress': bootrappIpAddress,
-            'instance.bootstrapp.port': bootrappPort,
-            'instance.reflector.ipadress': reflectip,
+            'instance.reflector.ipadress': 'REMOVE ME',
             
             'instance.bootstrapp.servername': servers['boot'],
             'instance.ovs.servername': servers['ovs'],
@@ -268,6 +283,10 @@ class Actions(ActionsBase):
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
             'instance.dcpm.servername': servers['dcpm'],
+            
+            'instance.generated.defense': 'server 127.0.0.1;',
+            'instance.generated.novnc': 'server 127.0.0.1;',
+            'instance.generated.ovs': 'server 127.0.0.1;',
             
             'instance.ssl.root': ssl['root'],
             'instance.ssl.ovs': ssl['ovs'],
