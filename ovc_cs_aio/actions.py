@@ -135,7 +135,8 @@ class Actions(ActionsBase):
     def installJumpscale(self, cl):
         # install Jumpscale
         print "[+] installing jumpscale"
-        cl.run('curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh')
+        cmd = j.do.getInstallCommand()
+        cl.run(cmd)
         print "[+] jumpscale installed"
         
     def setupGit(self, cl):

@@ -93,12 +93,8 @@ class Actions(ActionsBase):
             self.vm.warning('jumpscale already installed, skipping')
             return
         
-        branches = {
-            'jsbranch': j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').branchName,
-            'aysbranch': j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').branchName
-        }
-        
-        cl.run('JSBRANCH="%(jsbranch)s" AYSBRANCH="%(aysbranch)s" curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/%(jsbranch)s/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh' % branches)
+        cmd = j.do.getInstallCommand()
+        cl.run(cmd)
         
     def setupGit(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "ssh"')
