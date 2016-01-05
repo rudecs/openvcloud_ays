@@ -157,5 +157,5 @@ platform.supported             =
     'generic',
 
 ubuntu.packages                =
-    'ntp',
+    'ntp ethtool',
 
