@@ -11,14 +11,7 @@ git.export.1                   =
     source:'apps/ms1_fe/base/*',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
 
-git.export.2                   =
-    dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
-    link:'True',
-    source:'apps/kb/base/*',
-    url:'https://git.aydo.com/0-complexity/openvcloud-kb.git',
-
 git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
-git.url2                       = 'https://git.aydo.com/0-complexity/openvcloud-kb.git'
 
 platform.supported             =
     'generic',
