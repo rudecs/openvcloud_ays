@@ -24,7 +24,7 @@ class Actions(ActionsBase):
     DJANGO_SETTINGS = '/opt/OpenvStorage/webapps/api/settings.py'
 
     def installOVS(self):
-        release = 'eugene'
+        release = 'eugene-updates'
         packages = ['ntp', 'kvm', 'libvirt0', 'python-libvirt', 'virtinst', 'openvstorage-hc']
         j.system.fs.writeFile(filename="/etc/apt/sources.list.d/openvstorage.list", contents="deb http://apt.openvstorage.org %s main" % release, append=False)
         j.system.platform.ubuntu.updatePackageMetadata()
