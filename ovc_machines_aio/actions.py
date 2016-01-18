@@ -201,7 +201,7 @@ class Actions(ActionsBase):
         keyInstance = self.keyInstall(machinename)
         service = self.nodeInstall(machinename, network, keyInstance)
         
-        return service    
+        return service
     
     """
     Machines settings
@@ -241,6 +241,7 @@ class Actions(ActionsBase):
         self.vm.createPortForward('ovc_master', 4444, 4444)
         self.vm.createPortForward('ovc_master', 5544, 5544)
         self.vm.createPortForward('ovc_master', 8127, 8127)
+        self.vm.addVolume('ovc_master', '/opt/master_var', '/opt/jumpscale7/var')
         machine = self.vm.commitMachine('ovc_master')
         
         cl = j.ssh.connect(machine['localip'], 22, keypath='/root/.ssh/id_rsa')
