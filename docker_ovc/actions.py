@@ -31,18 +31,15 @@ class Actions(ActionsBase):
         source = '/opt/jumpscale7/var/lib/dockers/openvcloud/'
         image = serviceObj.hrd.get('instance.image.name')
         
-        jsbranch = j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').getBranchOrTag()[1]
-        aysbranch = j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').getBranchOrTag()[1]
-        ovcbranch = j.clients.git.get('/opt/code/git/0-complexity/openvcloud').getBranchOrTag()[1]
+        jsbranch = j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').branchName
+        aysbranch = j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').branchName
         
-        print '[+] jumpscale branch : %s' % jsbranch
-        print '[+] ays repo branch  : %s' % aysbranch
-        print '[+] openvcloud branch: %s' % ovcbranch
+        print '[+] jumpscale branch: %s' % jsbranch
+        print '[+] ays repo branch: %s' % aysbranch
         
         # setting hrd info
         serviceObj.hrd.set('instance.jsbranch', jsbranch)
         serviceObj.hrd.set('instance.aysbranch', aysbranch)
-        serviceObj.hrd.set('instance.ovcbranch', ovcbranch)
         
         print '[+] patching docker file'
         serviceObj.hrd.applyOnFile("%s/buildconfig" % source)
