@@ -1,8 +1,8 @@
 git.export.1                   =
-    branch:'2.0',
     dest:'$(system.paths.python.lib.ext)/cloudbrokerlib/',
     link:'True',
     source:'apps/cloudbroker/cloudbrokerlib/',
+    tag:'2.0.2',
     url:'https://git.aydo.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
