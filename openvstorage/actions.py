@@ -93,12 +93,13 @@ class Actions(ActionsBase):
         
         
         # custom kernel settings
+        sysfile = '/etc/sysctl.d/20-openvstorage.conf'
         size = 128 * 1024 * 1024
         swap = 5
         
-        j.system.fs.writeFile('/etc/sysctl.conf', "\n# ovs-tuning\n", True)
-        j.system.fs.writeFile('/etc/sysctl.conf', "vm.dirty_background_bytes = %d\n" % size, True)
-        j.system.fs.writeFile('/etc/sysctl.conf', "vm.swappiness = %d\n" % swap, True)
+        j.system.fs.writeFile(sysfile, "\n# ovs-tuning\n", True)
+        j.system.fs.writeFile(sysfile, "vm.dirty_background_bytes = %d\n" % size, True)
+        j.system.fs.writeFile(sysfile, "vm.swappiness = %d\n" % swap, True)
 
         j.system.process.execute('sysctl --system')
 
