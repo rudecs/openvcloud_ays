@@ -18,7 +18,7 @@ dep.args.osis_client           =
 dep.args.portal_client         =
     openvcloud.supportemail:'support@greenitglobe.com',
     param.addr:'$(instance.param.master.addr)',
-    param.port:'443',
+    param.port:'$(instance.param.master.port)',
     param.secret:'$(instance.param.rootpasswd)',
 
 dep.args.redis                 =

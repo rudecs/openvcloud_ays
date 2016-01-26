@@ -6,12 +6,16 @@ dep.args.basenetwork           =
     netconfig.vxbackend.interfacename:'backplane1',
     netconfig.vxbackend.vlanid:'200',
 
+dep.args.cpunodeaio              =
+    param.master.port:'82',
+
 dependencies.1                 =
     args:'dep.args.basenetwork',
     domain:'openvcloud',
     name:'basenetwork',
 
 dependencies.2                 =
+    args:'dep.args.cpunodeaio',
     domain:'openvcloud',
     name:'cb_cpunode_aio',
 
