@@ -3,6 +3,7 @@ targetpasswd=@ASK type:str  descr:'OVS: Target node password'
 clustername=@ASK type:str default:'kvm131' descr:'OVS: Cluster name'
 masterip=@ASK default:'' type:str  descr:'OVS: Master Host Ip (leave empty for master installation)'
 masterpasswd=@ASK default:'' type:str  descr:'OVS: Master Host Password (leave empty for master installation)'
+nodeid=@ASK default:'' type:str  descr:'OVS: Node ID (used for hypervisor name)'
 
 oauth.id=@ASK default:'' type:str  descr:'OVS: oauth id (leave empty to disable oauth)'
 oauth.secret=@ASK default:'' type:str  descr:'OVS: oauth secret (leave empty to disable oauth)'

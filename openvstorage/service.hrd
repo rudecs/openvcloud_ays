@@ -3,6 +3,7 @@ git.export.1                   =
     link:'False',
     source:'openvstorage/',
     url:'http://git.aydo.com/binary/openvstorage',
+    branch:'kvmfix',
 
 git.url                        = 'http://git.aydo.com/binary/openvstorage'
 

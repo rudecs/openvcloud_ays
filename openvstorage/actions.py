@@ -43,6 +43,8 @@ class Actions(ActionsBase):
             # extra node install
             serviceObj.hrd.set('instance.joinCluster', True)
 
+        serviceObj.hrd.set('instance.hypervisorname', 'kvm-%s' % serviceObj.hrd.getStr('instance.nodeid'))
+        
         serviceObj.hrd.save()
         self.installOVS()
 
