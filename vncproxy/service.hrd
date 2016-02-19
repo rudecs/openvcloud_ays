@@ -32,10 +32,10 @@ git.export.3                   =
     url:'http://github.com/0-complexity/noVNC',
 
 git.export.4                   =
+    branch:'2.0',
     dest:'$(system.paths.app)/vncproxy/utils/',
     link:'True',
     source:'/apps/vncproxy/utils/*',
-    tag:'2.0.3rc4',
     url:'http://git.aydo.com/0-complexity/openvcloud',
 
 platform.supported             = 'generic'
