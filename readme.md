@@ -31,7 +31,7 @@ metadata.jumpscale             =
     url:'https://github.com/Jumpscale/ays_jumpscale7',
 # add this domain
 metadata.openvcloud           =
-    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
+    url:'https://github.com/0-complexity/openvcloud_ays',
 ```
 
 ### Install cb_master_aio
@@ -68,7 +68,7 @@ metadata.jumpscale             =
 
 # add this domain
 metadata.openvcloud           =
-    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
+    url:'https://github.com/0-complexity/openvcloud_ays',
 ```
 
 ### Install ssloffloader
@@ -101,7 +101,7 @@ metadata.jumpscale             =
 
 # add this domain
 metadata.openvcloud           =
-    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
+    url:'https://github.com/0-complexity/openvcloud_ays',
 
 ```
 
