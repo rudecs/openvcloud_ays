@@ -113,6 +113,10 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
+dependencies.10                 =
+    instance:'ovs_health',
+    name:'ovs_health',
+
 git.export.1                   =
     branch:'2.0',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
