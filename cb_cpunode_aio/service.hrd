@@ -114,7 +114,7 @@ dependencies.9                 =
     name:'jsagent',
 
 dependencies.10                 =
-    instance:'ovs_health',
+    instance:'main',
     name:'ovs_health',
 
 git.export.1                   =
