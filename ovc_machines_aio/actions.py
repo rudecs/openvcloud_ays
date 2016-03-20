@@ -100,10 +100,6 @@ class Actions(ActionsBase):
         cl.run('jsconfig hrdset -n whoami.git.login -v "ssh"')
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "ssh"')
         
-        if self.target == "ms1":
-            cl.run('git config --global user.email "%s"' % 'GIG Setup')
-            cl.run('git config --global user.name "%s"' % 'setup@greenitglobe.com')
-        
         allowhosts = ["github.com", "git.aydo.com"]
             
         for host in allowhosts:
