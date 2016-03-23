@@ -11,4 +11,3 @@ platform.supported             = 'linux'
 
 ubuntu.packages                =
     'python-psutil',
-

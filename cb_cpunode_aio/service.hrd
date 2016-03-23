@@ -45,8 +45,8 @@ dependencies.1                 =
     name:'redis',
 
 dependencies.10                =
-    instance:'main',
-    name:'ovs_health',
+    domain:'openvcloud',
+    name:'compute_node',
 
 dependencies.11                =
     args:'dep.args.vfwnode',
@@ -112,6 +112,10 @@ dependencies.9                 =
     args:'dep.args.jsagent',
     instance:'main',
     name:'jsagent',
+
+dependencies.10                 =
+    instance:'main',
+    name:'ovs_health',
 
 git.export.1                   =
     branch:'2.0',

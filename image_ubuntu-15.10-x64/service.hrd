@@ -5,4 +5,3 @@ web.export.1                   =
     dest:'/opt/jumpscale7/var/tmp/templates/Ubuntu-15.10.qcow2',
     source:'/Linux/ubuntu/Ubuntu 15.10.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
-
