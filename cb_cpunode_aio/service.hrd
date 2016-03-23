@@ -74,7 +74,7 @@ dependencies.16                =
     instance:'main',
     name:'vncproxy',
 
-dependencies.17                 =
+dependencies.17                =
     instance:'main',
     name:'ovs_health',
 
@@ -117,14 +117,13 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-
 git.export.1                   =
-    branch:'2.0',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/cpunode_aio',
+    tag:'2.0.4rc3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
