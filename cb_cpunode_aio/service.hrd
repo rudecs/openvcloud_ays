@@ -45,8 +45,8 @@ dependencies.1                 =
     name:'redis',
 
 dependencies.10                =
-    domain:'openvcloud',
-    name:'compute_node',
+    instance:'main',
+    name:'ovs_health',
 
 dependencies.11                =
     args:'dep.args.vfwnode',
@@ -113,17 +113,13 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.10                 =
-    instance:'main',
-    name:'ovs_health',
-
 git.export.1                   =
-    branch:'2.0',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/cpunode_aio',
+    tag:'2.0.4rc3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
