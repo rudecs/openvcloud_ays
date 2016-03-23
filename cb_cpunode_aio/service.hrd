@@ -74,6 +74,10 @@ dependencies.16                =
     instance:'main',
     name:'vncproxy',
 
+dependencies.17                 =
+    instance:'main',
+    name:'ovs_health',
+
 dependencies.2                 =
     domain:'openvcloud',
     name:'compute_kvm_base',
@@ -113,9 +117,6 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.10                 =
-    instance:'main',
-    name:'ovs_health',
 
 git.export.1                   =
     branch:'2.0',
