@@ -143,12 +143,12 @@ dependencies.9                 =
     name:'billingengine',
 
 git.export.1                   =
-    branch:'2.0',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/ms1_fe',
+    tag:'2.0.4rc5',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'

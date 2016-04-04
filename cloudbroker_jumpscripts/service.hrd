@@ -2,10 +2,10 @@ dependencies.1                 =
     name:'agentcontroller',
 
 git.export.1                   =
-    branch:'2.0',
     dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/',
     link:'True',
     source:'libs/agent-scripts//*',
+    tag:'2.0.4rc5',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
