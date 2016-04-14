@@ -2,10 +2,10 @@ dependencies.1                 =
     name:'portal',
 
 git.export.1                   =
+    branch:'2.0',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:'True',
     source:'apps/vfw/base/*',
-    tag:'2.0.5rc2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
