@@ -23,7 +23,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'Windows 2012r2 Standard'
-        imagename = 'image_windows2012r2_standard_new.qcow2'
+        imagename = 'windows_2012_standardR2_new.qcow2'
         registerImage(serviceObj, name, imagename, 'Windows', 25, username="Cloudscalers")
 
 
