@@ -119,7 +119,7 @@ dependencies.9                 =
     domain:'openvcloud',
     name:'billingengine',
 
-git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+git.url                        = 'https://github.com/0-complexity/openvcloud.git'
 
 platform.supported             =
     'generic',

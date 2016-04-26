@@ -123,7 +123,7 @@ class Actions(ActionsBase):
 
     def build(self, serviceObj):
         go = j.atyourservice.getService(name='go')
-        go.actions.buildProjectGodep(go, 'https://git.aydo.com/0-complexity/vnaslb')
+        go.actions.buildProjectGodep(go, 'https://github.com/0-complexity/vnaslb')
         gopath = go.hrd.getStr('instance.gopath')
 
         binary = j.system.fs.joinPaths(gopath, 'bin', 'vnaslb')
