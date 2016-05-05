@@ -23,7 +23,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'Ubuntu 16.04 x64'
-        imagename = 'ubuntu-16.04.qcow2'
+        imagename = 'Ubuntu.1604.uefi.x64.qcow2'
         registerImage(serviceObj, name, imagename, 'Linux', 10)
 
 
