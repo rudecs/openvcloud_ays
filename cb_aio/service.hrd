@@ -110,14 +110,6 @@ dependencies.7                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.8                 =
-    domain:'openvcloud',
-    name:'billingenginelib',
-
-dependencies.9                 =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'billingengine',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
 

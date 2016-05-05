@@ -133,15 +133,6 @@ dependencies.7                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.8                 =
-    domain:'openvcloud',
-    name:'billingenginelib',
-
-dependencies.9                 =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'billingengine',
-
 git.export.1                   =
     branch:'2.1',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',

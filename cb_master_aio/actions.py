@@ -24,13 +24,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         import JumpScale.grid
         import JumpScale.portal
-        # set billing role
-        roles = j.application.config.getList('grid.node.roles')
         ovcEnvironment = serviceObj.hrd.get('instance.param.ovc.environment')
-        if 'billing' not in roles:
-            roles.append('billing')
-            j.application.config.set('grid.node.roles', roles)
-            j.atyourservice.get(name='jsagent', instance='main').restart()
 
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
