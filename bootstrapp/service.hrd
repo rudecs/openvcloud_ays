@@ -1,8 +1,8 @@
 git.export.1                   =
-    branch:'2.1',
     dest:'$(system.paths.base)/apps/bootstrapp',
     link:'True',
     source:'apps/bootstrapp/*',
+    tag:'2.1.0b3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
