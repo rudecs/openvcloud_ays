@@ -134,12 +134,12 @@ dependencies.7                 =
     name:'cloudbroker_jumpscripts',
 
 git.export.1                   =
+    branch:'2.1',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/ms1_fe',
-    tag:'2.1.0b4',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
