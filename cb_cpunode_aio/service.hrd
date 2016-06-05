@@ -118,12 +118,12 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
+    branch:'2.1',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/cpunode_aio',
-    tag:'2.1.0b9',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
