@@ -3,13 +3,13 @@
 # Summary
 |Milestone|ETA|
 |---------|---|
-|[ovc2.2](#milestone-ovc22)|0 seconds|
-|[ovc2.1_ga](#milestone-ovc21_ga)|0 seconds|
 |[ovc2.1_beta](#milestone-ovc21_beta)|0 seconds|
+|[ovc2.1_ga](#milestone-ovc21_ga)|0 seconds|
+|[ovc2.2](#milestone-ovc22)|0 seconds|
 |[ovc_backlog](#milestone-ovc_backlog)|0 seconds|
 |[No milestone](#no-milestone)|0 seconds|
 
-## [Milestone ovc2.2](milestones/3:ovc2.2.md)
+## [Milestone ovc2.1_beta](milestones/2:ovc2.1_beta.md)
 
 
 |Issue|Title|State|Owner|ETA|
@@ -21,7 +21,7 @@
 |Issue|Title|State|Owner|ETA|
 |-----|-----|-----|-----|---|
 
-## [Milestone ovc2.1_beta](milestones/2:ovc2.1_beta.md)
+## [Milestone ovc2.2](milestones/3:ovc2.2.md)
 
 
 |Issue|Title|State|Owner|ETA|
