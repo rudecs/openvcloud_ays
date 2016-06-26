@@ -23,7 +23,6 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'CentOS 7'
-        imagename = 'CentOS-7-x86_64-GenericCloud.qcow2'
-        registerImage(serviceObj, name, imagename, 'Linux', 10)
+        registerImage(serviceObj, name, 'Linux', 10)
 
 

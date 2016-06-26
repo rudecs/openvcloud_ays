@@ -23,5 +23,4 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'Desktop Environment'
-        imagename = 'awingu-2.3.1.qcow2'
-        registerImage(serviceObj, name, imagename, 'vDesktop', 80)
+        registerImage(serviceObj, name, 'vDesktop', 80)

@@ -23,7 +23,6 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'OpenWRT 14.07'
-        imagename = 'openwrt1407.qcow2'
-        registerImage(serviceObj, name, imagename, 'Linux', 10)
+        registerImage(serviceObj, name, 'Linux', 10)
 
 
