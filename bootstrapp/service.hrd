@@ -1,5 +1,5 @@
 git.export.1                   =
-    branch:'2.1',
+    branch:'tetris',
     dest:'$(system.paths.base)/apps/bootstrapp',
     link:'True',
     source:'apps/bootstrapp/*',

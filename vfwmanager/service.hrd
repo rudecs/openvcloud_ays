@@ -2,7 +2,7 @@ dependencies.1                 =
     name:'portal',
 
 git.export.1                   =
-    branch:'2.1',
+    branch:'tetris',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:'True',
     source:'apps/vfw/base/*',
