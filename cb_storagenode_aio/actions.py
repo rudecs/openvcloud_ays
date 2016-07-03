@@ -6,7 +6,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObject):
         roles = j.application.config.getList('grid.node.roles')
         change = False
-        for role in ['cpunode']:
+        for role in ['storagenode']:
             if role not in roles:
                 change = True
                 roles.append(role)

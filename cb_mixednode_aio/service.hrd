@@ -1,0 +1,133 @@
+dep.args.agentcontroller_client =
+    agentcontroller.client.addr:'$(instance.param.master.addr)',
+    agentcontroller.client.login:'node',
+    agentcontroller.client.passwd:,
+    agentcontroller.client.port:'4444',
+
+dep.args.jsagent               =
+    agentcontroller.connection:'main',
+    grid.id:'$(instance.param.grid.id)',
+    grid.node.roles:'node',
+
+dep.args.osis_client           =
+    param.osis.client.addr:'$(instance.param.master.addr)',
+    param.osis.client.login:'root',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
+    param.osis.client.port:'5544',
+
+dep.args.portal_client         =
+    openvcloud.supportemail:'support@greenitglobe.com',
+    param.addr:'$(instance.param.master.addr)',
+    param.port:'$(instance.param.master.port)',
+    param.secret:'$(instance.param.rootpasswd)',
+
+dep.args.redis                 =
+    param.disk:'0',
+    param.mem:'100',
+    param.passwd:,
+    param.port:'9999',
+    param.unixsocket:'0',
+
+dep.args.statsd-collector      =
+    statsd.master.host:'$(instance.param.master.addr)',
+
+dep.args.vfwnode               =
+    param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
+    vfw.admin.newpasswd:'$(instance.param.rootpasswd)',
+
+dep.args.vncproxy              =
+    param.portal.connection:'main',
+    param.vncproxy.publichostport:'$(instance.vnc.url)',
+
+dependencies.1                 =
+    args:'dep.args.redis',
+    instance:'system',
+    name:'redis',
+
+dependencies.10                =
+    domain:'openvcloud',
+    name:'compute_node',
+
+dependencies.11                =
+    args:'dep.args.vfwnode',
+    domain:'openvcloud',
+    name:'vfwnode',
+
+dependencies.12                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
+dependencies.13                =
+    args:'dep.args.statsd-collector',
+    name:'statsd-collector',
+
+dependencies.14                =
+    domain:'openvcloud',
+    name:'ovs_branding',
+
+dependencies.15                =
+    domain:'jumpscale',
+    name:'nginx',
+
+dependencies.16                =
+    args:'dep.args.vncproxy',
+    instance:'main',
+    name:'vncproxy',
+
+dependencies.17                =
+    instance:'main',
+    name:'ovs_health',
+
+dependencies.2                 =
+    domain:'openvcloud',
+    name:'compute_kvm_base',
+
+dependencies.3                 =
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+    name:'portal_client',
+
+dependencies.4                 =
+    args:'dep.args.portal_client',
+    instance:'main',
+    name:'portal_client',
+
+dependencies.5                 =
+    args:'dep.args.portal_client',
+    instance:'cbportal',
+    name:'portal_client',
+
+dependencies.6                 =
+    args:'dep.args.osis_client',
+    instance:'main',
+    name:'osis_client',
+
+dependencies.7                 =
+    args:'dep.args.osis_client',
+    instance:'jsagent',
+    name:'osis_client',
+
+dependencies.8                 =
+    args:'dep.args.agentcontroller_client',
+    instance:'main',
+    name:'agentcontroller_client',
+
+dependencies.9                 =
+    args:'dep.args.jsagent',
+    instance:'main',
+    name:'jsagent',
+
+git.export.1                   =
+    branch:'2.1',
+    dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
+    link:'False',
+    overwrite:'True',
+    revision:,
+    source:'apps/nginx/cpunode_aio',
+    url:'https://github.com/0-complexity/openvcloud.git',
+
+git.url                        = 'https://github.com/0-complexity/openvcloud.git'
+
+platform.supported             =
+    'generic',
+
