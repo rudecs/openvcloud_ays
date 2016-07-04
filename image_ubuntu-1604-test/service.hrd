@@ -1,0 +1,7 @@
+platform.supported             = 'generic'
+
+web.export.1                   =
+    checkmd5:'true',
+    dest:'/opt/jumpscale7/var/tmp/templates/image_ubuntu-1604-test',
+    source:'/Linux/ubuntu/ubuntu-1604.qcow2',
+    url:'ftp://pub:pub1234@ftp.aydo.com',
