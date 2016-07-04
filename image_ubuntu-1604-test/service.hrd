@@ -2,7 +2,7 @@ platform.supported             = 'generic'
 
 web.export.1                   =
     checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/ubuntu-1604.qcow2',
-    source:'/Linux/ubuntu/ubuntu-1604.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/ubuntu-16.04-test.qcow2',
+    source:'/Linux/ubuntu/ubuntu-16.04-test.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
 
