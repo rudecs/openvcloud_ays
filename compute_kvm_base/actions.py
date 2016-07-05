@@ -24,30 +24,3 @@ class Actions(ActionsBase):
         but this time test is done from central location
     """
 
-    def configure(self, service):
-        """
-        sed -r '/#?\s*user\s*=\s*"root"/{s//user = "ovs"/}'
-            /etc/libvirt/qemu.conf
-        """
-
-        assert j.system.unix.unixUserExists('ovs'), '"ovs" user does not exist'
-        assert j.system.unix.unixGroupExists('kvm'), \
-            '"kvm" group does not exist"'
-
-        # make sure that quemu user is ovs, not root
-        sed = 'sed -r -i.bak \'/#?\s*user\s*=\s*"root"/{s//user = "ovs"/}\' ' \
-            '/etc/libvirt/qemu.conf'
-
-        j.system.process.execute(sed)
-
-        # make sure that quemu user is ovs, not root
-        sed = 'sed -r -i.bak \'/#?\s*group\s*=.+/{s//group = "ovs"/}\' ' \
-            '/etc/libvirt/qemu.conf'
-
-        j.system.process.execute(sed)
-
-        # add ovs user to kvm group
-        j.system.unix.addUserToGroup('ovs', 'kvm')
-
-        # restart libvirt
-        j.system.process.execute('/etc/init.d/libvirt-bin restart')
