@@ -83,6 +83,10 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
+dependencies.12                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
 platform.supported             =
     'generic',
 
