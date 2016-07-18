@@ -275,18 +275,13 @@ class Actions(ActionsBase):
             'instance.master.ipadress': masterip,
             'instance.dcpm.ipadress': dcpmip,
             'instance.dcpm.port': dcpmPort,
-            'instance.reflector.ipadress': 'REMOVE ME',
-            
+
             'instance.bootstrapp.servername': servers['boot'],
             'instance.ovs.servername': servers['ovs'],
             'instance.defense.servername': servers['defense'],
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
             'instance.dcpm.servername': servers['dcpm'],
-            
-            'instance.generated.defense': 'server 127.0.0.1;',
-            'instance.generated.novnc': 'server 127.0.0.1;',
-            'instance.generated.ovs': 'server 127.0.0.1;',
             
             'instance.ssl.root': ssl['root'],
             'instance.ssl.ovs': ssl['ovs'],
