@@ -10,6 +10,7 @@ git.export.1                   =
     dest:'/opt/nginx/cfg/sites-enabled/ovc',
     link:'False',
     source:'ovc',
+    branch:'2.1',
     url:'https://git.aydo.com/binary/openvcloud_ssloffloader/',
 
 git.export.2                   =
