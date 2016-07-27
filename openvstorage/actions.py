@@ -97,7 +97,7 @@ class Actions(ActionsBase):
         # custom kernel settings
         sysfile = '/etc/sysctl.d/20-openvstorage.conf'
         size = 128 * 1024 * 1024
-        swap = 5
+        swap = 1
         
         j.system.fs.writeFile(sysfile, "\n# ovs-tuning\n", True)
         j.system.fs.writeFile(sysfile, "vm.dirty_background_bytes = %d\n" % size, True)
