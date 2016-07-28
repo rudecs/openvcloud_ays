@@ -98,10 +98,14 @@ class Actions(ActionsBase):
         sysfile = '/etc/sysctl.d/20-openvstorage.conf'
         size = 128 * 1024 * 1024
         swap = 1
-        
+        tcp_wmem = "8192\t32768\t8388608"
+        tcp_rmem = "8192\t32768\t8388608"
+
         j.system.fs.writeFile(sysfile, "\n# ovs-tuning\n", True)
         j.system.fs.writeFile(sysfile, "vm.dirty_background_bytes = %d\n" % size, True)
         j.system.fs.writeFile(sysfile, "vm.swappiness = %d\n" % swap, True)
+        j.system.fs.writeFile(sysfile, "net.ipv4.tcp_wmem = %s\n" % tcp_wmem, True)
+        j.system.fs.writeFile(sysfile, "net.ipv4.tcp_rmem = %s\n" % tcp_rmem, True)
 
         j.system.process.execute('sysctl --system')
 
