@@ -3,6 +3,7 @@ git.export.1                   =
     dest:'/opt/OpenvStorage-healthcheck/',
     link:'True',
     source:'*',
+    branch:'eugene-updates',
     url:'https://github.com/openvstorage/openvstorage-health-check.git',
 
 git.url                        = 'https://github.com/openvstorage/openvstorage-health-check.git'
