@@ -115,6 +115,10 @@ dependencies.20                =
     domain:'openvcloud',
     name:'portal_branding',
 
+dependencies.21                =
+    domain:'openvcloud',
+    name:'g8vdc',
+
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
