@@ -37,7 +37,7 @@ class Actions(ActionsBase):
                     'scope': 'admin',
                     'theme': 'light',
                     },
-                'wiki_gcb': {
+                'vdc': {
                     'name': 'End User',
                     'url': portalurl,
                     'scope': 'user',
@@ -80,7 +80,7 @@ class Actions(ActionsBase):
         for linkid, data in portallinks.iteritems():
             if data['url']:
                 portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
-        portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
+        portal.hrd.set('instance.param.cfg.defaultspace', 'vdc')
         portal.hrd.set('instance.param.cfg.force_oauth_instance', 'oauth')
         portal.start()
 
