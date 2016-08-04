@@ -32,7 +32,21 @@ class Actions(ActionsBase):
         this step is used to do configuration steps to the platform
         after this step the system will try to start the jpackage if anything needs to be started
         """
-        serviceObj.hrd.applyOnFile("/opt/nginx/cfg/sites-enabled/ovc")
+        data = {}
+        locations = {}
+        for locationkey in serviceObj.hrd.prefix('instance.generated'):
+            location = locationkey.split('.')[-1]
+            locations[location] = serviceObj.hrd.getList(locationkey)
+        data['locations'] = locations
+        data['master'] = serviceObj.hrd.getDictFromPrefix('instance.master')
+        data['dcpm'] = serviceObj.hrd.getDictFromPrefix('instance.dcpm')
+        data['ssl'] = serviceObj.hrd.getDictFromPrefix('instance.ssl')
+        data['host'] = serviceObj.hrd.getStr('instance.host')
+        data['domain'] = serviceObj.hrd.getStr('instance.domain')
+        import jinja2
+        config = "/opt/nginx/cfg/sites-enabled/ovc"
+        template = jinja2.Template(j.system.fs.fileGetContents(config))
+        j.system.fs.writeFile(config, template.render(**data))
         nginx = j.atyourservice.get(name='nginx', instance='main')
         nginx.restart()
         return True

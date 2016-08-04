@@ -472,6 +472,7 @@ class Actions(ActionsBase):
         # Theses files are generated on the master and not synced back to ovcgit
         self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
         self.copyBack('ovc_master', 'jumpscale__portal__main')
+        self.copyBack('ovc_master', 'openvcloud__oauthserver__main')
 
     def initDCPMVM(self, spacesecret, repoPath, delete=False):
         """
