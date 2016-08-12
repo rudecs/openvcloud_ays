@@ -90,3 +90,6 @@ dependencies.12                =
 platform.supported             =
     'generic',
 
+ubuntu.packages                =
+    'genisoimage',
+
