@@ -23,7 +23,6 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'kipod'
-        imagename = 'kipod.qcow2'
-        registerImage(serviceObj, name, imagename, 'kipod', 250)
+        registerImage(serviceObj, name, 'kipod', 250)
 
 
