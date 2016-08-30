@@ -129,6 +129,10 @@ dependencies.22                =
     instance:'itsyouonline',
     args:'dep.args.jwt_client,'
 
+dependencies.23                 =
+    domain:'openvcloud',
+    name:'selfhealing_jumpscripts',
+
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
