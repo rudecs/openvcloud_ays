@@ -43,10 +43,6 @@ server {
         proxy_set_header        X-Real-IP       $remote_addr;
     }
 
-    location ~ /rest(ext|extmachine|machine)*/libcloud {
-        return 404;
-    }
-
     location /jslib {
         expires 5m;
         add_header Pragma public;
