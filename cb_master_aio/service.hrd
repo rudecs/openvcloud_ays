@@ -11,6 +11,10 @@ dep.args.mailclient            =
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
 
+dep.args.jwt_client            =
+    jwt.secret:'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAES5X8XrfKdx9gYayFITc89wad4usrk0n27MjiGYvqalizeSWTHEpnd7oea9IQ8T5oJjMVH5cc0H5tFSKilFFeh//wngxIyny66+Vq5t5B0V0Ehy01+2ceEon2Y0XDkIKv',
+    jwt.algo:'ES384',
+
 dep.args.oauthclient           =
     oauth.client.id:'portal',
     oauth.client.logout_url:'$(instance.param.portal.url)/logout',
@@ -119,6 +123,12 @@ dependencies.21                =
     domain:'openvcloud',
     name:'g8vdc',
 
+dependencies.22                =
+    domain:'jumpscale',
+    name:'jwt_client',
+    instance:'itsyouonline',
+    args:'dep.args.jwt_client,'
+
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
@@ -153,4 +163,3 @@ platform.supported             =
 
 ubuntu.packages                =
     'ntp ethtool',
-

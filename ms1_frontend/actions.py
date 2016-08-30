@@ -55,6 +55,19 @@ server {
         root $(system.paths.base)/apps/portals/jslib/;
     }
 
+    location /g8vdc/ {
+        expires 5m;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        index /g8vdc/index.html;
+        rewrite /g8vdc/(.*) /$1 break;
+        root /opt/jumpscale7/apps/g8vdc/;
+     }
+
+     location ~ ^/g8vdc$ {
+        return 301 $scheme://$host$request_uri/;
+     }
+
 
     location /wiki_gcb/.files {
         expires 5m;
