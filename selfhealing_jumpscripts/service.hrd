@@ -1,0 +1,11 @@
+dependencies.1                 =
+    name:'agentcontroller',
+
+git.export.1                   =
+    branch:'master',
+    dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/',
+    link:'True',
+    source:'jumpscripts/*',
+    url:'https://github.com/0-complexity/selfhealing.git',
+
+platform.supported             = 'generic'
