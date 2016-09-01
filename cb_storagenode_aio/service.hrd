@@ -44,10 +44,6 @@ dependencies.14                =
     domain:'openvcloud',
     name:'ovs_branding',
 
-dependencies.17                =
-    instance:'main',
-    name:'ovs_health',
-
 dependencies.3                 =
     args:'dep.args.portal_client',
     instance:'cloudbroker',
@@ -89,4 +85,3 @@ dependencies.12                =
 
 platform.supported             =
     'generic',
-

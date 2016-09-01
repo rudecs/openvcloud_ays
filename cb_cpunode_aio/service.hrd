@@ -74,10 +74,6 @@ dependencies.16                =
     instance:'main',
     name:'vncproxy',
 
-dependencies.17                =
-    instance:'main',
-    name:'ovs_health',
-
 dependencies.2                 =
     domain:'openvcloud',
     name:'compute_kvm_base',
@@ -130,4 +126,3 @@ git.url                        = 'https://github.com/0-complexity/openvcloud.git
 
 platform.supported             =
     'generic',
-
