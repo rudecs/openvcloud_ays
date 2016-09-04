@@ -87,6 +87,20 @@ dependencies.12                =
     domain:'openvcloud',
     name:'libcloudlibvirt',
 
+dependencies.13                =
+        domain:'jumpscale',
+        name:'nginx',
+
+git.export.1                   =
+        branch:'2.1.5',
+        dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
+        link:'False',
+        overwrite:'True',
+        revision:,
+        source:'apps/nginx/cpunode_aio',
+        url:'https://github.com/0-complexity/openvcloud.git',
+
+
 platform.supported             =
     'generic',
 

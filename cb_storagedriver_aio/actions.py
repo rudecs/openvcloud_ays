@@ -1,6 +1,7 @@
 from JumpScale import j
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     def configure(self, serviceObject):
@@ -14,4 +15,4 @@ class Actions(ActionsBase):
             j.application.config.set('grid.node.roles', roles)
             j.atyourservice.get(name='jsagent', instance='main').restart()
 
-
+        j.atyourservice.get(name='nginx').restart()
