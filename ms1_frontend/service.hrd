@@ -5,7 +5,7 @@ dependencies.2                 =
     name:'nginx',
 
 git.export.1                   =
-    branch:'tetris',
+    branch:'2.1.5',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:'True',
     source:'apps/ms1_fe/base/*',

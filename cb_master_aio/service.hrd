@@ -152,7 +152,7 @@ dependencies.7                 =
     name:'cloudbroker_jumpscripts',
 
 git.export.1                   =
-    branch:'tetris',
+    branch:'2.1.5',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',

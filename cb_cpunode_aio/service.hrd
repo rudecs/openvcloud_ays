@@ -114,7 +114,7 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'tetris',
+    branch:'2.1.5',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
