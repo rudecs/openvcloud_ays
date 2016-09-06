@@ -1,6 +1,7 @@
 from JumpScale import j
 from ConfigParser import SafeConfigParser
 import cStringIO as StringIO
+from urlparse import urlparse
 
 ActionsBase=j.atyourservice.getActionsBaseClass()
 
@@ -144,7 +145,8 @@ class Actions(ActionsBase):
         portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
         oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
 
-        #configure grafana for oauth
+        # configure grafana for oauth
+        parsed_url = urlparse(portalurl)
         grafana = j.atyourservice.get(name='grafana')
         grafanaSecret = oauthServerHRD.get('instance.oauth.clients.grafana.secret')
         grafana.stop()
@@ -154,6 +156,7 @@ class Actions(ActionsBase):
         parser = SafeConfigParser()
         parser.readfp(fp)
         parser.set('server', 'root_url', '%s/grafana' % portalurl)
+        parser.set('server', 'domain', parsed_url.hostname)
         parser.set('users', 'auto_assign_org_role', 'Editor')
         parser.set('auth.github', 'enabled', 'true')
         parser.set('auth.github', 'allow_sign_up', 'true')
@@ -169,5 +172,3 @@ class Actions(ActionsBase):
         content = fpout.getvalue().replace('[global]', '')
         j.system.fs.writeFile(cfgfile, content)
         grafana.start()
-
-
