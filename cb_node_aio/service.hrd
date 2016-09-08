@@ -31,27 +31,10 @@ dep.args.redis                 =
 dep.args.statsd-collector      =
     statsd.master.host:'$(instance.param.master.addr)',
 
-dep.args.vfwnode               =
-    param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
-    vfw.admin.newpasswd:'$(instance.param.rootpasswd)',
-
-dep.args.vncproxy              =
-    param.portal.connection:'main',
-    param.vncproxy.publichostport:'$(instance.vnc.url)',
-
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
-
-dependencies.10                =
-    domain:'openvcloud',
-    name:'compute_node',
-
-dependencies.11                =
-    args:'dep.args.vfwnode',
-    domain:'openvcloud',
-    name:'vfwnode',
 
 dependencies.12                =
     domain:'openvcloud',
@@ -65,18 +48,9 @@ dependencies.14                =
     domain:'openvcloud',
     name:'ovs_branding',
 
-dependencies.15                =
-    domain:'jumpscale',
-    name:'nginx',
-
-dependencies.16                =
-    args:'dep.args.vncproxy',
+dependencies.17                =
     instance:'main',
-    name:'vncproxy',
-
-dependencies.2                 =
-    domain:'openvcloud',
-    name:'compute_kvm_base',
+    name:'ovs_health',
 
 dependencies.3                 =
     args:'dep.args.portal_client',
@@ -112,17 +86,6 @@ dependencies.9                 =
     args:'dep.args.jsagent',
     instance:'main',
     name:'jsagent',
-
-git.export.1                   =
-    dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
-    link:'False',
-    overwrite:'True',
-    revision:,
-    source:'apps/nginx/cpunode_aio',
-    tag:'2.1.5b3',
-    url:'https://github.com/0-complexity/openvcloud.git',
-
-git.url                        = 'https://github.com/0-complexity/openvcloud.git'
 
 platform.supported             =
     'generic',

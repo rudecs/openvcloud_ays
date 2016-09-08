@@ -36,9 +36,13 @@ dependencies.1                 =
     instance:'system',
     name:'redis',
 
+dependencies.12                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
 dependencies.13                =
-    args:'dep.args.statsd-collector',
-    name:'statsd-collector',
+    domain:'jumpscale',
+    name:'nginx',
 
 dependencies.14                =
     domain:'openvcloud',
@@ -83,23 +87,14 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.12                =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
-dependencies.13                =
-        domain:'jumpscale',
-        name:'nginx',
-
 git.export.1                   =
-        branch:'2.1.5',
-        dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
-        link:'False',
-        overwrite:'True',
-        revision:,
-        source:'apps/nginx/cpunode_aio',
-        url:'https://github.com/0-complexity/openvcloud.git',
-
+    dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
+    link:'False',
+    overwrite:'True',
+    revision:,
+    source:'apps/nginx/cpunode_aio',
+    tag:'2.1.5b3',
+    url:'https://github.com/0-complexity/openvcloud.git',
 
 platform.supported             =
     'generic',
@@ -107,3 +102,4 @@ platform.supported             =
 ubuntu.packages                =
     'genisoimage',
     'qemu-utils',
+

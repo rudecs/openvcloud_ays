@@ -36,6 +36,10 @@ dependencies.1                 =
     instance:'system',
     name:'redis',
 
+dependencies.12                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
 dependencies.13                =
     args:'dep.args.statsd-collector',
     name:'statsd-collector',
@@ -79,9 +83,6 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.12                =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
 platform.supported             =
     'generic',
+

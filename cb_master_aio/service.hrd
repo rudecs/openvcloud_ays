@@ -4,16 +4,16 @@ dep.args.cloudborker           =
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
+dep.args.jwt_client            =
+    jwt.algo:'ES384',
+    jwt.secret:'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAES5X8XrfKdx9gYayFITc89wad4usrk0n27MjiGYvqalizeSWTHEpnd7oea9IQ8T5oJjMVH5cc0H5tFSKilFFeh//wngxIyny66+Vq5t5B0V0Ehy01+2ceEon2Y0XDkIKv',
+
 dep.args.mailclient            =
     smtp.login:'$(instance.param.smtp.login)',
     smtp.passwd:'$(instance.param.smtp.passwd)',
     smtp.port:'$(instance.param.smtp.port)',
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
-
-dep.args.jwt_client            =
-    jwt.secret:'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAES5X8XrfKdx9gYayFITc89wad4usrk0n27MjiGYvqalizeSWTHEpnd7oea9IQ8T5oJjMVH5cc0H5tFSKilFFeh//wngxIyny66+Vq5t5B0V0Ehy01+2ceEon2Y0XDkIKv',
-    jwt.algo:'ES384',
 
 dep.args.oauthclient           =
     oauth.client.id:'portal',
@@ -124,12 +124,12 @@ dependencies.21                =
     name:'g8vdc',
 
 dependencies.22                =
+    args:'dep.args.jwt_client,',
     domain:'jumpscale',
-    name:'jwt_client',
     instance:'itsyouonline',
-    args:'dep.args.jwt_client,'
+    name:'jwt_client',
 
-dependencies.23                 =
+dependencies.23                =
     domain:'openvcloud',
     name:'selfhealing_jumpscripts',
 
@@ -152,12 +152,12 @@ dependencies.7                 =
     name:'cloudbroker_jumpscripts',
 
 git.export.1                   =
-    branch:'2.1.5',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/ms1_fe',
+    tag:'2.1.5b3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
@@ -167,3 +167,4 @@ platform.supported             =
 
 ubuntu.packages                =
     'ntp ethtool',
+

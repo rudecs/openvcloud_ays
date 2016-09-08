@@ -1,0 +1,5 @@
+ovc.environment = @ASK type:str descr:'environment name'
+itsyouonline.secret = @ASK type:str descr:'ItsYouOnline secret'
+itsyouonline.orgname = @ASK type:str descr:'ItsYouOnline organization name'
+itsyouonline.client_id = @ASK type:str descr:'ItsYouOnline clientid'
+
