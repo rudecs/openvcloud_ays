@@ -2,6 +2,7 @@ from JumpScale import j
 from ConfigParser import SafeConfigParser
 import cStringIO as StringIO
 from urlparse import urlparse
+import json
 
 ActionsBase=j.atyourservice.getActionsBaseClass()
 
@@ -164,3 +165,14 @@ class Actions(ActionsBase):
         content = fpout.getvalue().replace('[global]', '')
         j.system.fs.writeFile(cfgfile, content)
         grafana.start()
+
+        # import OVS graphs
+        gcl = j.clients.grafana.get(username='', password='')
+        dest = j.do.pullGitRepo(url='https://github.com/openvstorage/openvstorage-monitoring.git')
+        dashboards_dir = j.system.fs.joinPaths(dest, 'roles/grafana/files/dashboards')
+        for path in j.system.fs.listFilesInDir(path=dashboards_dir, filter='*.json'):
+            print "add %s dashboard to grafana" % j.system.fs.getBaseName(path)
+            dashboard = j.system.fs.fileGetContents(path)
+            db = json.loads(dashboard)
+            db['id'] = None
+            print gcl.updateDashboard(db)
