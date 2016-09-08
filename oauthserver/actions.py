@@ -52,10 +52,6 @@ class Actions(ActionsBase):
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("instance.oauth.clients.grafana.secret", clientsecret)
-
-        binarysecret = os.urandom(32)
-        clientsecret = base64.urlsafe_b64encode(binarysecret)
         serviceObj.hrd.set("instance.oauth.clients.safekeeper.secret", clientsecret)
 
         serviceObj.hrd.applyOnFile("$(system.paths.base)/apps/oauthserver/clients.toml")

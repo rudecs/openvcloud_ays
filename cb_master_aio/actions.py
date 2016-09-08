@@ -148,7 +148,6 @@ class Actions(ActionsBase):
         # configure grafana for oauth
         parsed_url = urlparse(portalurl)
         grafana = j.atyourservice.get(name='grafana')
-        grafanaSecret = oauthServerHRD.get('instance.oauth.clients.grafana.secret')
         grafana.stop()
         cfgfile = '/opt/grafana/conf/defaults.ini'
         cfgcontent = j.system.fs.fileGetContents(cfgfile)
@@ -158,15 +157,8 @@ class Actions(ActionsBase):
         parser.set('server', 'root_url', '%s/grafana' % portalurl)
         parser.set('server', 'domain', parsed_url.hostname)
         parser.set('users', 'auto_assign_org_role', 'Editor')
-        parser.set('auth.github', 'enabled', 'true')
-        parser.set('auth.github', 'allow_sign_up', 'true')
-        parser.set('auth.github', 'client_id', 'grafana')
-        parser.set('auth.github', 'client_secret', grafanaSecret)
-        parser.set('auth.github', 'scopes', 'admin')
-        parser.set('auth.github', 'auth_url', '%s/login/oauth/authorize' % portalurl)
-        parser.set('auth.github', 'token_url', 'http://127.0.0.1:8010/login/oauth/access_token')
-        parser.set('auth.github', 'api_url', 'http://127.0.0.1:8010/user')
-
+        parser.set('auth.anonymous', 'enabled', True)
+        parser.set('auth.anonymous', 'org_role', 'Admin')
         fpout = StringIO.StringIO()
         parser.write(fpout)
         content = fpout.getvalue().replace('[global]', '')
