@@ -167,9 +167,8 @@ class Actions(ActionsBase):
         grafana.start()
 
         # import OVS graphs
-        gcl = j.clients.grafana.get(username='', password='')
-        dest = j.do.pullGitRepo(url='https://github.com/openvstorage/openvstorage-monitoring.git')
-        dashboards_dir = j.system.fs.joinPaths(dest, 'roles/grafana/files/dashboards')
+        gcl = j.clients.grafana.getByInstance('main')
+        dashboards_dir = '/opt/grafana/dashboards'
         for path in j.system.fs.listFilesInDir(path=dashboards_dir, filter='*.json'):
             print "add %s dashboard to grafana" % j.system.fs.getBaseName(path)
             dashboard = j.system.fs.fileGetContents(path)
