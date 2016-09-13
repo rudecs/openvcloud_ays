@@ -158,7 +158,7 @@ class Actions(ActionsBase):
         parser.set('server', 'root_url', '%s/grafana' % portalurl)
         parser.set('server', 'domain', parsed_url.hostname)
         parser.set('users', 'auto_assign_org_role', 'Editor')
-        parser.set('auth.anonymous', 'enabled', True)
+        parser.set('auth.anonymous', 'enabled', 'true')
         parser.set('auth.anonymous', 'org_role', 'Admin')
         fpout = StringIO.StringIO()
         parser.write(fpout)
