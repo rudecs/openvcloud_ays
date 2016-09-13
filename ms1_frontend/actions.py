@@ -31,56 +31,5 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         service = j.atyourservice.findServices('jumpscale', 'portal', 'main')[0]
         service.restart()
-
-        nginxcfg = '''
-server {
-    listen 80 default_server;
-    gzip on;
-    gzip_static always;
-
-    location / {
-        proxy_pass http://127.0.0.1:82;
-        proxy_set_header        X-Real-IP       $remote_addr;
-    }
-
-    location ~ /rest(ext|extmachine|machine)*/libcloud {
-        return 404;
-    }
-
-    location /jslib {
-        expires 5m;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
-        rewrite /jslib/(.*) /$1 break;
-        root $(system.paths.base)/apps/portals/jslib/;
-    }
-
-    location /g8vdc/ {
-        expires 5m;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
-        index /g8vdc/index.html;
-        rewrite /g8vdc/(.*) /$1 break;
-        root /opt/jumpscale7/apps/g8vdc/;
-     }
-
-     location ~ ^/g8vdc$ {
-        return 301 $scheme://$host$request_uri/;
-     }
-
-
-    location /wiki_gcb/.files {
-        expires 5m;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
-        rewrite /wiki_gcb/.files/(.*) /$1 break;
-        root $(system.paths.base)/apps/portals/main/base/wiki_gcb/.files/;
-    }
-
-}
-        '''
-        j.system.fs.createDir('/opt/nginx/cfg/sites-enabled')
-        j.system.fs.writeFile('/opt/nginx/cfg/sites-enabled/ms1_fe', nginxcfg)
-
         service = j.atyourservice.findServices('jumpscale', 'nginx', 'main')[0]
         service.restart()
