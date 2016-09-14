@@ -4,6 +4,7 @@ ActionsBase = j.atyourservice.getActionsBaseClass()
 
 
 class Actions(ActionsBase):
+
     """
     process for install
     -------------------
@@ -25,31 +26,22 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
-        
+
         if serviceObj.hrd.get('instance.oauth.id') != '':
             # setting up ovs.json
-            config = None
-
-            with open('/opt/OpenvStorage/config/ovs.json', 'r') as f:
-                config = json.load(f)
-                
-                # oauth2 stuff
-                oauth = {
-                    'mode': 'remote',
-                    'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
-                    'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
-                    'client_id': serviceObj.hrd.get('instance.oauth.id'),
-                    'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
-                    'scope': 'ovs_admin'
-                }
-                
-                config['webapps']['oauth2'] = oauth
-                
-                # register stuff
-                config['core']['registered'] = True
+            config = {'oauth2':
+                      {
+                        'mode': 'remote',
+                        'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
+                        'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
+                        'client_id': serviceObj.hrd.get('instance.oauth.id'),
+                        'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
+                        'scope': 'ovs_admin'
+                        }
+                    }
 
             with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
                 json.dump(config, f, indent=4)
-        
+
         j.do.execute('restart ovs-webapp-api')
         return True

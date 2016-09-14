@@ -94,11 +94,11 @@ dependencies.13                =
 
 git.export.1                   =
         branch:'2.1.5',
-        dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
+        dest:'/opt/nginx/cfg/sites-enabled/storagedriver_aio',
         link:'False',
         overwrite:'True',
         revision:,
-        source:'apps/nginx/cpunode_aio',
+        source:'apps/nginx/storagedriver_aio',
         url:'https://github.com/0-complexity/openvcloud.git',
 
 
