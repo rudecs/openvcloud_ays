@@ -27,6 +27,7 @@ dep.args.redis                 =
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
+    param.ip:'0.0.0.0',
 
 dep.args.statsd-collector      =
     statsd.master.host:'$(instance.param.master.addr)',
