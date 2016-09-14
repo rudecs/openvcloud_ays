@@ -127,7 +127,7 @@ dependencies.22                =
     domain:'jumpscale',
     name:'jwt_client',
     instance:'itsyouonline',
-    args:'dep.args.jwt_client,'
+    args:'dep.args.jwt_client',
 
 dependencies.23                 =
     domain:'openvcloud',
