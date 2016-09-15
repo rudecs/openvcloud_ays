@@ -12,6 +12,7 @@ class Actions(ActionsBase):
             j.system.platform.ubuntu.generateLocalSSHKeyPair(passphrase='', type='rsa', overwrite=False, path=keyapth)
 
         source = j.system.net.getReachableIpAddress('$(instance.bootstrapp.addr)', 5000)
+        endpoint = 'http://$(instance.bootstrapp.addr):$(instance.bootstrapp.port)'
 
         hostname = j.system.net.getHostname()
         data = {
@@ -23,7 +24,7 @@ class Actions(ActionsBase):
         }
 
         # make request to the bootstrapp
-        resp = requests.post('$(instance.bootstrapp.addr)', json=data)
+        resp = requests.post(endpoint, json=data)
         if resp.status_code < 200 or resp.status_code > 299:
             msg = resp.json()['message']
             j.events.opserror_critical(msg, category='bootstrap_node')
