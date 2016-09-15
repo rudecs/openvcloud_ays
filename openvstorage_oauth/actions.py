@@ -37,7 +37,8 @@ class Actions(ActionsBase):
                 import etcd
                 setdata = etcd.Client(port=2379).set
             # setting up ovs.json
-            config = {'oauth2':
+            config = {"html_endpoint": "/",
+                      'oauth2':
                       {
                           'mode': 'remote',
                           'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),

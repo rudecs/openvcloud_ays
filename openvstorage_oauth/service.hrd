@@ -1,10 +1,2 @@
-git.export.1                   =
-    branch:'kvmfix',
-    dest:'/opt/openvstorage',
-    link:'False',
-    source:'openvstorage/',
-    url:'http://git.aydo.com/binary/openvstorage',
-
-git.url                        = 'http://git.aydo.com/binary/openvstorage'
 
 platform.supported             = 'linux64'
