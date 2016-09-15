@@ -26,22 +26,28 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         j.do.execute('''sed -i.bak "s/^ALLOWED_HOSTS.*$/ALLOWED_HOSTS = ['*']/" %s''' % self.DJANGO_SETTINGS)
-
         if serviceObj.hrd.get('instance.oauth.id') != '':
+            import sys
+            sys.path.append('/opt/OpenvStorage')
+            try:
+                from ovs.extensions.generic.configuration import Configuration
+                import functools
+                setdata = functools.partial(Configuration.set, raw=True)
+            except ImportError:
+                import etcd
+                setdata = etcd.Client(port=2379).set
             # setting up ovs.json
             config = {'oauth2':
                       {
-                        'mode': 'remote',
-                        'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
-                        'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
-                        'client_id': serviceObj.hrd.get('instance.oauth.id'),
-                        'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
-                        'scope': 'ovs_admin'
-                        }
-                    }
-
-            with open('/opt/OpenvStorage/config/ovs.json', 'w') as f:
-                json.dump(config, f, indent=4)
+                          'mode': 'remote',
+                          'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
+                          'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
+                          'client_id': serviceObj.hrd.get('instance.oauth.id'),
+                          'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
+                          'scope': 'ovs_admin'
+                      }
+                      }
+            setdata('/ovs/framework/webapps', json.dumps(config))
 
         j.do.execute('restart ovs-webapp-api')
         return True
