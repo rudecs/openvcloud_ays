@@ -127,7 +127,7 @@ dependencies.22                =
     domain:'jumpscale',
     name:'jwt_client',
     instance:'itsyouonline',
-    args:'dep.args.jwt_client,'
+    args:'dep.args.jwt_client',
 
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
