@@ -171,7 +171,7 @@ git.export.2                   =
 
 git.export.3                   =
     branch:'master',
-    dest:'/opt/grafana/dashboards/data/plugins',
+    dest:'/opt/grafana/data/plugins/piechart-panel',
     link:'True',
     overwrite:'True',
     revision:,
