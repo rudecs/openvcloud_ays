@@ -28,12 +28,37 @@ class Actions(ActionsBase):
         # import OVS graphs
         datasourceip = serviceObj.hrd.get('instance.datasource.ip')
         datasourceport = serviceObj.hrd.get('instance.datasource.port')
-        datasourcename = serviceObj.hrd.get('instance.datasource.name')
+        datasourcename = 'controller_{}'.format(serviceObj.instance)
         gcl = j.clients.grafana.getByInstance('main')
+        # add datasource
+        for datasource in gcl.listDateSources():
+            if datasource['name'] == datasourcename:
+                break
+        else:
+            datasource = {'access': 'proxy',
+                          'basicAuth': False,
+                          'basicAuthPassword': '',
+                          'basicAuthUser': '',
+                          'database': 'main',
+                          'id': 1,
+                          'isDefault': False,
+                          'name': datasourcename,
+                          'orgId': 1,
+                          'password': 'root',
+                          'type': 'influxdb',
+                          'typeLogoUrl': 'public/app/plugins/datasource/influxdb/img/influxdb_logo.svg',
+                          'url': 'http://{}:{}'.format(datasourceip, datasourceport),
+                          'user': 'root',
+                          'withCredentials': False}
+            gcl.addDatasource(datasource)
+
         dashboards_dir = '/opt/grafana/dashboards'
         for path in j.system.fs.listFilesInDir(path=dashboards_dir, filter='*.json'):
             print("add %s dashboard to grafana" % j.system.fs.getBaseName(path))
             dashboard = j.system.fs.fileGetContents(path)
             db = json.loads(dashboard)
             db['id'] = None
+            for row in db['rows']:
+                for panel in row['panels']:
+                    panel['datasource'] = datasourcename
             print(gcl.updateDashboard(db))
