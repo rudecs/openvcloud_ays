@@ -75,11 +75,6 @@ dependencies.12                =
     domain:'openvcloud',
     name:'cloudbroker',
 
-dependencies.13                =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'ms1_frontend',
-
 dependencies.14                =
     args:'dep.args.portal',
     domain:'openvcloud',
