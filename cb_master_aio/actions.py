@@ -4,7 +4,8 @@ import cStringIO as StringIO
 from urlparse import urlparse
 import json
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     """
@@ -24,8 +25,6 @@ class Actions(ActionsBase):
     """
 
     def configure(self, serviceObj):
-        import JumpScale.grid
-        import JumpScale.portal
         ovcEnvironment = serviceObj.hrd.get('instance.param.ovc.environment')
 
         # set navigation
@@ -118,7 +117,7 @@ class Actions(ActionsBase):
         # register networks
         start = 201
         end = 250
-        j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start,end)
+        j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start, end)
         # sync images
         j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
         j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
@@ -136,7 +135,7 @@ class Actions(ActionsBase):
             pool.id = network
             pool.subnetmask = netmask
             pool.gateway = gateway
-            pubips = [ str(ip) for ip in netaddr.IPRange(start, end) ]
+            pubips = [str(ip) for ip in netaddr.IPRange(start, end)]
             pool.pubips = pubips
             pool.network = str(netip.network)
             ccl.publicipv4pool.set(pool)
@@ -165,13 +164,3 @@ class Actions(ActionsBase):
         content = fpout.getvalue().replace('[global]', '')
         j.system.fs.writeFile(cfgfile, content)
         grafana.start()
-
-        # import OVS graphs
-        gcl = j.clients.grafana.getByInstance('main')
-        dashboards_dir = '/opt/grafana/dashboards'
-        for path in j.system.fs.listFilesInDir(path=dashboards_dir, filter='*.json'):
-            print "add %s dashboard to grafana" % j.system.fs.getBaseName(path)
-            dashboard = j.system.fs.fileGetContents(path)
-            db = json.loads(dashboard)
-            db['id'] = None
-            print gcl.updateDashboard(db)

@@ -27,60 +27,12 @@ dep.args.redis                 =
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
-
-dep.args.statsd-collector      =
-    statsd.master.host:'$(instance.param.master.addr)',
-
-dep.args.vfwnode               =
-    param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
-    vfw.admin.newpasswd:'$(instance.param.rootpasswd)',
-
-dep.args.vncproxy              =
-    param.portal.connection:'main',
-    param.vncproxy.publichostport:'$(instance.vnc.url)',
+    param.ip:'0.0.0.0',
 
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
-
-dependencies.10                =
-    domain:'openvcloud',
-    name:'compute_node',
-
-dependencies.11                =
-    args:'dep.args.vfwnode',
-    domain:'openvcloud',
-    name:'vfwnode',
-
-dependencies.12                =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
-dependencies.13                =
-    args:'dep.args.statsd-collector',
-    name:'statsd-collector',
-
-dependencies.14                =
-    domain:'openvcloud',
-    name:'ovs_branding',
-
-dependencies.15                =
-    domain:'jumpscale',
-    name:'nginx',
-
-dependencies.16                =
-    args:'dep.args.vncproxy',
-    instance:'main',
-    name:'vncproxy',
-
-dependencies.17                =
-    instance:'main',
-    name:'ovs_health',
-
-dependencies.2                 =
-    domain:'openvcloud',
-    name:'compute_kvm_base',
 
 dependencies.3                 =
     args:'dep.args.portal_client',
@@ -117,17 +69,5 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-git.export.1                   =
-    branch:'2.1',
-    dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
-    link:'False',
-    overwrite:'True',
-    revision:,
-    source:'apps/nginx/cpunode_aio',
-    url:'https://github.com/0-complexity/openvcloud.git',
-
-git.url                        = 'https://github.com/0-complexity/openvcloud.git'
-
 platform.supported             =
     'generic',
-

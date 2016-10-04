@@ -1,0 +1,9 @@
+
+git.export.1                   =
+    branch:'master',
+    dest:'/opt/grafana/dashboards',
+    link:'True',
+    overwrite:'True',
+    revision:,
+    source:'dashboards/*',
+    url:'https://github.com/0-complexity/openvstorage-monitoring.git',

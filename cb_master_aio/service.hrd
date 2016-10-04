@@ -160,15 +160,6 @@ git.export.1                   =
     source:'apps/nginx/ms1_fe',
     url:'https://github.com/0-complexity/openvcloud.git',
 
-git.export.2                   =
-    branch:'master',
-    dest:'/opt/grafana/dashboards',
-    link:'True',
-    overwrite:'True',
-    revision:,
-    source:'dashboards/*',
-    url:'https://github.com/0-complexity/openvstorage-monitoring.git',
-
 git.export.3                   =
     branch:'master',
     dest:'/opt/grafana/data/plugins/piechart-panel',
