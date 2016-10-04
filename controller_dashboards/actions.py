@@ -31,7 +31,7 @@ class Actions(ActionsBase):
         datasourcename = 'controller_{}'.format(serviceObj.instance)
         gcl = j.clients.grafana.getByInstance('main')
         # add datasource
-        for datasource in gcl.listDateSources():
+        for datasource in gcl.listDataSources():
             if datasource['name'] == datasourcename:
                 break
         else:
@@ -50,7 +50,7 @@ class Actions(ActionsBase):
                           'url': 'http://{}:{}'.format(datasourceip, datasourceport),
                           'user': 'root',
                           'withCredentials': False}
-            gcl.addDatasource(datasource)
+            gcl.addDataSource(datasource)
 
         dashboards_dir = '/opt/grafana/dashboards'
         for path in j.system.fs.listFilesInDir(path=dashboards_dir, filter='*.json'):
@@ -58,7 +58,11 @@ class Actions(ActionsBase):
             dashboard = j.system.fs.fileGetContents(path)
             db = json.loads(dashboard)
             db['id'] = None
+            db['title'] += " ({})".format(serviceObj.instance)
             for row in db['rows']:
                 for panel in row['panels']:
                     panel['datasource'] = datasourcename
+            if 'templating' in db:
+                for item in db['templating']['list']:
+                    item['datasource'] = datasourcename
             print(gcl.updateDashboard(db))
