@@ -36,13 +36,14 @@ class Actions(ActionsBase):
             j.system.process.execute('docker run -td -p 9020:22 --name jsagent --hostname controller-jsagent8 jumpscale/ubuntu1604_jsagent')
             # update docker
             print('Updating jsagent code')
-            j.system.process.execute('docker exec -i jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull"')
+            j.system.process.execute('docker exec -i jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pulll; git checkout js8.0.beta"')
+            j.system.process.execute('docker exec -i jsagent bash -c "pip3 install crontab"')
 
             # start jsagent
             print('Starting jsagent')
             masteraddr = serviceObject.hrd.get('instance.param.master.addr')
             rootpassword = serviceObject.hrd.get('instance.param.rootpasswd')
-            cmd = "j.tools.cuisine.local.processmanager.ensure('jsagent', 'jspython jsagent.py --grid-id {gid} --controller-ip {masteraddr} --controller-port 4444 --controller-password {password}', path='/opt/jumpscale8/')"
+            cmd = "j.tools.cuisine.local.processmanager.ensure('jsagent', 'jspython jsagent.py --grid-id {gid} --controller-ip {masteraddr} --controller-port 4444 --controller-password {password}', path='/opt/jumpscale8/apps/jsagent')"
             cmd = cmd.format(gid=j.application.whoAmI.gid, masteraddr=masteraddr, password=rootpassword)
             j.system.process.execute('docker exec -i jsagent js "{}"'.format(cmd))
 
