@@ -1,7 +1,4 @@
 from JumpScale import j
-from ConfigParser import SafeConfigParser
-import cStringIO as StringIO
-from urlparse import urlparse
 import json
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
@@ -39,7 +36,7 @@ class Actions(ActionsBase):
                           'basicAuth': False,
                           'basicAuthPassword': '',
                           'basicAuthUser': '',
-                          'database': 'main',
+                          'database': 'statistics',
                           'id': 1,
                           'isDefault': False,
                           'name': datasourcename,
