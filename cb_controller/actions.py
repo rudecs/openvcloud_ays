@@ -62,6 +62,6 @@ class Actions(ActionsBase):
                 raise RuntimeError("Failed to find network cidr")
 
             print('Starting pumper')
-            cmd = "j.tools.cuisine.local.processmanager.ensure('jsagent', '/opt/code/github/jumpscale/jumpscale_core8/shellcmds/influxdumper --influx-host 172.17.0.1 --scan-cidr {} --workers 20 --redis-port 9999')"
+            cmd = "j.tools.cuisine.local.processmanager.ensure('influxdumper', '/opt/code/github/jumpscale/jumpscale_core8/shellcmds/influxdumper --influx-host 172.17.0.1 --scan-cidr {} --workers 20 --redis-port 9999')"
             cmd = cmd.format(networkcidr)
             j.system.process.execute('docker exec -i jsagent js "{}"'.format(cmd))
