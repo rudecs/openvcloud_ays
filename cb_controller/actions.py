@@ -39,7 +39,7 @@ class Actions(ActionsBase):
             j.system.process.execute('docker exec jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull; git checkout js8.0.beta"')
             j.system.process.execute('docker exec jsagent bash -c "pip3 install crontab"')
             # cause jumpscale8 wants redis running but the docker image is borked
-            j.system.process.execute('''docker exec jsagent bash -c "grep 'unixsocket /tmp/redis.sock' /optvar/redis/main/redis.conf || echo '/tmp/redis.sock' >> /optvar/redis/main/redis.conf; sv restart redis_main"''')
+            j.system.process.execute('''docker exec jsagent bash -c "grep 'unixsocket /tmp/redis.sock' /optvar/redis/main/redis.conf || echo 'unixsocket /tmp/redis.sock' >> /optvar/redis/main/redis.conf; sv restart redis_main"''')
 
             # start jsagent
             print('Starting jsagent')
