@@ -33,7 +33,7 @@ class Actions(ActionsBase):
             j.system.process.execute('docker run -td -p 8083:8083 -p 8086:8086 -v influxdb:/optvar/data/influxdb --hostname influxdb --name influxdb jumpscale/ubuntu1604_influxdb')
         if not container_check('jsagent'):
             print('Pulling jsagent docker')
-            j.system.process.execute('docker run -td -p 9022:22 --name jsagent --hostname controller_jsagent8 jumpscale/ubuntu1604_jsagent')
+            j.system.process.execute('docker run -td -p 9020:22 --name jsagent --hostname controller-jsagent8 jumpscale/ubuntu1604_jsagent')
             # update docker
             print('Updating jsagent code')
             j.system.process.execute('docker exec -i jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull"')
