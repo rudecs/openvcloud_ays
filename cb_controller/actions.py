@@ -36,8 +36,8 @@ class Actions(ActionsBase):
             j.system.process.execute('docker run -td -p 9020:22 --name jsagent --hostname controller-jsagent8 jumpscale/ubuntu1604_jsagent')
             # update docker
             print('Updating jsagent code')
-            j.system.process.execute('docker exec -i jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull; git checkout js8.0.beta"')
-            j.system.process.execute('docker exec -i jsagent bash -c "pip3 install crontab"')
+            j.system.process.execute('docker exec jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull; git checkout js8.0.beta"')
+            j.system.process.execute('docker exec jsagent bash -c "pip3 install crontab"')
 
             # start jsagent
             print('Starting jsagent')
@@ -45,7 +45,7 @@ class Actions(ActionsBase):
             rootpassword = serviceObject.hrd.get('instance.param.rootpasswd')
             cmd = "j.tools.cuisine.local.processmanager.ensure('jsagent', 'jspython jsagent.py --grid-id {gid} --controller-ip {masteraddr} --controller-port 4444 --controller-password {password}', path='/opt/jumpscale8/apps/jsagent')"
             cmd = cmd.format(gid=j.application.whoAmI.gid, masteraddr=masteraddr, password=rootpassword)
-            j.system.process.execute('docker exec -i jsagent js "{}"'.format(cmd))
+            j.system.process.execute('docker exec jsagent js "{}"'.format(cmd))
 
             # start pumper
             oknics = ['mgmt', 'pxeboot']
@@ -64,4 +64,4 @@ class Actions(ActionsBase):
             print('Starting pumper')
             cmd = "j.tools.cuisine.local.processmanager.ensure('influxdumper', '/opt/code/github/jumpscale/jumpscale_core8/shellcmds/influxdumper --influx-host 172.17.0.1 --scan-cidr {} --workers 20 --redis-port 9999')"
             cmd = cmd.format(networkcidr)
-            j.system.process.execute('docker exec -i jsagent js "{}"'.format(cmd))
+            j.system.process.execute('docker exec jsagent js "{}"'.format(cmd))
