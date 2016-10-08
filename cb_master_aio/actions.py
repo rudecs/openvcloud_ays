@@ -164,3 +164,4 @@ class Actions(ActionsBase):
         content = fpout.getvalue().replace('[global]', '')
         j.system.fs.writeFile(cfgfile, content)
         grafana.start()
+        j.atyourservice.get(name='nginx').restart()
