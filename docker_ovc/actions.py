@@ -53,6 +53,10 @@ class Actions(ActionsBase):
 
         lastline = response.pop()
         stream = json.loads(lastline)
+
+        if stream.get('errorDetail'):
+            raise RuntimeError(response)
+
         status = stream['stream'].replace('\n', '')
 
         print '[+] %s' % status
