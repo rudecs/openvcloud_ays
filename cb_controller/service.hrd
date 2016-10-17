@@ -69,5 +69,10 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
+dependencies.10                 =
+    domain:'jumpscale',
+    name:'pycapnp',
+    instance:'main',
+
 platform.supported             =
     'generic',

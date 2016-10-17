@@ -128,6 +128,11 @@ dependencies.23                 =
     domain:'openvcloud',
     name:'selfhealing_jumpscripts',
 
+dependencies.24                 =
+    domain:'jumpscale',
+    name:'pycapnp',
+    instance:'main',
+
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
