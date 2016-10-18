@@ -23,4 +23,4 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'Lede Project'
-        registerImage(serviceObj, name, 'Linux', 10)
+        registerImage(serviceObj, name, 'Linux', 1)
