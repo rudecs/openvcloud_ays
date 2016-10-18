@@ -74,5 +74,9 @@ dependencies.10                 =
     name:'pycapnp',
     instance:'main',
 
+dependencies.11                 =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
+
 platform.supported             =
     'generic',
