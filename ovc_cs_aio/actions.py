@@ -22,13 +22,13 @@ class Actions(ActionsBase):
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
         self.bootrappServerName = serviceObj.hrd.get('instance.bootstrapp.servername')
-        
+
         self.rootdomain = 'demo.greenitglobe.com'
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
-        
+
         if self.bootrappServerName == 'auto':
             self.bootrappServerName = 'bootstrap-%s.%s' % (self.rootenv, self.rootdomain)
-        
+
         if self.host == 'auto':
             self.host = '%s.%s' % (self.rootenv, self.rootdomain)
             self.oauthUrl = 'https://%s' % (self.host)
@@ -36,40 +36,40 @@ class Actions(ActionsBase):
         else:
             self.oauthUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
             self.portalUrl = 'https://' + serviceObj.hrd.getStr('instance.host')
-        
+
         if self.dcpmServerName == 'auto':
             self.dcpmServerName = 'dcpm-%s.%s' % (self.rootenv, self.rootdomain)
 
         self.dcpmUrl = 'https://' + self.dcpmServerName
-        
+
         if self.ovsServerName == 'auto':
             self.ovsServerName = 'ovs-%s.%s' % (self.rootenv, self.rootdomain)
-        
+
         self.ovsUrl = 'https://' + self.ovsServerName
-        
+
         if self.defenseServerName == 'auto':
             self.defenseServerName = 'defense-%s.%s' % (self.rootenv, self.rootdomain)
-            
+
         self.defenseUrl = 'https://' + self.defenseServerName
-        
+
         if self.novncServerName == 'auto':
             self.novncServerName = 'novnc-%s.%s' % (self.rootenv, self.rootdomain)
-        
+
         self.novncUrl = 'https://' + self.novncServerName
-        
+
         # grafana is redirected with /grafana/...
         if self.grafanaServerName == 'auto':
             self.grafanaServerName = '%s.%s/grafana' % (self.rootenv, self.rootdomain)
-        
+
         self.grafanaUrl = 'https://' + self.grafanaServerName
-        
+
         if self.safekeeperServerName == 'auto':
             self.safekeeperServerName = 'safekeeper-%s.%s' % (self.rootenv, self.rootdomain)
-        
+
         self.safekeeperUrl = 'https://' + self.safekeeperServerName
 
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
-        
+
         self.smtp = {
             'server': serviceObj.hrd.getStr('instance.smtp.server'),
             'port': serviceObj.hrd.getStr('instance.smtp.port'),
@@ -77,7 +77,7 @@ class Actions(ActionsBase):
             'passwd': serviceObj.hrd.getStr('instance.smtp.passwd'),
             'sender': serviceObj.hrd.getStr('instance.smtp.sender'),
         }
-        
+
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] oauth   url: %s' % self.oauthUrl
@@ -116,13 +116,13 @@ class Actions(ActionsBase):
                               self.defenseUrl, self.repoPath, self.grafanaUrl, self.safekeeperUrl, self.smtp,
                               delete=delete)
         j.actions.start(description='install master vm', action=master, category='openvlcoud', name='install_master', serviceObj=serviceObj)
-        
+
         def dcpm():
             # install reflector
             rootpasswd = serviceObj.hrd.getStr('instance.master.rootpasswd')
             self.initDCPMVM(spacesecret, self.repoPath, delete=delete)
         j.actions.start(description='install dcpm vm', action=dcpm, category='openvlcoud', name='install_dcpm', serviceObj=serviceObj)
-        
+
         def proxy():
             # install proxy
             self.initProxyVM(spacesecret, self.host, self.dcpmServerName, self.dcpmPort,
@@ -131,39 +131,39 @@ class Actions(ActionsBase):
                              self.bootrappIpAddress, self.bootrappPort, self.bootrappServerName,
                              self.grafanaServerName, delete=delete)
         j.actions.start(description='install proxy vm', action=proxy, category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
-    
+
     def installJumpscale(self, cl):
         # install Jumpscale
         print "[+] installing jumpscale"
         cmd = j.do.getInstallCommand()
         cl.run(cmd)
         print "[+] jumpscale installed"
-        
+
     def setupGit(self, cl):
         cl.run('jsconfig hrdset -n whoami.git.login -v "ssh"')
         cl.run('jsconfig hrdset -n whoami.git.passwd -v "ssh"')
-        
+
         allowhosts = ["github.com", "git.aydo.com"]
-            
+
         for host in allowhosts:
             cl.run('echo "Host %s" >> /root/.ssh/config' % host)
             cl.run('echo "    StrictHostKeyChecking no" >> /root/.ssh/config')
             cl.run('echo "" >> /root/.ssh/config')
-    
+
     def setupHost(self, host, address):
         hosts = StringIO('\n'.join(line.strip() for line in open('/etc/hosts'))).getvalue()
-        
+
         # FIXME: should replace ip if already exists
         if not host in hosts:
             j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
-    
+
     def copyBack(self, remote, service):
         remoteHrd  = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
         remoteHost = remoteHrd.getStr('instance.ip')
-        
+
         remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
         localPath  = '%s/services/jumpscale__node.ssh__%s/%s/' % (self.repoPath, remote, service)
-        
+
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
 
@@ -190,10 +190,10 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
-                
+
         machine = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         privIP = machine['interfaces'][0]['ipAddress']
-        
+
         # FIXME: why sshPort not well defined ?
         ports = self.api.listPortforwarding(spacesecret, 'ovc_reflector')
         for fw in ports:
@@ -202,7 +202,7 @@ class Actions(ActionsBase):
 
         vspace = self.api.getCloudspaceObj(spacesecret)
         pubIP = vspace['publicipaddress']
-        
+
         # saving ip to hosts
         self.setupHost('reflector', privIP)
 
@@ -231,7 +231,7 @@ class Actions(ActionsBase):
         content = cl.file_read('/etc/ssh/sshd_config')
         if content.find('GatewayPorts clientspecified') == -1:
             cl.file_append('/etc/ssh/sshd_config', "\nGatewayPorts clientspecified\n")
-            
+
             print '[+] restarting ssh'
             cl.run('service ssh restart')
 
@@ -255,7 +255,7 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_reflector')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_reflector', args=data)
         nodeService.install(reinstall=True)
-        
+
         print "[+] bootstrap: private ip: %s" % privIP
         print "[+] bootstrap: public ip : %s" % pubIP
         print "[+] reflector ssh port: %s" % sshPort
@@ -297,22 +297,22 @@ class Actions(ActionsBase):
         except Exception as e:
             if e.message.find('Could not create machine it does already exist') == -1:
                 raise e
-        
+
         print '[+] grabbing ovc_proxy address'
         proxyvm = self.api.getMachineObject(spacesecret, 'ovc_proxy')
         proxyip = proxyvm['interfaces'][0]['ipAddress']
         print '[+] ovc_proxy is %s' % proxyip
-        
+
         print '[+] grabbing ovc_master address'
         mastervm = self.api.getMachineObject(spacesecret, 'ovc_master')
         masterip = mastervm['interfaces'][0]['ipAddress']
         print '[+] ovc_master is %s' % masterip
-        
+
         print '[+] grabbing ovc_reflector address'
         reflectvm = self.api.getMachineObject(spacesecret, 'ovc_reflector')
         reflectip = reflectvm['interfaces'][0]['ipAddress']
         print '[+] ovc_reflector is %s' % reflectip
-        
+
         print '[+] grabbing ovc_dcpm address'
         dcpmvm = self.api.getMachineObject(spacesecret, 'ovc_dcpm')
         dcpmip = dcpmvm['interfaces'][0]['ipAddress']
@@ -321,7 +321,7 @@ class Actions(ActionsBase):
         # portforward 80 and 443 to 80 and 443 on ovc_proxy
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 80, pubipport=80)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_proxy', 443, pubipport=443)
-        
+
         # saving ip to hosts
         self.setupHost('proxy', proxyip)
 
@@ -397,10 +397,7 @@ class Actions(ActionsBase):
         # portforward 4444 to 4444 ovc_master and 5544
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 4444, pubipport=4444)
         self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 5544, pubipport=5544)
-        
-        # FIXME: should not expose statsd port
-        self.api.createTcpPortForwardRule(spacesecret, 'ovc_master', 8127, pubipport=8127)
-        
+
         # saving ip to hosts
         self.setupHost('master', ip)
 
@@ -466,7 +463,7 @@ class Actions(ActionsBase):
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=nodeService)
         master.consume('node', nodeService.instance)
         master.install(deps=True)
-        
+
         # FIXME
         # Copy needed file from master to ovcgit
         # Theses files are generated on the master and not synced back to ovcgit
@@ -496,7 +493,7 @@ class Actions(ActionsBase):
         ip = machine['interfaces'][0]['ipAddress']
 
         cl = j.ssh.connect(ip, 22, keypath='/root/.ssh/id_rsa')
-        
+
         # saving ip to hosts
         self.setupHost('dcpm', ip)
 
@@ -535,7 +532,7 @@ class Actions(ActionsBase):
         j.atyourservice.remove(name='node.ssh', instance='ovc_dcpm')
         nodeService = j.atyourservice.new(name='node.ssh', instance='ovc_dcpm', args=data)
         nodeService.install(reinstall=True)
-        
+
         """
         # FIXME: manual installation until fixed
         dcpm = j.atyourservice.new(name='dcpm', parent=nodeService)

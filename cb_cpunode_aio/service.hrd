@@ -29,9 +29,6 @@ dep.args.redis                 =
     param.unixsocket:'0',
     param.ip:'0.0.0.0',
 
-dep.args.statsd-collector      =
-    statsd.master.host:'$(instance.param.master.addr)',
-
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
     vfw.admin.newpasswd:'$(instance.param.rootpasswd)',
@@ -57,10 +54,6 @@ dependencies.11                =
 dependencies.12                =
     domain:'openvcloud',
     name:'libcloudlibvirt',
-
-dependencies.13                =
-    args:'dep.args.statsd-collector',
-    name:'statsd-collector',
 
 dependencies.14                =
     domain:'openvcloud',
