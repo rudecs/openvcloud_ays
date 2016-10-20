@@ -43,11 +43,6 @@ dependencies.12                =
     domain:'openvcloud',
     name:'cloudbroker',
 
-dependencies.13                =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'ms1_frontend',
-
 dependencies.14                =
     args:'dep.args.portal',
     domain:'openvcloud',
@@ -110,17 +105,7 @@ dependencies.7                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.8                 =
-    domain:'openvcloud',
-    name:'billingenginelib',
-
-dependencies.9                 =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'billingengine',
-
-git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+git.url                        = 'https://github.com/0-complexity/openvcloud.git'
 
 platform.supported             =
     'generic',
-

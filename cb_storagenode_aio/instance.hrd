@@ -1,0 +1,5 @@
+param.rootpasswd=@ASK type:str descr='CBAIO: Portal secret'
+param.master.addr=@ASK descr:'Master node address'
+param.master.port='443'
+param.grid.id=@ASK type:int descr:'grid id'
+

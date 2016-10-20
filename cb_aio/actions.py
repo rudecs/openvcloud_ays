@@ -47,16 +47,13 @@ class Actions(ActionsBase):
         end = serviceObj.hrd.get('instance.param.publicip.end')
         gateway = serviceObj.hrd.get('instance.param.publicip.gateway')
         netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
-        network = str(netip.cidr)
-        if not ccl.publicipv4pool.exists(network):
-            pool = ccl.publicipv4pool.new()
+        if ccl.externalnetwork.count({'network': str(netip.network), 'subnetmask': str(netip.netmask)}) == 0:
+            pool = ccl.externalnetwork.new()
             pool.gid = j.application.whoAmI.gid
-            pool.id = network
             pool.subnetmask = netmask
             pool.gateway = gateway
-            pubips = [ str(ip) for ip in netaddr.IPRange(start, end) ]
-            pool.pubips = pubips
+            ips = [str(ip) for ip in netaddr.IPRange(start, end)]
+            pool.ips = ips
+            pool.name = 'Default Network'
             pool.network = str(netip.network)
-            ccl.publicipv4pool.set(pool)
-
-
+            ccl.externalnetwork.set(pool)

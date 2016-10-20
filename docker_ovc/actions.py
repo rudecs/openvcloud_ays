@@ -26,35 +26,39 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         docker = j.tools.docker
-        docker.connectRemoteTCP('172.17.0.1', 2375)
-        
+        docker.connectRemoteTCP('172.17.0.1', 2375) # FIXME
+
         source = '/opt/jumpscale7/var/lib/dockers/openvcloud/'
         image = serviceObj.hrd.get('instance.image.name')
-        
-        jsbranch = j.clients.git.get('/opt/code/github/jumpscale/jumpscale_core7').getBranchOrTag()[1]
-        aysbranch = j.clients.git.get('/opt/code/github/jumpscale/ays_jumpscale7').getBranchOrTag()[1]
-        ovcbranch = j.clients.git.get('/opt/code/git/0-complexity/openvcloud').getBranchOrTag()[1]
-        
+
+        jsbranch = j.clients.git.get('/opt/code/github/jumpscale7/jumpscale_core7').getBranchOrTag()[1]
+        aysbranch = j.clients.git.get('/opt/code/github/jumpscale7/ays_jumpscale7').getBranchOrTag()[1]
+        ovcbranch = j.clients.git.get('/opt/code/github/0-complexity/openvcloud').getBranchOrTag()[1]
+
         print '[+] jumpscale branch : %s' % jsbranch
         print '[+] ays repo branch  : %s' % aysbranch
         print '[+] openvcloud branch: %s' % ovcbranch
-        
+
         # setting hrd info
         serviceObj.hrd.set('instance.jsbranch', jsbranch)
         serviceObj.hrd.set('instance.aysbranch', aysbranch)
         serviceObj.hrd.set('instance.ovcbranch', ovcbranch)
-        
+
         print '[+] patching docker file'
         serviceObj.hrd.applyOnFile("%s/buildconfig" % source)
-        
+
         print '[+] source: %s' % source
         print '[+] building the image: %s' % image
         response = [line for line in docker.client.build(source, image)]
-        
+
         lastline = response.pop()
         stream = json.loads(lastline)
+
+        if stream.get('errorDetail'):
+            raise RuntimeError(response)
+
         status = stream['stream'].replace('\n', '')
-        
+
         print '[+] %s' % status
-        
+
         return True

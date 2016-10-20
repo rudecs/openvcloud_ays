@@ -23,7 +23,6 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'Routeros 6.31'
-        imagename = 'routeros-6.31.qcow2'
-        registerImage(serviceObj, name, imagename, 'Linux', 10)
+        registerImage(serviceObj, name, 'Linux', 10)
 
 

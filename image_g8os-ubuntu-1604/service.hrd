@@ -1,0 +1,8 @@
+platform.supported             = 'generic'
+
+web.export.1                   =
+    checkmd5:'true',
+    dest:'/opt/jumpscale7/var/tmp/templates/g8os-test-1604.img',
+    source:'/Linux/ubuntu/g8os-test-1604.img',
+    url:'ftp://pub:pub1234@ftp.aydo.com',
+

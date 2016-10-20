@@ -1,8 +1,11 @@
 from JumpScale import j
 from ConfigParser import SafeConfigParser
 import cStringIO as StringIO
+from urlparse import urlparse
+import json
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     """
@@ -22,15 +25,7 @@ class Actions(ActionsBase):
     """
 
     def configure(self, serviceObj):
-        import JumpScale.grid
-        import JumpScale.portal
-        # set billing role
-        roles = j.application.config.getList('grid.node.roles')
         ovcEnvironment = serviceObj.hrd.get('instance.param.ovc.environment')
-        if 'billing' not in roles:
-            roles.append('billing')
-            j.application.config.set('grid.node.roles', roles)
-            j.atyourservice.get(name='jsagent', instance='main').restart()
 
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
@@ -43,12 +38,12 @@ class Actions(ActionsBase):
                     'scope': 'admin',
                     'theme': 'light',
                     },
-                'wiki_gcb': {
+                'vdc': {
                     'name': 'End User',
                     'url': portalurl,
                     'scope': 'user',
                     'theme': 'dark',
-                    'external': 'false'},
+                    'external': 'true'},
                 'ovs': {
                     'name': 'Storage',
                     'url': serviceObj.hrd.get('instance.param.ovs.url'),
@@ -86,7 +81,7 @@ class Actions(ActionsBase):
         for linkid, data in portallinks.iteritems():
             if data['url']:
                 portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
-        portal.hrd.set('instance.param.cfg.defaultspace', 'wiki_gcb')
+        portal.hrd.set('instance.param.cfg.defaultspace', 'vdc')
         portal.hrd.set('instance.param.cfg.force_oauth_instance', 'oauth')
         portal.start()
 
@@ -122,7 +117,7 @@ class Actions(ActionsBase):
         # register networks
         start = 201
         end = 250
-        j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start,end)
+        j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start, end)
         # sync images
         j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
         j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
@@ -133,26 +128,25 @@ class Actions(ActionsBase):
         end = serviceObj.hrd.get('instance.param.publicip.end')
         gateway = serviceObj.hrd.get('instance.param.publicip.gateway')
         netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
-        network = str(netip.cidr)
-        if not ccl.publicipv4pool.exists(network):
-            pool = ccl.publicipv4pool.new()
+        if ccl.externalnetwork.count({'network': str(netip.network), 'subnetmask': str(netip.netmask)}) == 0:
+            pool = ccl.externalnetwork.new()
             pool.gid = j.application.whoAmI.gid
-            pool.id = network
             pool.subnetmask = netmask
             pool.gateway = gateway
-            pubips = [ str(ip) for ip in netaddr.IPRange(start, end) ]
-            pool.pubips = pubips
+            ips = [str(ip) for ip in netaddr.IPRange(start, end)]
+            pool.ips = ips
+            pool.name = 'Default Network'
             pool.network = str(netip.network)
-            ccl.publicipv4pool.set(pool)
+            ccl.externalnetwork.set(pool)
 
         oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
         oauthClientHRD = j.atyourservice.get(name='oauth_client').hrd
         portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
         oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
 
-        #configure grafana for oauth
+        # configure grafana for oauth
+        parsed_url = urlparse(portalurl)
         grafana = j.atyourservice.get(name='grafana')
-        grafanaSecret = oauthServerHRD.get('instance.oauth.clients.grafana.secret')
         grafana.stop()
         cfgfile = '/opt/grafana/conf/defaults.ini'
         cfgcontent = j.system.fs.fileGetContents(cfgfile)
@@ -160,20 +154,13 @@ class Actions(ActionsBase):
         parser = SafeConfigParser()
         parser.readfp(fp)
         parser.set('server', 'root_url', '%s/grafana' % portalurl)
+        parser.set('server', 'domain', parsed_url.hostname)
         parser.set('users', 'auto_assign_org_role', 'Editor')
-        parser.set('auth.github', 'enabled', 'true')
-        parser.set('auth.github', 'allow_sign_up', 'true')
-        parser.set('auth.github', 'client_id', 'grafana')
-        parser.set('auth.github', 'client_secret', grafanaSecret)
-        parser.set('auth.github', 'scopes', 'admin')
-        parser.set('auth.github', 'auth_url', '%s/login/oauth/authorize' % portalurl)
-        parser.set('auth.github', 'token_url', 'http://127.0.0.1:8010/login/oauth/access_token')
-        parser.set('auth.github', 'api_url', 'http://127.0.0.1:8010/user')
-
+        parser.set('auth.anonymous', 'enabled', 'true')
+        parser.set('auth.anonymous', 'org_role', 'Admin')
         fpout = StringIO.StringIO()
         parser.write(fpout)
         content = fpout.getvalue().replace('[global]', '')
         j.system.fs.writeFile(cfgfile, content)
         grafana.start()
-
-
+        j.atyourservice.get(name='nginx').restart()

@@ -4,6 +4,10 @@ dep.args.cloudborker           =
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
+dep.args.jwt_client            =
+    jwt.algo:'ES384',
+    jwt.secret:'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAES5X8XrfKdx9gYayFITc89wad4usrk0n27MjiGYvqalizeSWTHEpnd7oea9IQ8T5oJjMVH5cc0H5tFSKilFFeh//wngxIyny66+Vq5t5B0V0Ehy01+2ceEon2Y0XDkIKv',
+
 dep.args.mailclient            =
     smtp.login:'$(instance.param.smtp.login)',
     smtp.passwd:'$(instance.param.smtp.passwd)',
@@ -71,11 +75,6 @@ dependencies.12                =
     domain:'openvcloud',
     name:'cloudbroker',
 
-dependencies.13                =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'ms1_frontend',
-
 dependencies.14                =
     args:'dep.args.portal',
     domain:'openvcloud',
@@ -115,6 +114,25 @@ dependencies.20                =
     domain:'openvcloud',
     name:'portal_branding',
 
+dependencies.21                =
+    domain:'openvcloud',
+    name:'g8vdc',
+
+dependencies.22                =
+    args:'dep.args.jwt_client',
+    domain:'jumpscale',
+    instance:'itsyouonline',
+    name:'jwt_client',
+
+dependencies.23                =
+    domain:'openvcloud',
+    name:'selfhealing_jumpscripts',
+
+dependencies.24                =
+    domain:'jumpscale',
+    instance:'main',
+    name:'pycapnp',
+
 dependencies.4                 =
     args:'dep.args.singlenode_grid',
     domain:'jumpscale',
@@ -133,29 +151,28 @@ dependencies.7                 =
     domain:'openvcloud',
     name:'cloudbroker_jumpscripts',
 
-dependencies.8                 =
-    domain:'openvcloud',
-    name:'billingenginelib',
-
-dependencies.9                 =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'billingengine',
-
 git.export.1                   =
-    branch:'2.0',
+    branch:'2.1.5',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
     revision:,
     source:'apps/nginx/ms1_fe',
-    url:'https://git.aydo.com/0-complexity/openvcloud.git',
+    url:'https://github.com/0-complexity/openvcloud.git',
 
-git.url                        = 'https://git.aydo.com/0-complexity/openvcloud.git'
+git.export.3                   =
+    branch:'master',
+    dest:'/opt/grafana/data/plugins/piechart-panel',
+    link:'True',
+    overwrite:'True',
+    revision:,
+    source:'*',
+    url:'https://github.com/grafana/piechart-panel.git',
+
+git.url                        = 'https://github.com/0-complexity/openvcloud.git'
 
 platform.supported             =
     'generic',
 
 ubuntu.packages                =
     'ntp ethtool',
-

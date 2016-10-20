@@ -1,0 +1,8 @@
+platform.supported             = 'generic'
+
+web.export.1                   =
+    checkmd5:'true',
+    dest:'/opt/jumpscale7/var/tmp/templates/CentOS-6.5.x64.qcow2',
+    source:'/Linux/centos/CentOS-6.5.x64.qcow2',
+    url:'ftp://pub:pub1234@ftp.aydo.com',
+

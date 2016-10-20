@@ -21,10 +21,7 @@ mknod /dev/kvm c 10 232
 
 ### Install Jumpscale
 ```sh
-curl https://raw.githubusercontent.com/Jumpscale7/jumpscale_core7/7.1/install/install.sh > /tmp/js7.sh && bash
-export AYSBRANCH=7.1
-export JSBRANCH=7.1
-/tmp/js7.sh
+curl https://raw.githubusercontent.com/Jumpscale7/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh
 ```
 
 ### Add openvcloud domain
@@ -32,11 +29,9 @@ edit `/opt/jumpscale7/hrd/system/atyourservice.hrd`
 ```
 metadata.jumpscale             =
     url:'https://github.com/Jumpscale7/ays_jumpscale7',
-    branch:'7.1',
 # add this domain
 metadata.openvcloud           =
     url:'https://github.com/0-complexity/openvcloud_ays',
-    branch:'7.1',
 ```
 
 ### Install cb_master_aio
@@ -73,7 +68,7 @@ metadata.jumpscale             =
 
 # add this domain
 metadata.openvcloud           =
-    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
+    url:'https://github.com/0-complexity/openvcloud_ays',
 ```
 
 ### Install ssloffloader
@@ -98,8 +93,6 @@ hostname the defenseshield should be exposed at
 ### Install Jumpscale
 ```
 curl https://raw.githubusercontent.com/Jumpscale7/jumpscale_core7/7.1/install/install.sh > /tmp/js7.sh && bash
-export JSBRANCH=7.1
-export AYSBRANCH=7.1
 /tmp/js7.sh
 ```
 
@@ -108,18 +101,15 @@ edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
 ```
 metadata.jumpscale             =
     url:'https://github.com/Jumpscale/ays_jumpscale7',
-    branch:'7.1',
 
 # add this domain
 metadata.openvcloud           =
-    url:'https://git.aydo.com/0-complexity/openvcloud_ays',
-    branch:'2.1',
+    url:'https://github.com/0-complexity/openvcloud_ays',
 
 ```
 
 ### Install cb_cpunode_aio
 ```
-ays install -n openvstorage
 ays install -n cb_cpunode_aio
 ```
 

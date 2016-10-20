@@ -1,6 +1,5 @@
 host = @ASK type:str default:'environment.demo.greenitglobe.com'  descr:'host for which the ssl is being offloaded'
 master.ipadress = @ASK type:str default:'192.168.103.254'  descr:'private ipaddress of the master vm'
-reflector.ipadress = @ASK type:str default:'192.168.103.253'  descr:'private ipaddress of the reflector vm'
 dcpm.servername = @ASK type:str default:'dcpmenvironment.demo.greenitglobe.com'  descr:'servername DCPM is exposed at'
 dcpm.ipadress = @ASK type:str default:'192.168.103.252'  descr:'internal ip address DCPM is running on'
 dcpm.port = @ASK type:int default:80  descr:'port DCPM is listenning on'

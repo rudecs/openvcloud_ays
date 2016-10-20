@@ -1,4 +1,0 @@
-openvcloud.billing.machineprices.Linux=512:0.0,1024:0.0,2048:0.0,4096:0.0,8192:0.0,16384:0.0
-openvcloud.billing.machineprices.Windows=512:0.0,1024:0.0,2048:0.0,4096:0.0,8192:0.0,16384:0.0
-openvcloud.billing.primarystorageprice=0.0
-openvcloud.billing.extracloudspaceprice=0.0

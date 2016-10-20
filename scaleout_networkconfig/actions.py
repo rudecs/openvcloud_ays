@@ -33,6 +33,18 @@ class Actions(ActionsBase):
         vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
         public_vlan= hrd.get('instance.netconfig.public.vlanid')
 
+        # removing existings ports and bridge
+        ports = j.system.process.execute("ovs-appctl dpif/show | awk '/patch/{print $1}'")[1]
+        if ports:
+            print("Cleaning openswitch bridges found")
+            ports = ports.strip().split("\n")
+
+            for port in ports:
+                j.system.process.execute("ovs-vsctl del-port %s" % port)
+
+            for network in ('public', 'vxbackend', 'gw_mgmt'):
+                j.system.process.execute("ovs-vsctl del-br %s" % network)
+
         for network in ('vxbackend', 'gw_mgmt'):
             key = 'instance.netconfig.%s.ipaddr' % network
             if hrd.exists(key):

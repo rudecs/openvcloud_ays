@@ -16,28 +16,28 @@ class Actions(ActionsBase):
 
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
-        
+
         self.rootdomain = serviceObj.hrd.get('instance.param.domain')
         self.rootenv = serviceObj.hrd.getStr('instance.param.main.host')
         self.repoPath = serviceObj.hrd.getStr('instance.param.repo.path')
-        
+
         # checking for ssh-agent
         if not os.environ.get('SSH_AUTH_SOCK'):
             print '[-] ssh agent seems not loaded, please check your keys'
             j.application.stop()
-        
+
         # custom servers name
         if self.host == 'auto':
             self.host = '%s.%s' % (self.rootenv, self.rootdomain)
         else:
             self.host = serviceObj.hrd.getStr('instance.host')
-        
+
         # grafana is redirected with /grafana/...
         self.grafanaServerName = serviceObj.hrd.getStr('instance.grafana.servername')
-        
+
         if self.grafanaServerName == 'auto':
             self.grafanaServerName = '%s.%s/grafana' % (self.rootenv, self.rootdomain)
-        
+
         # servers settings
         self.servers = {
             'boot':    self.defaultServerName('bootstrapp', serviceObj.hrd.get('instance.bootstrapp.servername')),
@@ -48,7 +48,7 @@ class Actions(ActionsBase):
             'novnc':   self.defaultServerName('novnc', serviceObj.hrd.getStr('instance.novnc.servername')),
             'grafana': self.grafanaServerName
         }
-        
+
         self.urls = {
             'ovs':     'https://' + self.servers['ovs'],
             'dcpm':    'https://' + self.servers['dcpm'],
@@ -59,14 +59,14 @@ class Actions(ActionsBase):
             'oauth':   'https://%s' % (self.host),
             'portal':  'https://%s' % (self.host)
         }
-        
+
         self.network = {
             'gateway': serviceObj.hrd.getStr('instance.publicip.gateway'),
             'start':   serviceObj.hrd.getStr('instance.publicip.start'),
             'end':     serviceObj.hrd.getStr('instance.publicip.end'),
             'netmask': serviceObj.hrd.getStr('instance.publicip.netmask')
         }
-        
+
         self.smtp = {
             'server': serviceObj.hrd.getStr('instance.smtp.server'),
             'port':   serviceObj.hrd.getStr('instance.smtp.port'),
@@ -74,25 +74,25 @@ class Actions(ActionsBase):
             'passwd': serviceObj.hrd.getStr('instance.smtp.passwd'),
             'sender': serviceObj.hrd.getStr('instance.smtp.sender')
         }
-        
+
         self.machines = {
             'master':    self.getMachineService('ovc_master'),
             'proxy':     self.getMachineService('ovc_proxy'),
             'reflector': self.getMachineService('ovc_reflector'),
             'dcpm':      self.getMachineService('ovc_dcpm')
         }
-        
+
         self.grid = {
             'id': serviceObj.hrd.getInt('instance.grid.id'),
         }
-        
+
         self.ssl = {
             'root':    serviceObj.hrd.getStr('instance.ssl.root'),
             'ovs':     serviceObj.hrd.getStr('instance.ssl.ovs'),
             'novnc':   serviceObj.hrd.getStr('instance.ssl.novnc'),
             'defense': serviceObj.hrd.getStr('instance.ssl.defense'),
         }
-        
+
         print '[+] root domain: %s' % self.rootdomain
         print '[+] environment: %s' % self.rootenv
         print '[+] --------------------------'
@@ -110,19 +110,19 @@ class Actions(ActionsBase):
         print '[+] reflector: %s' % self.machines['reflector']
         print '[+] dcpm     : %s' % self.machines['dcpm']
         print '[+] --------------------------'
-        
+
         if self.machines['reflector'] == None:
             self.warning('direct access environment, no reflector found')
 
     def configure(self, serviceObj):
         parent = None
-        
+
         def reflector():
             self.initReflectorVM(self.machines['reflector'], self.repoPath)
-        
+
         if self.machines['reflector']:
             j.actions.start(description='configure reflector', action=reflector, category='openvlcoud', name='configure_reflector', serviceObj=serviceObj)
-            
+
         else:
             # no reflector, setting up bootstrap without it
             self.warning('skipping reflector configuration, setting up bootstrap')
@@ -133,70 +133,70 @@ class Actions(ActionsBase):
                 'service': '', # need to be empty
             }
             self.setupBootstrap(self.repoPath, fakeReflector)
-            
+
 
         def master():
             self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls, self.repoPath, self.smtp, self.grid)
-        
+
         j.actions.start(description='configure master', action=master, category='openvlcoud', name='configure_master', serviceObj=serviceObj)
-        
+
         def dcpm():
             self.initDCPMVM(self.machines['dcpm'])
-        
+
         j.actions.start(description='configure dcpm', action=dcpm, category='openvlcoud', name='configure_dcpm', serviceObj=serviceObj)
-        
+
         def proxy():
             self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort, self.bootrappIpAddress, self.bootrappPort, self.ssl)
-        
+
         j.actions.start(description='configure proxy', action=proxy, category='openvlcoud', name='configure_proxy', serviceObj=serviceObj)
-    
+
     """
     Console tools
     """
     def enableQuiet(self):
         j.remote.cuisine.api.fabric.state.output['stdout'] = False
         j.remote.cuisine.api.fabric.state.output['running'] = False
-    
+
     def disableQuiet(self):
         j.remote.cuisine.api.fabric.state.output['stdout'] = True
         j.remote.cuisine.api.fabric.state.output['running'] = True
-    
+
     # FIXME: move me
     def info(self, text):
         print '\033[1;36m[*] %s\033[0m' % text
-        
+
     def warning(self, text):
         print '\033[1;33m[-] %s\033[0m' % text
 
     def success(self, text):
         print '\033[1;32m[+] %s\033[0m' % text
-    
+
     """
     Configuration tools
     """
     def defaultServerName(self, item, name):
         if name == 'auto':
             return '%s-%s.%s' % (item, self.rootenv, self.rootdomain)
-            
+
         return name
-    
+
     def getMachineService(self, name):
         sshservices = j.atyourservice.findServices(instance=name)
         nodeservices = filter(lambda x: x.name.startswith('node.'), sshservices)
-        
+
         if len(nodeservices) == 1:
             return nodeservices[0]
-        
+
         return None
-    
+
     def getMachine(self, name):
         machine = self.getMachineService(name)
-        
+
         if machine is None:
             return {}
-        
+
         temp = machine.hrd.getHRDAsDict()
-        
+
         data = {
             'hostname': temp['service.instance'],
             'localport': temp['instance.ssh.port'],
@@ -205,24 +205,24 @@ class Actions(ActionsBase):
             'publicport': temp['instance.ssh.publicport'],
             'image': ''
         }
-        
+
         return data
-    
+
     def getMachineAddress(self, name):
         machine = self.getMachine(name)
-        
+
         if machine.get('localip'):
             return machine['localip']
-        
+
         return None
-        
+
     def copyBack(self, remote, service):
         remoteHrd  = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
         remoteHost = remoteHrd.getStr('instance.ip')
-        
+
         remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
         localPath  = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, 'node.ssh', remote, service)
-        
+
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
 
@@ -242,31 +242,31 @@ class Actions(ActionsBase):
             'instance.reflector.name': reflector['service'],
             'instance.reflector.user': 'guest'
         }
-        
+
         bootrapp = j.atyourservice.remove(name='bootstrapp') # override service
         bootrapp = j.atyourservice.new(name='bootstrapp', args=data)
         bootrapp.install()
-    
+
     def initReflectorVM(self, parent, repoPath):
         self.info('configuring: reflector')
-        
+
         reflector = self.getMachine('ovc_reflector')
         reflector['service'] = 'jumpscale__node.ssh__ovc_reflector'
-        
+
         self.setupBootstrap(repoPath, reflector)
 
     def initProxyVM(self, parent, host, servers, dcpmPort, bootrappIpAddress, bootrappPort, ssl):
         self.info('configuring: proxy')
-        
+
         proxyip = self.getMachineAddress('ovc_proxy')
         print '[+] ovc_proxy: %s' % proxyip
-        
+
         masterip = self.getMachineAddress('ovc_master')
         print '[+] ovc_master: %s' % masterip
-        
+
         dcpmip = self.getMachineAddress('ovc_dcpm')
         print '[+] ovc_dcpm: %s' % dcpmip
-        
+
         print '[+] master domain: %s' % self.rootdomain
 
         data = {
@@ -275,36 +275,31 @@ class Actions(ActionsBase):
             'instance.master.ipadress': masterip,
             'instance.dcpm.ipadress': dcpmip,
             'instance.dcpm.port': dcpmPort,
-            'instance.reflector.ipadress': 'REMOVE ME',
-            
+
             'instance.bootstrapp.servername': servers['boot'],
             'instance.ovs.servername': servers['ovs'],
             'instance.defense.servername': servers['defense'],
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
             'instance.dcpm.servername': servers['dcpm'],
-            
-            'instance.generated.defense': 'server 127.0.0.1;',
-            'instance.generated.novnc': 'server 127.0.0.1;',
-            'instance.generated.ovs': 'server 127.0.0.1;',
-            
+
             'instance.ssl.root': ssl['root'],
             'instance.ssl.ovs': ssl['ovs'],
             'instance.ssl.novnc': ssl['novnc'],
             'instance.ssl.defense': ssl['defense'],
         }
-        
+
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=parent)
         ssloffloader.consume('node', parent.instance)
         ssloffloader.install(deps=True)
 
     def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid):
         self.info('configuring: master')
-        
+
         print '[+] network: %s -> %s' % (network['start'], network['end'])
         print '[+] gateway: %s, netmask: %s' % (network['gateway'], network['netmask'])
         print '[+] master password: %s' % masterPasswd
-        
+
         data = {
             'instance.param.rootpasswd': masterPasswd,
             'instance.param.publicip.gateway': network['gateway'],
@@ -326,16 +321,17 @@ class Actions(ActionsBase):
             'instance.param.smtp.sender': smtp['sender'],
             'instance.param.grid.id': grid['id'],
         }
-        
+
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=parent)
         master.consume('node', parent.instance)
         master.install(deps=True)
-        
+
         # FIXME
         # Copy needed file from master to ovcgit
         # Theses files are generated on the master and not synced back to ovcgit
         self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
         self.copyBack('ovc_master', 'jumpscale__portal__main')
+        self.copyBack('ovc_master', 'openvcloud__oauthserver__main')
 
     def initDCPMVM(self, parent):
         self.info('configuring: dcpm')
