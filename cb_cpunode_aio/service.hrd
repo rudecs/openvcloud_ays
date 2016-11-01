@@ -75,6 +75,10 @@ dependencies.16                =
     instance:'main',
     name:'vncproxy',
 
+dependencies.17                =
+    domain:'openvcloud',
+    name:'libvirtlistener',
+
 dependencies.2                 =
     domain:'openvcloud',
     name:'compute_kvm_base',
