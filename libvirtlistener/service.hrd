@@ -1,0 +1,19 @@
+git.export.1                   =
+    branch:'2.1.5',
+    dest:'/opt/jumpscale7/apps/libvirtlistener/',
+    link:'True',
+    source:'apps/libvirtlistener/*',
+    url:'https://github.com/0-complexity/openvcloud/',
+
+platform.supported             = 'generic'
+
+process.1                      =
+    args:'libvirtlistener.py',
+    cmd:'jspython',
+    cwd:'/opt/jumpscale7/apps/libvirtlistener/',
+    env:,
+    filterstr:'libvirtlistener.py',
+    prio:'100',
+    startupmanager:'tmux',
+    timeout_start:'20',
+    timeout_stop:'20',
