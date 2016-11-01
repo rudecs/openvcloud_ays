@@ -1,0 +1,73 @@
+dep.args.agentcontroller_client =
+    agentcontroller.client.addr:'$(instance.param.master.addr)',
+    agentcontroller.client.login:'node',
+    agentcontroller.client.passwd:,
+    agentcontroller.client.port:'4444',
+
+dep.args.jsagent               =
+    agentcontroller.connection:'main',
+    grid.id:'$(instance.param.grid.id)',
+    grid.node.roles:'reflector',
+
+dep.args.osis_client           =
+    param.osis.client.addr:'$(instance.param.master.addr)',
+    param.osis.client.login:'root',
+    param.osis.client.passwd:'$(instance.param.rootpasswd)',
+    param.osis.client.port:'5544',
+
+dep.args.portal_client         =
+    openvcloud.supportemail:'support@greenitglobe.com',
+    param.addr:'$(instance.param.master.addr)',
+    param.port:'$(instance.param.master.port)',
+    param.secret:'$(instance.param.rootpasswd)',
+
+dep.args.redis                 =
+    param.disk:'0',
+    param.mem:'100',
+    param.passwd:,
+    param.port:'9999',
+    param.unixsocket:'0',
+    param.ip:'0.0.0.0',
+
+dependencies.1                 =
+    args:'dep.args.redis',
+    instance:'system',
+    name:'redis',
+
+dependencies.3                 =
+    args:'dep.args.portal_client',
+    instance:'cloudbroker',
+    name:'portal_client',
+
+dependencies.4                 =
+    args:'dep.args.portal_client',
+    instance:'main',
+    name:'portal_client',
+
+dependencies.5                 =
+    args:'dep.args.portal_client',
+    instance:'cbportal',
+    name:'portal_client',
+
+dependencies.6                 =
+    args:'dep.args.osis_client',
+    instance:'main',
+    name:'osis_client',
+
+dependencies.7                 =
+    args:'dep.args.osis_client',
+    instance:'jsagent',
+    name:'osis_client',
+
+dependencies.8                 =
+    args:'dep.args.agentcontroller_client',
+    instance:'main',
+    name:'agentcontroller_client',
+
+dependencies.9                 =
+    args:'dep.args.jsagent',
+    instance:'main',
+    name:'jsagent',
+
+platform.supported             =
+    'generic',

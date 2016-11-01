@@ -1,9 +1,8 @@
 from JumpScale import j
-import urllib
-from StringIO import StringIO
 import os
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
 
@@ -111,17 +110,18 @@ class Actions(ActionsBase):
         print '[+] dcpm     : %s' % self.machines['dcpm']
         print '[+] --------------------------'
 
-        if self.machines['reflector'] == None:
+        if self.machines['reflector'] is None:
             self.warning('direct access environment, no reflector found')
 
     def configure(self, serviceObj):
-        parent = None
 
         def reflector():
             self.initReflectorVM(self.machines['reflector'], self.repoPath)
 
+
         if self.machines['reflector']:
-            j.actions.start(description='configure reflector', action=reflector, category='openvlcoud', name='configure_reflector', serviceObj=serviceObj)
+            j.actions.start(description='configure reflector', action=reflector, category='openvlcoud',
+                            name='configure_reflector', serviceObj=serviceObj)
 
         else:
             # no reflector, setting up bootstrap without it
@@ -130,25 +130,42 @@ class Actions(ActionsBase):
                 'localip': 'not used (no reflector)',
                 'publicip': 'not used (no reflector)',
                 'publicport': 'not used (no reflector)',
-                'service': '', # need to be empty
+                'service': '',  # need to be empty
             }
             self.setupBootstrap(self.repoPath, fakeReflector)
 
-
         def master():
-            self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls, self.repoPath, self.smtp, self.grid)
+            self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls,
+                              self.repoPath, self.smtp, self.grid)
 
-        j.actions.start(description='configure master', action=master, category='openvlcoud', name='configure_master', serviceObj=serviceObj)
+        j.actions.start(description='configure master', action=master, category='openvlcoud',
+                        name='configure_master', serviceObj=serviceObj)
+
+        # setting up agent on reflector
+        if self.machines['reflector']:
+            reflector = self.machines['reflector']
+            masterip = self.getMachineAddress('ovc_master')
+            data_reflector = {
+                'instance.param.rootpasswd': self.rootpwd,
+                'instance.param.master.addr': masterip,
+                'instance.param.grid.id': self.grid['id'],
+            }
+            temp = j.atyourservice.new(name='cb_reflector', args=data_reflector, parent=reflector)
+            temp.consume('node', reflector.instance)
+            temp.install(deps=True)
 
         def dcpm():
             self.initDCPMVM(self.machines['dcpm'])
 
-        j.actions.start(description='configure dcpm', action=dcpm, category='openvlcoud', name='configure_dcpm', serviceObj=serviceObj)
+        j.actions.start(description='configure dcpm', action=dcpm, category='openvlcoud',
+                        name='configure_dcpm', serviceObj=serviceObj)
 
         def proxy():
-            self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort, self.bootrappIpAddress, self.bootrappPort, self.ssl)
+            self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort,
+                             self.bootrappIpAddress, self.bootrappPort, self.ssl)
 
-        j.actions.start(description='configure proxy', action=proxy, category='openvlcoud', name='configure_proxy', serviceObj=serviceObj)
+        j.actions.start(description='configure proxy', action=proxy, category='openvlcoud',
+                        name='configure_proxy', serviceObj=serviceObj)
 
     """
     Console tools
@@ -217,11 +234,11 @@ class Actions(ActionsBase):
         return None
 
     def copyBack(self, remote, service):
-        remoteHrd  = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
+        remoteHrd = j.application.getAppInstanceHRD(name='node.ssh', instance=remote)
         remoteHost = remoteHrd.getStr('instance.ip')
 
         remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
-        localPath  = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, 'node.ssh', remote, service)
+        localPath = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, 'node.ssh', remote, service)
 
         print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
@@ -243,7 +260,7 @@ class Actions(ActionsBase):
             'instance.reflector.user': 'guest'
         }
 
-        bootrapp = j.atyourservice.remove(name='bootstrapp') # override service
+        bootrapp = j.atyourservice.remove(name='bootstrapp')  # override service
         bootrapp = j.atyourservice.new(name='bootstrapp', args=data)
         bootrapp.install()
 
