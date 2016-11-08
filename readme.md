@@ -21,14 +21,14 @@ mknod /dev/kvm c 10 232
 
 ### Install Jumpscale
 ```sh
-curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh
+curl https://raw.githubusercontent.com/Jumpscale7/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh
 ```
 
 ### Add openvcloud domain
 edit `/opt/jumpscale7/hrd/system/atyourservice.hrd`
 ```
 metadata.jumpscale             =
-    url:'https://github.com/Jumpscale/ays_jumpscale7',
+    url:'https://github.com/Jumpscale7/ays_jumpscale7',
 # add this domain
 metadata.openvcloud           =
     url:'https://github.com/0-complexity/openvcloud_ays',
@@ -55,7 +55,7 @@ Please provide value for param.vncproxy.publichostport of type str
 : 192.168.57.7:8091
 ```
 
-## SSL offloader
+## SSL offloader (dont do this for development install)
 
 ### Install Jumpscale
 ```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh```
@@ -91,7 +91,10 @@ hostname the defenseshield should be exposed at
 ## CPU Node
 
 ### Install Jumpscale
-```curl https://raw.githubusercontent.com/Jumpscale/jumpscale_core7/master/install/install.sh > /tmp/js7.sh && bash /tmp/js7.sh```
+```
+curl https://raw.githubusercontent.com/Jumpscale7/jumpscale_core7/7.1/install/install.sh > /tmp/js7.sh && bash
+/tmp/js7.sh
+```
 
 ### Add openvcloud domain
 edit ```/opt/jumpscale7/hrd/system/atyourservice.hrd```
@@ -106,7 +109,9 @@ metadata.openvcloud           =
 ```
 
 ### Install cb_cpunode_aio
-```ays install -n cb_cpunode_aio```
+```
+ays install -n cb_cpunode_aio
+```
 
 Fill in the public IP of the cloudspace where the master is installed:
 ```
