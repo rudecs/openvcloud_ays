@@ -6,14 +6,14 @@ dependencies.2                 =
     name:'portal_client',
 
 git.export.1                   =
-    branch:'2.1.5',
+    branch:'master',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:'True',
     source:'apps/cbportal/base/*',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.2                   =
-    branch:'2.1.5',
+    branch:'master',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/templates/',
     link:'True',
     source:'apps/cbportal/templates/*',
