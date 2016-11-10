@@ -50,5 +50,5 @@ class Actions(ActionsBase):
                       }
             setdata('/ovs/framework/webapps', json.dumps(config))
 
-        j.do.execute('restart ovs-webapp-api')
+        j.system.platform.ubuntu.restartService('ovs-webapp-api')
         return True
