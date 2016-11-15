@@ -26,6 +26,8 @@ class Actions(ActionsBase):
         client_id = serviceObj.hrd.get('instance.param.client_id')
         client_secret = serviceObj.hrd.get('instance.param.client_secret')
         callbackURL = serviceObj.hrd.get('instance.param.callbackurl')
+        environment = serviceObj.hrd.get('instance.param.environment')
+        groups = ['admin', 'level1', 'level2', 'level2', 'ovs_admin', 'user']
 
         baseurl = "https://itsyou.online/"
 
@@ -34,19 +36,22 @@ class Actions(ActionsBase):
         token = accesstoken.json()['access_token']
         authheaders = {'Authorization': 'token %s' % token}
 
+        # register api key
+        apikeyname = 'openvcloud-{}'.format(environment)
         apikey = {'callbackURL': callbackURL,
                   'clientCredentialsGrantType': False,
-                  'label': 'openvcloud'
+                  'label': apikeyname
                   }
 
         result = requests.get(os.path.join(baseurl, 'api', 'organizations', client_id,
-                                           'apikeys', 'openvcloud'), headers=authheaders)
+                                           'apikeys', apikeyname), headers=authheaders)
         if result.status_code == 200:
             stored_apikey = result.json()
             if apikey['callbackURL'] != stored_apikey['callbackURL']:
                 print('API key does not match callback url deleting it')
                 requests.delete(os.path.join(baseurl, 'api', 'organizations', client_id,
-                                             'apikeys', 'openvcloud'), headers=authheaders)
+                                             'apikeys', apikeyname), headers=authheaders)
+                apikey = {}
             else:
                 apikey = stored_apikey
 
@@ -56,7 +61,6 @@ class Actions(ActionsBase):
                                                 client_id, 'apikeys'), json=apikey, headers=authheaders)
             apikey = result.json()
 
-        groups = ['admin', 'level1', 'level2', 'level2', 'ovs_admin', 'user']
         # install oauth_client
         scopes = ['user:name', 'user:email']
         for group in groups:
@@ -81,12 +85,13 @@ class Actions(ActionsBase):
             print('Check if group %s exists' % suborgname)
             result = requests.get(os.path.join(baseurl, 'api', 'organizations', suborgname), headers=authheaders)
             if result.status_code != 200:
-                print('Creating group %s' % suborgname)
+                print('Creating group {}'.format(suborgname))
                 result = requests.post(os.path.join(baseurl, 'api', 'organizations',
                                                     suborgname, 'apikeys'), json=suborg, headers=authheaders)
                 if result.status_code >= 400:
-                    raise RuntimeError("Failed to create suborg {}. Error: {}".format(suborgname, result.text))
+                    raise RuntimeError("Failed to create suborg {}. Error: {} {}".format(suborgname, result.status_code, result.text))
 
+        # configure portal to use this oauthprovider and restart
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.hrd.set('instance.param.cfg.force_oauth_instance', 'itsyouonline')
         portal.restart()

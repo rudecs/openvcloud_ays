@@ -1,3 +1,4 @@
 param.client_id = @ASK type:str descr='ovc_itsyouonline: Client ID'
 param.client_secret = @ASK type:str descr='ovc_itsyouonline: Client Secret'
 param.callbackurl = @ASK type:str descr='ovs_itsyouonline: Callback URL'
+param.environment = @ASK type:str descr='ovs_itsoutonline: name'
