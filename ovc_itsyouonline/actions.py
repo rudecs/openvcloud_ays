@@ -39,8 +39,6 @@ class Actions(ActionsBase):
                   'label': 'openvcloud'
                   }
 
-        import ipdb
-        ipdb.set_trace()
         result = requests.get(os.path.join(baseurl, 'api', 'organizations', client_id,
                                            'apikeys', 'openvcloud'), headers=authheaders)
         if result.status_code == 200:
@@ -82,10 +80,13 @@ class Actions(ActionsBase):
             suborg = {'globalid': suborgname}
             print('Check if group %s exists' % suborgname)
             result = requests.get(os.path.join(baseurl, 'api', 'organizations', suborgname), headers=authheaders)
-            if result.status_code == 404:
+            if result.status_code != 200:
                 print('Creating group %s' % suborgname)
                 result = requests.post(os.path.join(baseurl, 'api', 'organizations',
                                                     suborgname, 'apikeys'), json=suborg, headers=authheaders)
+                if result.status_code >= 400:
+                    raise RuntimeError("Failed to create suborg {}. Error: {}".format(suborgname, result.text))
+
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.hrd.set('instance.param.cfg.force_oauth_instance', 'itsyouonline')
         portal.restart()
