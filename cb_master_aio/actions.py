@@ -133,7 +133,7 @@ class Actions(ActionsBase):
             ccl.externalnetwork.set(pool)
 
         oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
-        oauthClientHRD = j.atyourservice.get(name='oauth_client').hrd
+        oauthClientHRD = j.atyourservice.get(name='oauth_client', instance='oauth').hrd
         portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
         oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
 
