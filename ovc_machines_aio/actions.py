@@ -22,7 +22,7 @@ class Actions(ActionsBase):
         if len(clients) > 0:
             self.target = 'ms1'
 
-        print '[+] target node: %s' % self.target
+        j.console.info('target node: %s' % self.target)
 
     def configure(self, serviceObj):
         if self.target == 'ms1':
@@ -117,11 +117,11 @@ class Actions(ActionsBase):
         hosts = re.sub(r'\n\n', '\n', hosts)
         j.system.fs.writeFile('/etc/hosts', hosts, False)
 
-        self.vm.message('updating local /etc/hosts')
+        j.console.message('updating local /etc/hosts')
         j.system.fs.writeFile('/etc/hosts', ("\n%s\t%s\n" % (address, host)), True)
 
     def nodeInstall(self, hostname, network, keyInstance):
-        self.vm.message('installing node service: %s, %s' % (hostname, network['localip']))
+        j.console.message('installing node service: %s, %s' % (hostname, network['localip']))
 
         data = {
             'instance.ip': network['localip'],
@@ -153,7 +153,7 @@ class Actions(ActionsBase):
 
     def sshKeyGrabber(self, remote, keys):
         for source, destination in keys.iteritems():
-            self.vm.message('importing key (%s -> %s)' % (source, destination))
+            j.console.message('importing key (%s -> %s)' % (source, destination))
             content = remote.file_read(source)
             j.system.fs.writeFile(filename=destination, contents=content)
             j.system.fs.chmod(destination, 0o600)
@@ -172,7 +172,7 @@ class Actions(ActionsBase):
         self.sshKeyGrabber(remote, keys)
 
     def sshSetup(self, remote):
-        self.vm.message('configuring ssh daemon')
+        j.console.message('configuring ssh daemon')
         content = remote.file_read('/etc/ssh/sshd_config')
 
         if content.find('GatewayPorts clientspecified') == -1:
@@ -180,7 +180,7 @@ class Actions(ActionsBase):
             remote.file_append('/etc/ssh/sshd_config', "UsePAM yes\n")
             remote.file_append('/etc/ssh/sshd_config', "GatewayPorts clientspecified\n")
 
-            self.vm.message('restarting ssh')
+            j.console.message('restarting ssh')
             remote.run('service ssh restart')
 
     def defaultConfig(self, remote, hostname, machinename, network, repoPath):
