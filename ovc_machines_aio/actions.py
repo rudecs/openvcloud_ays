@@ -184,22 +184,19 @@ class Actions(ActionsBase):
             remote.run('service ssh restart')
 
     def defaultConfig(self, remote, hostname, machinename, network, repoPath):
-        if self.quiet:
-            self.vm.enableQuiet(remote)
-
-        self.vm.message('setting up host configuration')
+        j.console.message('setting up host configuration')
         self.setupHost(hostname, network['localip'])
 
-        self.vm.message('generating ssh keys')
+        j.console.message('generating ssh keys')
         self.sshKeygen(remote, hostname, repoPath)
 
-        self.vm.message('installing jumpscale')
+        j.console.message('installing jumpscale')
         self.installJumpscale(remote)
 
-        self.vm.message('setting up git credentials')
+        j.console.message('setting up git credentials')
         self.setupGit(remote)
 
-        self.vm.message('initializing node sshkey')
+        j.console.message('initializing node sshkey')
         keyInstance = self.keyInstall(machinename)
         service = self.nodeInstall(machinename, network, keyInstance)
 

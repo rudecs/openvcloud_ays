@@ -86,24 +86,24 @@ class Actions(ActionsBase):
             'defense': serviceObj.hrd.getStr('instance.ssl.defense'),
         }
 
-        print '[+] root domain: %s' % self.rootdomain
-        print '[+] environment: %s' % self.rootenv
-        print '[+] --------------------------'
-        print '[+] oauth   url: %s' % self.urls['oauth']
-        print '[+] portal  url: %s' % self.urls['portal']
-        print '[+] ovs     url: %s' % self.urls['ovs']
-        print '[+] defense url: %s' % self.urls['defense']
-        print '[+] novnc   url: %s' % self.urls['novnc']
-        print '[+] grafana url: %s' % self.urls['grafana']
-        print '[+] smtp server: %s' % self.smtp['server']
-        print '[+] --------------------------'
-        print '[+] master   : %s' % self.machines['master']
-        print '[+] proxy    : %s' % self.machines['proxy']
-        print '[+] reflector: %s' % self.machines['reflector']
-        print '[+] --------------------------'
+        j.console.info('root domain: %s' % self.rootdomain')
+        j.console.info('environment: %s' % self.rootenv')
+        j.console.info('--------------------------'')
+        j.console.info('oauth   url: %s' % self.urls['oauth']')
+        j.console.info('portal  url: %s' % self.urls['portal']')
+        j.console.info('ovs     url: %s' % self.urls['ovs']')
+        j.console.info('defense url: %s' % self.urls['defense']')
+        j.console.info('novnc   url: %s' % self.urls['novnc']')
+        j.console.info('grafana url: %s' % self.urls['grafana']')
+        j.console.info('smtp server: %s' % self.smtp['server']')
+        j.console.info('--------------------------'')
+        j.console.info('master   : %s' % self.machines['master']')
+        j.console.info('proxy    : %s' % self.machines['proxy']')
+        j.console.info('reflector: %s' % self.machines['reflector']')
+        j.console.info('--------------------------'')
 
         if self.machines['reflector'] is None:
-            self.warning('direct access environment, no reflector found')
+            j.console.warning('direct access environment, no reflector found')
 
     def configure(self, serviceObj):
 
@@ -116,7 +116,7 @@ class Actions(ActionsBase):
 
         else:
             # no reflector, setting up bootstrap without it
-            self.warning('skipping reflector configuration, setting up bootstrap')
+            j.console.warning('skipping reflector configuration, setting up bootstrap')
             fakeReflector = {
                 'localip': 'not used (no reflector)',
                 'publicip': 'not used (no reflector)',
@@ -163,16 +163,6 @@ class Actions(ActionsBase):
     def disableQuiet(self):
         j.remote.cuisine.api.fabric.state.output['stdout'] = True
         j.remote.cuisine.api.fabric.state.output['running'] = True
-
-    # FIXME: move me
-    def info(self, text):
-        print '\033[1;36m[*] %s\033[0m' % text
-
-    def warning(self, text):
-        print '\033[1;33m[-] %s\033[0m' % text
-
-    def success(self, text):
-        print '\033[1;32m[+] %s\033[0m' % text
 
     """
     Configuration tools
@@ -227,13 +217,13 @@ class Actions(ActionsBase):
         remotePath = '/opt/jumpscale7/hrd/apps/%s/service.hrd' % service
         localPath = '%s/services/jumpscale__%s__%s/%s/' % (self.repoPath, 'node.ssh', remote, service)
 
-        print '[+] copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath)
+        j.console.info('copy back: %s:%s -> %s' % (remoteHost, remotePath, localPath))
         j.do.execute('scp %s:%s %s' % (remoteHost, remotePath, localPath))
 
     def setupBootstrap(self, repoPath, reflector):
-        print "[+] bootstrap reflector private ip: %s" % reflector['localip']
-        print "[+] bootstrap reflector public ip: %s" % reflector['publicip']
-        print "[+] bootstrap reflector ssh port: %s" % reflector['publicport']
+        j.console.info("bootstrap reflector private ip: %s" % reflector['localip'])
+        j.console.info("bootstrap reflector public ip: %s" % reflector['publicip'])
+        j.console.info("bootstrap reflector ssh port: %s" % reflector['publicport'])
 
         # install bootrapp on git vm
         data = {
@@ -252,7 +242,7 @@ class Actions(ActionsBase):
         bootrapp.install()
 
     def initReflectorVM(self, parent, repoPath):
-        self.info('configuring: reflector')
+        j.console.info('configuring: reflector')
 
         reflector = self.getMachine('ovc_reflector')
         reflector['service'] = 'jumpscale__node.ssh__ovc_reflector'
@@ -260,15 +250,15 @@ class Actions(ActionsBase):
         self.setupBootstrap(repoPath, reflector)
 
     def initProxyVM(self, parent, host, servers, bootrappIpAddress, bootrappPort, ssl):
-        self.info('configuring: proxy')
+        j.console.info('configuring: proxy')
 
         proxyip = self.getMachineAddress('ovc_proxy')
-        print '[+] ovc_proxy: %s' % proxyip
+        j.console.info('ovc_proxy: %s' % proxyip)
 
         masterip = self.getMachineAddress('ovc_master')
-        print '[+] ovc_master: %s' % masterip
+        j.console.info('ovc_master: %s' % masterip)
 
-        print '[+] master domain: %s' % self.rootdomain
+        j.console.info('master domain: %s' % self.rootdomain)
 
         data = {
             'instance.host': host,
@@ -292,11 +282,11 @@ class Actions(ActionsBase):
         ssloffloader.install(deps=True)
 
     def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid, itsyouonline):
-        self.info('configuring: master')
+        j.console.info('configuring: master')
 
-        print '[+] network: %s -> %s' % (network['start'], network['end'])
-        print '[+] gateway: %s, netmask: %s' % (network['gateway'], network['netmask'])
-        print '[+] master password: %s' % masterPasswd
+        j.console.info('network: %s -> %s' % (network['start'], network['end']))
+        j.console.info('gateway: %s, netmask: %s' % (network['gateway'], network['netmask']))
+        j.console.info('master password: %s' % masterPasswd)
 
         data = {
             'instance.param.rootpasswd': masterPasswd,
