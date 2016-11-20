@@ -19,7 +19,7 @@ class Actions(ActionsBase):
 
         # checking for ssh-agent
         if not os.environ.get('SSH_AUTH_SOCK'):
-            print '[-] ssh agent seems not loaded, please check your keys'
+            j.console.warning('ssh agent seems not loaded, please check your keys')
             j.application.stop()
 
         # custom servers name
@@ -36,26 +36,26 @@ class Actions(ActionsBase):
 
         # servers settings
         self.servers = {
-            'boot':    self.defaultServerName('bootstrapp', serviceObj.hrd.get('instance.bootstrapp.servername')),
-            'ovs':     self.defaultServerName('ovs', serviceObj.hrd.getStr('instance.ovs.servername')),
+            'boot': self.defaultServerName('bootstrapp', serviceObj.hrd.get('instance.bootstrapp.servername')),
+            'ovs': self.defaultServerName('ovs', serviceObj.hrd.getStr('instance.ovs.servername')),
             'defense': self.defaultServerName('defense', serviceObj.hrd.getStr('instance.defense.servername')),
-            'novnc':   self.defaultServerName('novnc', serviceObj.hrd.getStr('instance.novnc.servername')),
+            'novnc': self.defaultServerName('novnc', serviceObj.hrd.getStr('instance.novnc.servername')),
             'grafana': self.grafanaServerName
         }
 
         self.urls = {
-            'ovs':     'https://' + self.servers['ovs'],
+            'ovs': 'https://' + self.servers['ovs'],
             'defense': 'https://' + self.servers['defense'],
             'grafana': 'https://' + self.servers['grafana'],
-            'novnc':   'https://' + self.servers['novnc'],
-            'oauth':   'https://%s' % (self.host),
-            'portal':  'https://%s' % (self.host)
+            'novnc': 'https://' + self.servers['novnc'],
+            'oauth': 'https://%s' % (self.host),
+            'portal': 'https://%s' % (self.host)
         }
 
         self.network = {
             'gateway': serviceObj.hrd.getStr('instance.publicip.gateway'),
-            'start':   serviceObj.hrd.getStr('instance.publicip.start'),
-            'end':     serviceObj.hrd.getStr('instance.publicip.end'),
+            'start': serviceObj.hrd.getStr('instance.publicip.start'),
+            'end': serviceObj.hrd.getStr('instance.publicip.end'),
             'netmask': serviceObj.hrd.getStr('instance.publicip.netmask')
         }
 
@@ -63,15 +63,15 @@ class Actions(ActionsBase):
 
         self.smtp = {
             'server': serviceObj.hrd.getStr('instance.smtp.server'),
-            'port':   serviceObj.hrd.getStr('instance.smtp.port'),
-            'login':  serviceObj.hrd.getStr('instance.smtp.login'),
+            'port': serviceObj.hrd.getStr('instance.smtp.port'),
+            'login': serviceObj.hrd.getStr('instance.smtp.login'),
             'passwd': serviceObj.hrd.getStr('instance.smtp.passwd'),
             'sender': serviceObj.hrd.getStr('instance.smtp.sender')
         }
 
         self.machines = {
-            'master':    self.getMachineService('ovc_master'),
-            'proxy':     self.getMachineService('ovc_proxy'),
+            'master': self.getMachineService('ovc_master'),
+            'proxy': self.getMachineService('ovc_proxy'),
             'reflector': self.getMachineService('ovc_reflector'),
         }
 
@@ -80,27 +80,27 @@ class Actions(ActionsBase):
         }
 
         self.ssl = {
-            'root':    serviceObj.hrd.getStr('instance.ssl.root'),
-            'ovs':     serviceObj.hrd.getStr('instance.ssl.ovs'),
-            'novnc':   serviceObj.hrd.getStr('instance.ssl.novnc'),
+            'root': serviceObj.hrd.getStr('instance.ssl.root'),
+            'ovs': serviceObj.hrd.getStr('instance.ssl.ovs'),
+            'novnc': serviceObj.hrd.getStr('instance.ssl.novnc'),
             'defense': serviceObj.hrd.getStr('instance.ssl.defense'),
         }
 
-        j.console.info('root domain: %s' % self.rootdomain')
-        j.console.info('environment: %s' % self.rootenv')
-        j.console.info('--------------------------'')
-        j.console.info('oauth   url: %s' % self.urls['oauth']')
-        j.console.info('portal  url: %s' % self.urls['portal']')
-        j.console.info('ovs     url: %s' % self.urls['ovs']')
-        j.console.info('defense url: %s' % self.urls['defense']')
-        j.console.info('novnc   url: %s' % self.urls['novnc']')
-        j.console.info('grafana url: %s' % self.urls['grafana']')
-        j.console.info('smtp server: %s' % self.smtp['server']')
-        j.console.info('--------------------------'')
-        j.console.info('master   : %s' % self.machines['master']')
-        j.console.info('proxy    : %s' % self.machines['proxy']')
-        j.console.info('reflector: %s' % self.machines['reflector']')
-        j.console.info('--------------------------'')
+        j.console.info('root domain: %s' % self.rootdomain)
+        j.console.info('environment: %s' % self.rootenv)
+        j.console.info('--------------------------')
+        j.console.info('oauth   url: %s' % self.urls['oauth'])
+        j.console.info('portal  url: %s' % self.urls['portal'])
+        j.console.info('ovs     url: %s' % self.urls['ovs'])
+        j.console.info('defense url: %s' % self.urls['defense'])
+        j.console.info('novnc   url: %s' % self.urls['novnc'])
+        j.console.info('grafana url: %s' % self.urls['grafana'])
+        j.console.info('smtp server: %s' % self.smtp['server'])
+        j.console.info('--------------------------')
+        j.console.info('master   : %s' % self.machines['master'])
+        j.console.info('proxy    : %s' % self.machines['proxy'])
+        j.console.info('reflector: %s' % self.machines['reflector'])
+        j.console.info('--------------------------')
 
         if self.machines['reflector'] is None:
             j.console.warning('direct access environment, no reflector found')
