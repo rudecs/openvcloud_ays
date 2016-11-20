@@ -29,6 +29,7 @@ class Actions(ActionsBase):
         environment = serviceObj.hrd.get('instance.param.environment')
         groups = ['admin', 'level1', 'level2', 'level2', 'ovs_admin', 'user']
 
+        # baseurl = "https://staging.itsyou.online/"
         baseurl = "https://itsyou.online/"
 
         accesstokenparams = {'grant_type': 'client_credentials', 'client_id': client_id, 'client_secret': client_secret}
@@ -71,9 +72,9 @@ class Actions(ActionsBase):
                 'instance.oauth.client.redirect_url': callbackURL,
                 'instance.oauth.client.scope': ','.join(scopes),
                 'instance.oauth.client.secret': apikey['secret'],
-                'instance.oauth.client.url': 'https://itsyou.online/v1/oauth/authorize',
-                'instance.oauth.client.url2': 'https://itsyou.online/v1/oauth/access_token',
-                'instance.oauth.client.user_info_url': 'https://itsyou.online/api/users/{username}/info'
+                'instance.oauth.client.url': os.path.join(baseurl, 'v1/oauth/authorize'),
+                'instance.oauth.client.url2': os.path.join(baseurl, 'v1/oauth/access_token'),
+                'instance.oauth.client.user_info_url': os.path.join(baseurl, 'api/users/{username}/info')
                 }
         oauthclient = j.atyourservice.new(name='oauth_client', instance='itsyouonline', args=data)
         oauthclient.install()
@@ -87,9 +88,10 @@ class Actions(ActionsBase):
             if result.status_code != 200:
                 print('Creating group {}'.format(suborgname))
                 result = requests.post(os.path.join(baseurl, 'api', 'organizations',
-                                                    suborgname, 'apikeys'), json=suborg, headers=authheaders)
+                                                    client_id), json=suborg, headers=authheaders)
                 if result.status_code >= 400:
-                    raise RuntimeError("Failed to create suborg {}. Error: {} {}".format(suborgname, result.status_code, result.text))
+                    raise RuntimeError("Failed to create suborg {}. Error: {} {}".format(
+                        suborgname, result.status_code, result.text))
 
         # configure portal to use this oauthprovider and restart
         portal = j.atyourservice.get(name='portal', instance='main')
