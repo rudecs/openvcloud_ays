@@ -59,7 +59,7 @@ class Actions(ActionsBase):
             'netmask': serviceObj.hrd.getStr('instance.publicip.netmask')
         }
 
-        self.itsyouonline = serviceObj.hrd.getDictFromPrefix('instance.itsyouonline.client_id')
+        self.itsyouonline = serviceObj.hrd.getDictFromPrefix('instance.itsyouonline')
 
         self.smtp = {
             'server': serviceObj.hrd.getStr('instance.smtp.server'),
