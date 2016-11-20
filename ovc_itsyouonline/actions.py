@@ -27,7 +27,7 @@ class Actions(ActionsBase):
         client_secret = serviceObj.hrd.get('instance.param.client_secret')
         callbackURL = serviceObj.hrd.get('instance.param.callbackurl')
         environment = serviceObj.hrd.get('instance.param.environment')
-        groups = ['admin', 'level1', 'level2', 'level2', 'ovs_admin', 'user']
+        groups = ['admin', 'level1', 'level2', 'level3', 'ovs_admin', 'user']
 
         # baseurl = "https://staging.itsyou.online/"
         baseurl = "https://itsyou.online/"
