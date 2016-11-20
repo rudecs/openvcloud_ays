@@ -2,7 +2,6 @@ from JumpScale import j
 from ConfigParser import SafeConfigParser
 import cStringIO as StringIO
 from urlparse import urlparse
-import json
 
 ActionsBase = j.atyourservice.getActionsBaseClass()
 
@@ -76,7 +75,7 @@ class Actions(ActionsBase):
             if data['url']:
                 portal.hrd.set('instance.navigationlinks.%s' % linkid, data)
         portal.hrd.set('instance.param.cfg.defaultspace', 'vdc')
-        portal.hrd.set('instance.param.cfg.force_oauth_instance', 'oauth')
+        portal.hrd.set('instance.param.cfg.force_oauth_instance', 'itsyouonline')
         portal.start()
 
         ccl = j.clients.osis.getNamespace('cloudbroker')

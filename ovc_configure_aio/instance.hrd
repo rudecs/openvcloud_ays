@@ -20,6 +20,9 @@ defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe
 novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at (use auto to autodetect)'
 grafana.servername = @ASK type:str default:'grafanaenvironment.demo.greenitglobe.com'  descr:'hostname the grafana should be access (use auto to autodetect)'
 
+itsyouonline.client_id = @ASK type:str default:'greenitglobe.environments' descr:'Itsyouonline client_id'
+itsyouonline.client_secret = @ASK type:str descr:'Itsyouonline client_secret'
+
 reflector.root.passphrase=@ASK descr:'passphrase for the root ssh keypair' type:'str'
 
 smtp.server=@ASK default:'smtp.mandrillapp.com'  descr:'MAILCLIENT: SMTP Server'

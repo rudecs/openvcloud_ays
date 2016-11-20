@@ -25,13 +25,17 @@ dep.args.oauthclient           =
     oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
     oauth.client.user_info_url:'http://127.0.0.1:8010/user',
 
+dep.args.ovc_itsyouonline           =
+    param.client_id:'$(instance.param.itsyouonline.client_id)',
+    param.client_secret:'$(instance.param.itsyouonline.client_secret)',
+    param.callbackurl:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
+    param.environment:'$(instance.param.ovc.environment)',
+
 dep.args.oauthserver           =
-    dcpm.url:'$(instance.param.dcpm.url)',
     grafana.url:'$(instance.param.grafana.url)',
     oauth.url:'$(instance.param.oauth.url)',
     ovs.url:'$(instance.param.ovs.url)',
     portal.url:'$(instance.param.portal.url)',
-    safekeeper.url:'$(instance.param.safekeeper.url)',
 
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
@@ -132,6 +136,12 @@ dependencies.24                =
     domain:'jumpscale',
     instance:'main',
     name:'pycapnp',
+
+dependencies.25                =
+    domain:'openvcloud',
+    instance:'main',
+    args:'dep.args.ovc_itsyouonline',
+    name:'ovc_itsyouonline',
 
 dependencies.4                 =
     args:'dep.args.singlenode_grid',

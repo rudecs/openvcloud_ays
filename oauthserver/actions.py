@@ -1,7 +1,9 @@
 from JumpScale import j
-import os, base64
+import os
+import base64
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     """
@@ -20,14 +22,14 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-    def prepare(self,serviceObj):
+    def prepare(self, serviceObj):
         """
         this gets executed before the files are downloaded & installed on appropriate spots
         """
         j.system.fs.createDir("$(system.paths.base)/apps/oauthserver")
         return True
 
-    def configure(self,serviceObj):
+    def configure(self, serviceObj):
         """
         this gets executed when files are installed
         this step is used to do configuration steps to the platform
@@ -40,19 +42,11 @@ class Actions(ActionsBase):
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("instance.oauth.clients.dcpm.secret", clientsecret)
-
-        binarysecret = os.urandom(32)
-        clientsecret = base64.urlsafe_b64encode(binarysecret)
         serviceObj.hrd.set("instance.oauth.clients.ovs.secret", clientsecret)
 
         binarysecret = os.urandom(32)
         clientsecret = base64.urlsafe_b64encode(binarysecret)
         serviceObj.hrd.set("instance.oauth.clients.portal.secret", clientsecret)
-
-        binarysecret = os.urandom(32)
-        clientsecret = base64.urlsafe_b64encode(binarysecret)
-        serviceObj.hrd.set("instance.oauth.clients.safekeeper.secret", clientsecret)
 
         serviceObj.hrd.applyOnFile("$(system.paths.base)/apps/oauthserver/clients.toml")
 

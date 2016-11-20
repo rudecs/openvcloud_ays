@@ -59,6 +59,8 @@ class Actions(ActionsBase):
             'netmask': serviceObj.hrd.getStr('instance.publicip.netmask')
         }
 
+        self.itsyouonline = serviceObj.hrd.getDictFromPrefix('instance.itsyouonline.client_id')
+
         self.smtp = {
             'server': serviceObj.hrd.getStr('instance.smtp.server'),
             'port':   serviceObj.hrd.getStr('instance.smtp.port'),
@@ -125,7 +127,7 @@ class Actions(ActionsBase):
 
         def master():
             self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls,
-                              self.repoPath, self.smtp, self.grid)
+                              self.repoPath, self.smtp, self.grid, self.itsyouonline)
 
         j.actions.start(description='configure master', action=master, category='openvlcoud',
                         name='configure_master', serviceObj=serviceObj)
@@ -289,7 +291,7 @@ class Actions(ActionsBase):
         ssloffloader.consume('node', parent.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid):
+    def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid, itsyouonline):
         self.info('configuring: master')
 
         print '[+] network: %s -> %s' % (network['start'], network['end'])
@@ -314,6 +316,8 @@ class Actions(ActionsBase):
             'instance.param.smtp.passwd': smtp['passwd'],
             'instance.param.smtp.sender': smtp['sender'],
             'instance.param.grid.id': grid['id'],
+            'instance.param.itsyouonline.client_id': itsyouonline['client_id'],
+            'instance.param.itsyouonline.client_secret': itsyouonline['client_secret'],
         }
 
         master = j.atyourservice.new(name='cb_master_aio', args=data, parent=parent)
