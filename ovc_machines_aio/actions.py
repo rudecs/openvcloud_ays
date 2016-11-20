@@ -54,7 +54,7 @@ class Actions(ActionsBase):
         delete = serviceObj.hrd.getBool('instance.param.override')
 
         if self.quiet:
-            self.vm.enableQuiet()
+            j.remote.cuisine.enableQuiet()
 
         def reflector():
             self.initReflectorVM(self.bootstrappPort, self.repoPath, delete=delete)
@@ -63,24 +63,24 @@ class Actions(ActionsBase):
         if self.reflector:
             j.actions.start(description='install reflector vm', action=reflector,
                             category='openvlcoud', name='install_reflector', serviceObj=serviceObj)
-            self.vm.success('reflector spawned')
+            j.console.success('reflector spawned')
 
         else:
-            self.vm.warning('reflector skipped')
+            j.console.warning('reflector skipped')
 
         def master():
             self.initMasterVM(self.repoPath, delete=delete)
 
         j.actions.start(description='install master vm', action=master,
                         category='openvlcoud', name='install_master', serviceObj=serviceObj)
-        self.vm.success('master spawned')
+        j.console.success('master spawned')
 
         def proxy():
             self.initProxyVM(self.repoPath, delete=delete)
 
         j.actions.start(description='install proxy vm', action=proxy,
                         category='openvlcoud', name='install_proxy', serviceObj=serviceObj)
-        self.vm.success('proxy spawned')
+        j.console.success('proxy spawned')
 
     """
     Setup tools
@@ -88,7 +88,7 @@ class Actions(ActionsBase):
 
     def installJumpscale(self, cl):
         if cl.file_exists('/opt/jumpscale7'):
-            self.vm.warning('jumpscale already installed, skipping')
+            j.console.warning('jumpscale already installed, skipping')
             return
 
         cmd = j.do.getInstallCommand()
@@ -184,6 +184,8 @@ class Actions(ActionsBase):
             remote.run('service ssh restart')
 
     def defaultConfig(self, remote, hostname, machinename, network, repoPath):
+        if self.quiet:
+            j.remote.cuisine.enableQuiet()
         j.console.message('setting up host configuration')
         self.setupHost(hostname, network['localip'])
 
