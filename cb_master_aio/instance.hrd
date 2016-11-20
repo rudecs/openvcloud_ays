@@ -3,12 +3,10 @@ param.publicip.gateway = @ASK type:str
 param.publicip.netmask = @ASK type:str
 param.publicip.start = @ASK type:str
 param.publicip.end = @ASK type:str
-param.dcpm.url = @ASK type:str default:''  descr:'url DCPM is hosted on (leave empty if no DCPM) eg: https://dcpmcustomer.demo.greenitglobe.com'
 param.ovs.url = @ASK type:str default:''  descr:'url OpenvStorage is hosted on eg: https://ovscustomer.demo.greenitglobe.com'
 param.portal.url = @ASK type:str default:''  descr:'url the gridportal is hosted on eg: https://customer.demo.greenitglobe.com'
 param.oauth.url = @ASK type:str default:'' descr:'public url of the oauth server eg: https://environment.demo.greenitglobe.com'
 param.defense.url = @ASK type:str default:'' descr:'url for the defense shield eg: https://defensecurtomer.demo.greenitglobe.com'
-param.safekeeper.url = @ASK type:str default:'' descr:'url for the safekeeper eg; https://safekeepercustomer.demo.greenitglobe.com'
 param.ovc.environment = @ASK type:str default:'demo' descr:'Environment name eg: demo'
 
 param.smtp.server=@ASK default:'smtp.mandrillapp.com'  descr:'MAILCLIENT: SMTP Server'

@@ -10,9 +10,6 @@ class Actions(ActionsBase):
         self.host = serviceObj.hrd.getStr('instance.host')
         self.rootpwd = serviceObj.hrd.getStr('instance.master.rootpasswd')
 
-        # self.dcpmIpAddress = serviceObj.hrd.getStr('instance.dcpm.ipadress')
-        self.dcpmPort = serviceObj.hrd.getStr('instance.dcpm.port')
-
         self.bootrappIpAddress = serviceObj.hrd.get('instance.bootstrapp.ipadress')
         self.bootrappPort = serviceObj.hrd.get('instance.bootstrapp.port')
 
@@ -40,9 +37,7 @@ class Actions(ActionsBase):
         # servers settings
         self.servers = {
             'boot':    self.defaultServerName('bootstrapp', serviceObj.hrd.get('instance.bootstrapp.servername')),
-            'safe':    self.defaultServerName('safekeeper', serviceObj.hrd.getStr('instance.safekeeper.servername')),
             'ovs':     self.defaultServerName('ovs', serviceObj.hrd.getStr('instance.ovs.servername')),
-            'dcpm':    self.defaultServerName('dcpm', serviceObj.hrd.getStr('instance.dcpm.servername')),
             'defense': self.defaultServerName('defense', serviceObj.hrd.getStr('instance.defense.servername')),
             'novnc':   self.defaultServerName('novnc', serviceObj.hrd.getStr('instance.novnc.servername')),
             'grafana': self.grafanaServerName
@@ -50,11 +45,9 @@ class Actions(ActionsBase):
 
         self.urls = {
             'ovs':     'https://' + self.servers['ovs'],
-            'dcpm':    'https://' + self.servers['dcpm'],
             'defense': 'https://' + self.servers['defense'],
             'grafana': 'https://' + self.servers['grafana'],
             'novnc':   'https://' + self.servers['novnc'],
-            'safe':    'https://' + self.servers['safe'],
             'oauth':   'https://%s' % (self.host),
             'portal':  'https://%s' % (self.host)
         }
@@ -78,7 +71,6 @@ class Actions(ActionsBase):
             'master':    self.getMachineService('ovc_master'),
             'proxy':     self.getMachineService('ovc_proxy'),
             'reflector': self.getMachineService('ovc_reflector'),
-            'dcpm':      self.getMachineService('ovc_dcpm')
         }
 
         self.grid = {
@@ -97,7 +89,6 @@ class Actions(ActionsBase):
         print '[+] --------------------------'
         print '[+] oauth   url: %s' % self.urls['oauth']
         print '[+] portal  url: %s' % self.urls['portal']
-        print '[+] dcpm    url: %s' % self.urls['dcpm']
         print '[+] ovs     url: %s' % self.urls['ovs']
         print '[+] defense url: %s' % self.urls['defense']
         print '[+] novnc   url: %s' % self.urls['novnc']
@@ -107,7 +98,6 @@ class Actions(ActionsBase):
         print '[+] master   : %s' % self.machines['master']
         print '[+] proxy    : %s' % self.machines['proxy']
         print '[+] reflector: %s' % self.machines['reflector']
-        print '[+] dcpm     : %s' % self.machines['dcpm']
         print '[+] --------------------------'
 
         if self.machines['reflector'] is None:
@@ -117,7 +107,6 @@ class Actions(ActionsBase):
 
         def reflector():
             self.initReflectorVM(self.machines['reflector'], self.repoPath)
-
 
         if self.machines['reflector']:
             j.actions.start(description='configure reflector', action=reflector, category='openvlcoud',
@@ -154,14 +143,8 @@ class Actions(ActionsBase):
             temp.consume('node', reflector.instance)
             temp.install(deps=True)
 
-        def dcpm():
-            self.initDCPMVM(self.machines['dcpm'])
-
-        j.actions.start(description='configure dcpm', action=dcpm, category='openvlcoud',
-                        name='configure_dcpm', serviceObj=serviceObj)
-
         def proxy():
-            self.initProxyVM(self.machines['proxy'], self.host, self.servers, self.dcpmPort,
+            self.initProxyVM(self.machines['proxy'], self.host, self.servers,
                              self.bootrappIpAddress, self.bootrappPort, self.ssl)
 
         j.actions.start(description='configure proxy', action=proxy, category='openvlcoud',
@@ -170,6 +153,7 @@ class Actions(ActionsBase):
     """
     Console tools
     """
+
     def enableQuiet(self):
         j.remote.cuisine.api.fabric.state.output['stdout'] = False
         j.remote.cuisine.api.fabric.state.output['running'] = False
@@ -191,6 +175,7 @@ class Actions(ActionsBase):
     """
     Configuration tools
     """
+
     def defaultServerName(self, item, name):
         if name == 'auto':
             return '%s-%s.%s' % (item, self.rootenv, self.rootdomain)
@@ -272,7 +257,7 @@ class Actions(ActionsBase):
 
         self.setupBootstrap(repoPath, reflector)
 
-    def initProxyVM(self, parent, host, servers, dcpmPort, bootrappIpAddress, bootrappPort, ssl):
+    def initProxyVM(self, parent, host, servers, bootrappIpAddress, bootrappPort, ssl):
         self.info('configuring: proxy')
 
         proxyip = self.getMachineAddress('ovc_proxy')
@@ -281,24 +266,18 @@ class Actions(ActionsBase):
         masterip = self.getMachineAddress('ovc_master')
         print '[+] ovc_master: %s' % masterip
 
-        dcpmip = self.getMachineAddress('ovc_dcpm')
-        print '[+] ovc_dcpm: %s' % dcpmip
-
         print '[+] master domain: %s' % self.rootdomain
 
         data = {
             'instance.host': host,
             'instance.domain': self.rootdomain,
             'instance.master.ipadress': masterip,
-            'instance.dcpm.ipadress': dcpmip,
-            'instance.dcpm.port': dcpmPort,
 
             'instance.bootstrapp.servername': servers['boot'],
             'instance.ovs.servername': servers['ovs'],
             'instance.defense.servername': servers['defense'],
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
-            'instance.dcpm.servername': servers['dcpm'],
 
             'instance.ssl.root': ssl['root'],
             'instance.ssl.ovs': ssl['ovs'],
@@ -323,14 +302,12 @@ class Actions(ActionsBase):
             'instance.param.publicip.netmask': network['netmask'],
             'instance.param.publicip.start': network['start'],
             'instance.param.publicip.end': network['end'],
-            'instance.param.dcpm.url': urls['dcpm'],
             'instance.param.ovs.url': urls['ovs'],
             'instance.param.ovc.environment': self.rootenv,
             'instance.param.portal.url': urls['portal'],
             'instance.param.oauth.url': urls['oauth'],
             'instance.param.defense.url': urls['defense'],
             'instance.param.grafana.url': urls['grafana'],
-            'instance.param.safekeeper.url': urls['safe'],
             'instance.param.smtp.server': smtp['server'],
             'instance.param.smtp.port': smtp['port'],
             'instance.param.smtp.login': smtp['login'],
@@ -349,8 +326,3 @@ class Actions(ActionsBase):
         self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
         self.copyBack('ovc_master', 'jumpscale__portal__main')
         self.copyBack('ovc_master', 'openvcloud__oauthserver__main')
-
-    def initDCPMVM(self, parent):
-        self.info('configuring: dcpm')
-        # Nothing to do now, not used
-        return
