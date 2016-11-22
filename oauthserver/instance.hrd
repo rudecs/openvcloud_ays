@@ -1,7 +1,3 @@
-oauth.clients.dcpm.id='dcpm'
-oauth.clients.ovs.id='ovs'
 oauth.clients.portal.id='portal'
-oauth.clients.safekeeper.id='safekeeper'
-ovs.url = @ASK type:str default:'https://ovscustomer.demo.greenitglobe.com'  descr:'url OpenvStorage is hosted on'
 portal.url = @ASK type:str default:'https://customer.demo.greenitglobe.com'  descr:'url the gridportal is hosted on'
 oauth.url = @ASK type:str default:'https://environment.demo.greenitglobe.com' descr:'public url of the oauth server'

@@ -320,3 +320,4 @@ class Actions(ActionsBase):
         self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
         self.copyBack('ovc_master', 'jumpscale__portal__main')
         self.copyBack('ovc_master', 'openvcloud__oauthserver__main')
+        self.copyBack('ovc_master', 'openvcloud__ovc_itsyouonline__main')
