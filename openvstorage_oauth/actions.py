@@ -37,15 +37,16 @@ class Actions(ActionsBase):
                 import etcd
                 setdata = etcd.Client(port=2379).set
             # setting up ovs.json
+            clientid = serviceObj.hrd.get('instance.oauth.id')
             config = {"html_endpoint": "/",
                       'oauth2':
                       {
                           'mode': 'remote',
                           'authorize_uri': serviceObj.hrd.get('instance.oauth.authorize_uri'),
                           'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
-                          'client_id': serviceObj.hrd.get('instance.oauth.id'),
+                          'client_id': clientid,
                           'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
-                          'scope': 'ovs_admin'
+                          'scope': 'user:memberof:{}:ovs_admin'.format(clientid)
                       }
                       }
             setdata('/ovs/framework/webapps', json.dumps(config))
