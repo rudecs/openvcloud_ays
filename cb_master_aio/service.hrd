@@ -40,6 +40,7 @@ dep.args.oauthserver           =
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
+    param.osis.client.poolsize:'1000',
     param.osis.client.passwd:'$(instance.param.rootpasswd)',
 
 dep.args.portal                =
