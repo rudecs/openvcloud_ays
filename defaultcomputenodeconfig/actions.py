@@ -1,6 +1,7 @@
 from JumpScale import j
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
+
 
 class Actions(ActionsBase):
     """
@@ -22,18 +23,17 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from JumpScale.lib import ovsnetconfig
         import libvirt
-        #configure the package
+        # configure the package
 
         basenetwork = j.atyourservice.findServices('openvcloud', 'basenetwork')[0]
         # basenetwork = jpd.getInstance('main')
         hrd = basenetwork.hrd
 
-
         public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
         vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
 
         vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
-        public_vlan= hrd.get('instance.netconfig.public.vlanid')
+        public_vlan = hrd.get('instance.netconfig.public.vlanid')
 
         for network in ('mgmt', 'vxbackend', 'gw_mgmt'):
             key = 'instance.netconfig.%s.ipaddr' % network
@@ -44,7 +44,7 @@ class Actions(ActionsBase):
 
         j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newBridge('gw_mgmt')
-        j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan,mtu=2000)
+        j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan, mtu=2000)
 
         publicxml = '''
      <network>
@@ -66,10 +66,12 @@ class Actions(ActionsBase):
 
         networks = conn.listAllNetworks()
         for net in networks:
-            if net.isActive() <> 0:
+            if net.isActive() != 0:
                 net.destroy()
-            net.undefine()
-
+            try:
+                net.undefine()
+            except:
+                pass
 
         public = conn.networkDefineXML(publicxml)
         public.create()
@@ -77,4 +79,3 @@ class Actions(ActionsBase):
         private = conn.networkDefineXML(gwmgmtxml)
         private.create()
         private.setAutostart(True)
-
