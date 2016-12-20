@@ -46,7 +46,7 @@ class Actions(ActionsBase):
                           'token_uri': serviceObj.hrd.get('instance.oauth.token_uri'),
                           'client_id': clientid,
                           'client_secret': serviceObj.hrd.get('instance.oauth.secret'),
-                          'scope': 'user:memberof:{}:ovs_admin'.format(clientid)
+                          'scope': 'user:memberof:{}.ovs_admin'.format(clientid)
                       }
                       }
             setdata('/ovs/framework/webapps', json.dumps(config))
