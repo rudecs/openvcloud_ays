@@ -10,21 +10,21 @@ git.export.1                   =
     url:'http://git.aydo.com/binary/routeros.git',
 
 git.export.2                   =
-    branch:'master',
+    branch:'2.1.6',
     dest:'$(system.paths.base)/apps/routeros/configs',
     link:'True',
     source:'apps/routeros/configs/',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.3                   =
-    branch:'master',
+    branch:'2.1.6',
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:'True',
     source:'apps/routeros/template/*',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.4                   =
-    branch:'master',
+    branch:'2.1.6',
     dest:'$(system.paths.base)/apps/openwrt/template/',
     link:'True',
     source:'apps/openwrt/template/*',
@@ -39,3 +39,4 @@ git.export.5                   =
 
 platform.supported             =
     'generic',
+

@@ -1,6 +1,7 @@
 git.export.1                   =
-    branch:'2.1',
+    branch:'2.1.6',
     dest:'$(system.paths.base)/apps/g8vdc/',
     link:'True',
     source:'*',
     url:'https://github.com/0-complexity/g8vdc.git',
+

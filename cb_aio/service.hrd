@@ -109,3 +109,4 @@ git.url                        = 'https://github.com/0-complexity/openvcloud.git
 
 platform.supported             =
     'generic',
+
