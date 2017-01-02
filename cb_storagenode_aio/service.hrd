@@ -23,16 +23,20 @@ dep.args.portal_client         =
 
 dep.args.redis                 =
     param.disk:'0',
+    param.ip:'0.0.0.0',
     param.mem:'100',
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
-    param.ip:'0.0.0.0',
 
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
+
+dependencies.12                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
 
 dependencies.14                =
     domain:'openvcloud',
@@ -73,9 +77,6 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.12                =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
 platform.supported             =
     'generic',
+

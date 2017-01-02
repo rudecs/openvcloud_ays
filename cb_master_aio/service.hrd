@@ -25,12 +25,6 @@ dep.args.oauthclient           =
     oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
     oauth.client.user_info_url:'http://127.0.0.1:8010/user',
 
-dep.args.ovc_itsyouonline           =
-    param.client_id:'$(instance.param.itsyouonline.client_id)',
-    param.client_secret:'$(instance.param.itsyouonline.client_secret)',
-    param.callbackurl:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
-    param.environment:'$(instance.param.ovc.environment)',
-
 dep.args.oauthserver           =
     grafana.url:'$(instance.param.grafana.url)',
     oauth.url:'$(instance.param.oauth.url)',
@@ -40,8 +34,14 @@ dep.args.oauthserver           =
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
-    param.osis.client.poolsize:'1000',
     param.osis.client.passwd:'$(instance.param.rootpasswd)',
+    param.osis.client.poolsize:'1000',
+
+dep.args.ovc_itsyouonline      =
+    param.callbackurl:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
+    param.client_id:'$(instance.param.itsyouonline.client_id)',
+    param.client_secret:'$(instance.param.itsyouonline.client_secret)',
+    param.environment:'$(instance.param.ovc.environment)',
 
 dep.args.portal                =
     openvcloud.supportemail:'support@greenitglobe.com',
@@ -139,9 +139,9 @@ dependencies.24                =
     name:'pycapnp',
 
 dependencies.25                =
+    args:'dep.args.ovc_itsyouonline',
     domain:'openvcloud',
     instance:'main',
-    args:'dep.args.ovc_itsyouonline',
     name:'ovc_itsyouonline',
 
 dependencies.4                 =
@@ -163,11 +163,10 @@ dependencies.7                 =
     name:'cloudbroker_jumpscripts',
 
 git.export.1                   =
-    branch:'master',
+    branch:'2.1.7',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
-    revision:,
     source:'apps/nginx/ms1_fe',
     url:'https://github.com/0-complexity/openvcloud.git',
 
@@ -187,3 +186,4 @@ platform.supported             =
 
 ubuntu.packages                =
     'ntp ethtool',
+

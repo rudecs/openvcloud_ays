@@ -23,11 +23,11 @@ dep.args.portal_client         =
 
 dep.args.redis                 =
     param.disk:'0',
+    param.ip:'0.0.0.0',
     param.mem:'100',
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
-    param.ip:'0.0.0.0',
 
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
@@ -108,11 +108,10 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'master',
+    branch:'2.1.7',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
-    revision:,
     source:'apps/nginx/cpunode_aio',
     url:'https://github.com/0-complexity/openvcloud.git',
 
@@ -123,3 +122,4 @@ platform.supported             =
 
 ubuntu.packages                =
     'python-pexpect',
+
