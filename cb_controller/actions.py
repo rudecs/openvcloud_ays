@@ -31,23 +31,17 @@ class Actions(ActionsBase):
         if not container_check('influxdb'):
             print('Pulling influxdb docker')
             j.system.process.execute('docker run -td -p 8083:8083 -p 8086:8086 -v influxdb:/optvar/data/influxdb --hostname influxdb --name influxdb jumpscale/ubuntu1604_influxdb')
-        if not container_check('jsagent'):
-            print('Pulling jsagent docker')
-            j.system.process.execute('docker run -td -p 9020:22 --name jsagent --hostname controller-jsagent8 jumpscale/ubuntu1604_jsagent')
-            # update docker
-            print('Updating jsagent code')
-            j.system.process.execute('docker exec jsagent bash -c "cd /opt/code/github/jumpscale/jumpscale_core8; git pull; git checkout js8.0.beta"')
-            j.system.process.execute('docker exec jsagent bash -c "pip3 install crontab"')
-            # cause jumpscale8 wants redis running but the docker image is borked
-            j.system.process.execute('''docker exec jsagent bash -c "grep 'unixsocket /tmp/redis.sock' /optvar/redis/main/redis.conf || echo 'unixsocket /tmp/redis.sock' >> /optvar/redis/main/redis.conf; sv restart redis_main"''')
-
+        name = j.system.net.getHostname() + '-jsagent8'
+        if not container_check(name):
+            j.console.info('Pulling jsagent docker')
+            j.system.process.execute('docker run -td -p 9021:22 --name {0} --hostname {0} jumpscale/core:8.1.1'.format(name))
             # start jsagent
-            print('Starting jsagent')
+            j.console.info('Starting jsagent')
             masteraddr = serviceObject.hrd.get('instance.param.master.addr')
             rootpassword = serviceObject.hrd.get('instance.param.rootpasswd')
-            cmd = "j.tools.cuisine.local.processmanager.ensure('jsagent', 'jspython jsagent.py --grid-id {gid} --controller-ip {masteraddr} --controller-port 4444 --controller-password {password}', path='/opt/jumpscale8/apps/jsagent')"
+            cmd = "j.tools.cuisine.local.apps.jsagent.install(start=True, gid={gid}, ctrl_addr='{masteraddr}', ctrl_port=4444, ctrl_passwd='{password}', reset=False)"
             cmd = cmd.format(gid=j.application.whoAmI.gid, masteraddr=masteraddr, password=rootpassword)
-            j.system.process.execute('docker exec jsagent js "{}"'.format(cmd))
+            j.system.process.execute('docker exec {} js "{}"'.format(name, cmd))
 
             # start pumper
             oknics = ['mgmt', 'pxeboot']
@@ -63,7 +57,10 @@ class Actions(ActionsBase):
             if networkcidr is None:
                 raise RuntimeError("Failed to find network cidr")
 
-            print('Starting pumper')
-            cmd = "j.tools.cuisine.local.processmanager.ensure('influxdumper', '/opt/code/github/jumpscale/jumpscale_core8/shellcmds/influxdumper --influx-host 172.17.0.1 --scan-cidr {} --workers 20 --redis-port 9999')"
+            j.console.info('Starting pumper')
+            cmd = "j.sal.ubuntu.apt_install('nmap');"
+            cmd += "j.tools.cuisine.local.processmanager.ensure('influxdumper', '/opt/code/github/jumpscale/jumpscale_core8/shellcmds/influxdumper --influx-host 172.17.0.1 --scan-cidr {} --workers 20 --redis-port 9999')"
             cmd = cmd.format(networkcidr)
-            j.system.process.execute('docker exec jsagent js "{}"'.format(cmd))
+            j.system.process.execute('docker exec {} js "{}"'.format(name, cmd))
+            j.console.info('Restarting container')
+            j.system.process.execute('docker restart {}'.format(name))
