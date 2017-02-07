@@ -11,6 +11,9 @@ class Actions(ActionsBase):
         storageroles = ['storagedriver']
         if 'MASTER' in j.system.process.execute('ovs config get "ovs/framework/hosts/$(cat /etc/openvstorage_id)/type"')[1]:
             storageroles.append('storagemaster')
+        else:
+            # remove nginx config
+            j.system.fs.remove('/opt/nginx/cfg/sites-enabled/storagedriver_aio')
         for role in storageroles:
             if role not in roles:
                 change = True
