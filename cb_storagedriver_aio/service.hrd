@@ -99,4 +99,3 @@ platform.supported             =
 ubuntu.packages                =
     'genisoimage',
     'qemu-utils',
-

@@ -56,9 +56,6 @@ dep.args.singlenode_grid       =
     param.grid.id:'$(instance.param.grid.id)',
     param.rootpasswd:'$(instance.param.rootpasswd)',
 
-dep.args.vfwmanager            =
-    portal.instance:'main',
-
 dep.args.vncproxy              =
     param.portal.connection:'main',
 
@@ -186,4 +183,3 @@ platform.supported             =
 
 ubuntu.packages                =
     'ntp ethtool',
-
