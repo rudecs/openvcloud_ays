@@ -32,7 +32,7 @@ git.export.3                   =
     url:'http://github.com/0-complexity/noVNC',
 
 git.export.4                   =
-    branch:'2.1.7',
+    branch:'2.1.8',
     dest:'$(system.paths.app)/vncproxy/utils/',
     link:'True',
     source:'/apps/vncproxy/utils/*',

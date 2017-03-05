@@ -74,3 +74,4 @@ platform.supported             =
 
 ubuntu.packages                =
     'ethtool',
+
