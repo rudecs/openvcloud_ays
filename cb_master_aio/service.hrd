@@ -91,11 +91,6 @@ dependencies.16                =
     domain:'openvcloud',
     name:'libvirtsizes',
 
-dependencies.17                =
-    args:'dep.args.vfwmanager',
-    domain:'openvcloud',
-    name:'vfwmanager',
-
 dependencies.18                =
     args:'dep.args.oauthserver',
     domain:'openvcloud',

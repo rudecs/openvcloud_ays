@@ -53,11 +53,6 @@ dependencies.15                =
     domain:'jumpscale',
     name:'gridportal',
 
-dependencies.16                =
-    args:'dep.args.portal',
-    domain:'openvcloud',
-    name:'vfwmanager',
-
 dependencies.17                =
     args:'dep.args.vfwnode',
     domain:'openvcloud',
