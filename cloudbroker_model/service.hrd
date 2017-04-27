@@ -2,7 +2,7 @@ dependencies.1                 =
     name:'osis',
 
 git.export.1                   =
-    branch:'2.1.8',
+    branch:'3.0',
     dest:'$(system.paths.base)/apps/osis/logic/',
     link:'True',
     source:'apps/osis/logic/*',

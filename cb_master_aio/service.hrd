@@ -160,7 +160,7 @@ dependencies.7                 =
     name:'cloudbroker_jumpscripts',
 
 git.export.1                   =
-    branch:'2.1.8',
+    branch:'3.0',
     dest:'/opt/nginx/cfg/sites-enabled/ms1_fe',
     link:'False',
     overwrite:'True',
