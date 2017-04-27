@@ -1,0 +1,8 @@
+platform.supported             = 'generic'
+
+web.export.1                   =
+    checkmd5:'true',
+    dest:'/opt/jumpscale7/var/tmp/templates/redhat-7.2-x86_64.qcow2',
+    source:'/Linux/centos/redhat-7.2-x86_64.qcow2',
+    url:'ftp://pub:pub1234@ftp.aydo.com',
+
