@@ -29,7 +29,6 @@ class Actions(ActionsBase):
         # set navigation
         portal = j.atyourservice.get(name='portal', instance='main')
         portal.stop()
-        portalurl = serviceObj.hrd.get('instance.param.portal.url')
         portallinks = {
             'ays': {
                 'name': 'At Your Service',
@@ -39,15 +38,9 @@ class Actions(ActionsBase):
             },
             'vdc': {
                 'name': 'End User',
-                'url': portalurl,
+                'url': '/g8vdc/',
                 'scope': 'user',
                 'theme': 'dark',
-                'external': 'true'},
-            'ovs': {
-                'name': 'Storage',
-                'url': serviceObj.hrd.get('instance.param.ovs.url'),
-                'scope': 'ovs_admin',
-                'theme': 'light',
                 'external': 'true'},
             'grafana': {
                 'name': 'Statistics',
@@ -82,7 +75,7 @@ class Actions(ActionsBase):
         scl = j.clients.osis.getNamespace('system')
 
         # setup user/groups
-        for groupname in ('user', 'ovs_admin'):
+        for groupname in ('user',):
             if not scl.group.search({'id': groupname})[0]:
                 group = scl.group.new()
                 group.gid = j.application.whoAmI.gid
@@ -105,55 +98,32 @@ class Actions(ActionsBase):
             grid.name = ovcEnvironment
             scl.grid.set(grid)
 
-        j.clients.portal.getByInstance('main')
-
         # register networks
         start = 201
         end = 250
-        j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start, end)
-        # sync images
-        j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
-        j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
-        # register public ips
-        import netaddr
-        netmask = serviceObj.hrd.get('instance.param.publicip.netmask')
-        start = serviceObj.hrd.get('instance.param.publicip.start')
-        end = serviceObj.hrd.get('instance.param.publicip.end')
-        gateway = serviceObj.hrd.get('instance.param.publicip.gateway')
-        netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
-        if ccl.externalnetwork.count({'network': str(netip.network), 'subnetmask': str(netip.netmask)}) == 0:
-            pool = ccl.externalnetwork.new()
-            pool.gid = j.application.whoAmI.gid
-            pool.subnetmask = netmask
-            pool.gateway = gateway
-            ips = [str(ip) for ip in netaddr.IPRange(start, end)]
-            pool.ips = ips
-            pool.name = 'Default Network'
-            pool.network = str(netip.network)
-            ccl.externalnetwork.set(pool)
-
-        oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
-        oauthClientHRD = j.atyourservice.get(name='oauth_client', instance='oauth').hrd
-        portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
-        oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
+        if not ccl.networkids.exists(j.application.whoAmI.gid):
+            networkids = ccl.networkids.new()
+            networkids.id = j.application.whoAmI.gid
+            networkids.freeNetworkIds = range(start, end)
+            ccl.networkids.set(networkids)
 
         # configure grafana for oauth
-        parsed_url = urlparse(portalurl)
-        grafana = j.atyourservice.get(name='grafana')
-        grafana.stop()
-        cfgfile = '/opt/grafana/conf/defaults.ini'
-        cfgcontent = j.system.fs.fileGetContents(cfgfile)
-        fp = StringIO.StringIO('[global]\n' + cfgcontent)
-        parser = SafeConfigParser()
-        parser.readfp(fp)
-        parser.set('server', 'root_url', '%s/grafana' % portalurl)
-        parser.set('server', 'domain', parsed_url.hostname)
-        parser.set('users', 'auto_assign_org_role', 'Editor')
-        parser.set('auth.anonymous', 'enabled', 'true')
-        parser.set('auth.anonymous', 'org_role', 'Admin')
-        fpout = StringIO.StringIO()
-        parser.write(fpout)
-        content = fpout.getvalue().replace('[global]', '')
-        j.system.fs.writeFile(cfgfile, content)
-        grafana.start()
+        # parsed_url = urlparse(portalurl)
+        # grafana = j.atyourservice.get(name='grafana')
+        # grafana.stop()
+        # cfgfile = '/opt/grafana/conf/defaults.ini'
+        # cfgcontent = j.system.fs.fileGetContents(cfgfile)
+        # fp = StringIO.StringIO('[global]\n' + cfgcontent)
+        # parser = SafeConfigParser()
+        # parser.readfp(fp)
+        # parser.set('server', 'root_url', '%s/grafana' % portalurl)
+        # parser.set('server', 'domain', parsed_url.hostname)
+        # parser.set('users', 'auto_assign_org_role', 'Editor')
+        # parser.set('auth.anonymous', 'enabled', 'true')
+        # parser.set('auth.anonymous', 'org_role', 'Admin')
+        # fpout = StringIO.StringIO()
+        # parser.write(fpout)
+        # content = fpout.getvalue().replace('[global]', '')
+        # j.system.fs.writeFile(cfgfile, content)
+        # grafana.start()
         j.atyourservice.get(name='nginx').restart()

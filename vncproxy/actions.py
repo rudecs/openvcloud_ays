@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -19,14 +19,15 @@ class Actions(ActionsBase):
     step7c: do monitor_remote to see if package healthy installed & running, but this time test is done from central location
     """
 
-
     def configure(self, serviceObj):
-        from JumpScale import j
-        import JumpScale.portal
-        cl = j.clients.portal.getByInstance("$(instance.param.portal.connection)")
-        actor = cl.getActor('libcloud', 'libvirt')
-        myurl = "$(instance.param.vncproxy.publichostport)/vnc_auto.html?token="
-        gid = "$(grid.id)"
-        if myurl not in actor.listVNC(gid):
-            actor.registerVNC(myurl, gid)
-        return True
+        ccl = j.clients.osis.getNamespace('cloudbroker')
+        host = "$(instance.param.vncproxy.publichostport)"
+        if host:
+            myurl = "{}/vnc_auto.html?token=".format(host)
+            gid = int("$(grid.id)")
+            if ccl.vnc.count({'gid': gid, 'url': myurl}) == 0:
+                vnc = ccl.vnc.new()
+                vnc.gid = gid
+                vnc.url = myurl
+                ccl.vnc.set(vnc)
+            return True

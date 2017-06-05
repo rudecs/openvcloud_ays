@@ -61,7 +61,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         callbackURL = serviceObj.hrd.get('instance.param.callbackurl')
         environment = serviceObj.hrd.get('instance.param.environment')
-        groups = ['admin', 'level1', 'level2', 'level3', 'ovs_admin', 'user']
+        groups = ['admin', 'level1', 'level2', 'level3']
 
         # register api key
         apikeyname = 'openvcloud-{}'.format(environment)

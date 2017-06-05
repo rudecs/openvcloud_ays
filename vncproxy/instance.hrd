@@ -1,2 +1,2 @@
-param.vncproxy.publichostport = @ASK type:str descr:'Please enter url vnc is hosted on example https://novnc.example.com'
+param.vncproxy.publichostport = type:str default:'' descr:'Please enter url vnc is hosted on example https://novnc.example.com'
 param.portal.connection = @ASK typ:str default:main
