@@ -34,8 +34,8 @@ class Actions(ActionsBase):
 
         # setup groups
         j.application.loadConfig()
-        import JumpScale.grid
         scl = j.clients.osis.getNamespace('system')
+        admin = scl.user.get('admin')
         for groupname in ('level1', 'level2', 'level3', 'finance'):
             if not scl.group.search({'id': groupname})[0]:
                 group = scl.group.new()
@@ -43,4 +43,5 @@ class Actions(ActionsBase):
                 group.id = groupname
                 group.users = ['admin']
                 scl.group.set(group)
-
+                admin.groups.append(group)
+        scl.user.set(admin)
