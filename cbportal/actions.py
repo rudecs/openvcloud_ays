@@ -43,5 +43,5 @@ class Actions(ActionsBase):
                 group.id = groupname
                 group.users = ['admin']
                 scl.group.set(group)
-                admin.groups.append(group)
+                admin.groups.append(groupname)
         scl.user.set(admin)
