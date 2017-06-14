@@ -1,7 +1,0 @@
-platform.supported             = 'generic'
-
-web.export.1                   =
-    checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/debian-8.1-amd64.qcow2',
-    source:'/Linux/debian/debian-8.1-amd64.qcow2',
-    url:'ftp://pub:pub1234@ftp.aydo.com',
