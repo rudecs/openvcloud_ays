@@ -3,6 +3,6 @@ platform.supported             = 'generic'
 web.export.1                   =
     checkmd5:'true',
     dest:'/opt/jumpscale7/var/tmp/templates/win-server-2016.qcow2',
-    source:'/Windows/windows-server-2016-final.qcow2',
+    source:'/Windows/windows-2016-standard.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
 
