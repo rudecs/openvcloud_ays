@@ -2,7 +2,7 @@ platform.supported             = 'generic'
 
 web.export.1                   =
     checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/awingu-2.3.1.qcow2',
-    source:'/images/awingu/awingu-2.3.1.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/awingu.qcow2',
+    source:'Linux/awingu/awingu.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
 
