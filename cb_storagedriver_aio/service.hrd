@@ -86,7 +86,7 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'2.2.0',
+    branch:'2.2.1',
     dest:'/opt/nginx/cfg/sites-enabled/storagedriver_aio',
     link:'False',
     overwrite:'True',
@@ -99,3 +99,4 @@ platform.supported             =
 ubuntu.packages                =
     'genisoimage',
     'qemu-utils',
+
