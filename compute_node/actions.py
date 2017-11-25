@@ -23,6 +23,11 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         contents = "\n  /mnt/vmstor/** rw,\n  /mnt/vmstor/**/** rw,"
         j.system.fs.writeFile('/etc/apparmor.d/abstractions/libvirt-qemu', contents, True)
+        txt = j.codetools.getTextFileEditor('/etc/apparmor.d/abstractions/libvirt-qemu')
+        txt.appendReplaceLine('/sys/devices/system/cpu', '  /sys/devices/system/cpu/** r,')
+        txt.save()
+        if j.system.platform.ubuntu.serviceExists('apparmor'):
+            j.system.platfor.ubuntu.reloadService('apparmor')
 
         ccl = j.clients.osis.getNamespace('cloudbroker')
         lcl = j.clients.osis.getNamespace('libvirt')
