@@ -23,11 +23,30 @@ class Actions(ActionsBase):
         def patchDefaultWiki(path):
             if not j.system.fs.exists(path):
                 return
-            editor = j.codetools.getTextFileEditor(path)
-            regex = "^{{logo.*$"
-            if not editor.existsLine(regex):
-                editor.appendReplaceLine("^{{find.*$", "{{find}}\n{{logo:/cbgrid/.files/green.png}}\n")
-                editor.save()
+
+            contents = j.system.fs.fileGetContents(path)
+            lines = contents.splitlines()
+            haslogo = False
+            hashealth = False
+            for linenr, line in enumerate(lines):
+                if 'logo' in line:
+                    haslogo = True
+                if 'grid.healthmenu' in line:
+                    hashealth = True
+
+            def getline(match):
+                for nr, line in enumerate(lines):
+                    if match in line:
+                        return nr
+                return 0
+
+            if not haslogo:
+                lines.insert(getline('ApplyFlatTheme'), '{{logo:/cbgrid/.files/green.png}}')
+            if not hashealth:
+                lines.insert(getline('menuadmin'), '{{grid.healthmenu}}')
+
+            if not haslogo or not hashealth:
+                j.system.fs.writeFile(path, '\n'.join(lines))
 
         for space in ['home', 'Grid', 'AYS']:
             path = j.system.fs.joinPaths(j.dirs.baseDir, 'apps', 'portals', serviceObj.instance, 'base', space, '.space', 'default.wiki')
