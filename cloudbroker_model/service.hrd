@@ -2,10 +2,10 @@ dependencies.1                 =
     name:'osis',
 
 git.export.1                   =
-    branch:'staging',
     dest:'$(system.paths.base)/apps/osis/logic/',
     link:'True',
     source:'apps/osis/logic/*',
+    tag:'v2.2.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
