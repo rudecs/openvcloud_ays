@@ -1,6 +1,6 @@
 from JumpScale import j
 
-ActionsBase=j.atyourservice.getActionsBaseClass()
+ActionsBase = j.atyourservice.getActionsBaseClass()
 
 class Actions(ActionsBase):
     """
@@ -24,12 +24,18 @@ class Actions(ActionsBase):
         openwrt_manager = j.atyourservice.get('openvcloud', 'openwrt-remote-manager')
         openwrt_manager.build()
 
-    def configure(self,  serviceObj):
-        import netaddr
-        import JumpScale.baselib.netconfig
+    def configure(self, serviceObj):
         roles = j.application.config.getList('grid.node.roles')
         if 'fw' not in roles:
             roles.append('fw')
             j.application.config.set('grid.node.roles', roles)
             j.atyourservice.get(name='jsagent', instance='main').restart()
 
+        # configure vfwnode
+        basepath = '/var/lib/libvirt/images/routeros/'
+        if not j.system.fs.exists(basepath):
+            j.system.fs.createDir(basepath)
+        if not j.system.fs.exists(j.system.fs.joinPaths(basepath, 'template')):
+            j.system.btrfs.subvolumeCreate(basepath, 'template')
+        j.system.fs.copyFile('/opt/code/git/binary/routeros/root/routeros-small-NETWORK-ID.qcow2',
+                             j.system.fs.joinPaths(basepath, 'template', 'routeros.qcow2'))

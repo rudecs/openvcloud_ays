@@ -85,10 +85,12 @@ class Actions(ActionsBase):
 
         networks = conn.listAllNetworks()
         for net in networks:
-            if net.isActive() <> 0:
+            if net.isActive() != 0:
                 net.destroy()
-            net.undefine()
-
+            try:
+                net.undefine()
+            except:
+                pass
 
         public = conn.networkDefineXML(publicxml)
         public.create()
@@ -97,7 +99,6 @@ class Actions(ActionsBase):
         private = conn.networkDefineXML(gwmgmtxml)
         private.create()
         private.setAutostart(True)
-
 
         private = conn.networkDefineXML(mgmtxml)
         private.create()
