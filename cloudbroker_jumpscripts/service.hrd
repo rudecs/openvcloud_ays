@@ -2,7 +2,7 @@ dependencies.1                 =
     name:'agentcontroller',
 
 git.export.1                   =
-    branch:'master',
+    branch:'staging',
     dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/',
     link:'True',
     source:'libs/agent-scripts//*',
