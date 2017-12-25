@@ -30,7 +30,6 @@ class Actions(ActionsBase):
             j.system.platfor.ubuntu.reloadService('apparmor')
 
         ccl = j.clients.osis.getNamespace('cloudbroker')
-        lcl = j.clients.osis.getNamespace('libvirt')
 
         oob_interface = 'backplane1'
         ipaddress = j.system.net.getIpAddress(oob_interface)[0][0]
@@ -47,15 +46,5 @@ class Actions(ActionsBase):
             stack['gid'] = j.application.whoAmI.gid
             stack['referenceId'] = str(j.application.whoAmI.nid)
             ccl.stack.set(stack)
-
-        # create resourceprovider
-        agentid = j.application.getAgentId()
-        if not lcl.resourceprovider.exists(agentid):
-            rp = lcl.resourceprovider.new()
-            rp.cloudUnitType = 'CU'
-            rp.guid = agentid
-            rp.gid = j.application.whoAmI.gid
-            rp.id = str(j.application.whoAmI.nid)
-            lcl.resourceprovider.set(rp)
 
         return True
