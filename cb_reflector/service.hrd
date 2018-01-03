@@ -71,3 +71,6 @@ dependencies.9                 =
 
 platform.supported             =
     'generic',
+
+ubuntu.packages                =
+    'ethtool',
