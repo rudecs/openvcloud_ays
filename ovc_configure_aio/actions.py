@@ -38,25 +38,15 @@ class Actions(ActionsBase):
         self.servers = {
             'boot': self.defaultServerName('bootstrapp', serviceObj.hrd.get('instance.bootstrapp.servername')),
             'ovs': self.defaultServerName('ovs', serviceObj.hrd.getStr('instance.ovs.servername')),
-            'defense': self.defaultServerName('defense', serviceObj.hrd.getStr('instance.defense.servername')),
             'novnc': self.defaultServerName('novnc', serviceObj.hrd.getStr('instance.novnc.servername')),
             'grafana': self.grafanaServerName
         }
 
         self.urls = {
             'ovs': 'https://' + self.servers['ovs'],
-            'defense': 'https://' + self.servers['defense'],
             'grafana': 'https://' + self.servers['grafana'],
             'novnc': 'https://' + self.servers['novnc'],
-            'oauth': 'https://%s' % (self.host),
             'portal': 'https://%s' % (self.host)
-        }
-
-        self.network = {
-            'gateway': serviceObj.hrd.getStr('instance.publicip.gateway'),
-            'start': serviceObj.hrd.getStr('instance.publicip.start'),
-            'end': serviceObj.hrd.getStr('instance.publicip.end'),
-            'netmask': serviceObj.hrd.getStr('instance.publicip.netmask')
         }
 
         self.itsyouonline = serviceObj.hrd.getDictFromPrefix('instance.itsyouonline')
@@ -83,16 +73,13 @@ class Actions(ActionsBase):
             'root': serviceObj.hrd.getStr('instance.ssl.root'),
             'ovs': serviceObj.hrd.getStr('instance.ssl.ovs'),
             'novnc': serviceObj.hrd.getStr('instance.ssl.novnc'),
-            'defense': serviceObj.hrd.getStr('instance.ssl.defense'),
         }
 
         j.console.info('root domain: %s' % self.rootdomain)
         j.console.info('environment: %s' % self.rootenv)
         j.console.info('--------------------------')
-        j.console.info('oauth   url: %s' % self.urls['oauth'])
         j.console.info('portal  url: %s' % self.urls['portal'])
         j.console.info('ovs     url: %s' % self.urls['ovs'])
-        j.console.info('defense url: %s' % self.urls['defense'])
         j.console.info('novnc   url: %s' % self.urls['novnc'])
         j.console.info('grafana url: %s' % self.urls['grafana'])
         j.console.info('smtp server: %s' % self.smtp['server'])
@@ -126,7 +113,7 @@ class Actions(ActionsBase):
             self.setupBootstrap(self.repoPath, fakeReflector)
 
         def master():
-            self.initMasterVM(self.machines['master'], self.rootpwd, self.network, self.urls,
+            self.initMasterVM(self.machines['master'], self.rootpwd, self.urls,
                               self.repoPath, self.smtp, self.grid, self.itsyouonline)
 
         j.actions.start(description='configure master', action=master, category='openvlcoud',
@@ -267,38 +254,28 @@ class Actions(ActionsBase):
 
             'instance.bootstrapp.servername': servers['boot'],
             'instance.ovs.servername': servers['ovs'],
-            'instance.defense.servername': servers['defense'],
             'instance.novnc.servername': servers['novnc'],
             'instance.grafana.servername': servers['grafana'],
 
             'instance.ssl.root': ssl['root'],
             'instance.ssl.ovs': ssl['ovs'],
             'instance.ssl.novnc': ssl['novnc'],
-            'instance.ssl.defense': ssl['defense'],
         }
 
         ssloffloader = j.atyourservice.new(name='ssloffloader', args=data, parent=parent)
         ssloffloader.consume('node', parent.instance)
         ssloffloader.install(deps=True)
 
-    def initMasterVM(self, parent, masterPasswd, network, urls, repoPath, smtp, grid, itsyouonline):
+    def initMasterVM(self, parent, masterPasswd, urls, repoPath, smtp, grid, itsyouonline):
         j.console.info('configuring: master')
 
-        j.console.info('network: %s -> %s' % (network['start'], network['end']))
-        j.console.info('gateway: %s, netmask: %s' % (network['gateway'], network['netmask']))
         j.console.info('master password: %s' % masterPasswd)
 
         data = {
             'instance.param.rootpasswd': masterPasswd,
-            'instance.param.publicip.gateway': network['gateway'],
-            'instance.param.publicip.netmask': network['netmask'],
-            'instance.param.publicip.start': network['start'],
-            'instance.param.publicip.end': network['end'],
             'instance.param.ovs.url': urls['ovs'],
             'instance.param.ovc.environment': self.rootenv,
             'instance.param.portal.url': urls['portal'],
-            'instance.param.oauth.url': urls['oauth'],
-            'instance.param.defense.url': urls['defense'],
             'instance.param.grafana.url': urls['grafana'],
             'instance.param.smtp.server': smtp['server'],
             'instance.param.smtp.port': smtp['port'],
@@ -317,7 +294,5 @@ class Actions(ActionsBase):
         # FIXME
         # Copy needed file from master to ovcgit
         # Theses files are generated on the master and not synced back to ovcgit
-        self.copyBack('ovc_master', 'jumpscale__oauth_client__oauth')
         self.copyBack('ovc_master', 'jumpscale__portal__main')
-        self.copyBack('ovc_master', 'openvcloud__oauthserver__main')
         self.copyBack('ovc_master', 'openvcloud__ovc_itsyouonline__main')

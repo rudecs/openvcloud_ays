@@ -1,6 +1,5 @@
 dep.args.cloudborker           =
     cloudbroker.portalurl:'$(instance.param.portal.url)',
-    openvcloud.cloudbroker.defense_proxy:'$(instance.param.defense.url)',
     openvcloud.supportemail:'support@greenitglobe.com',
     portal.instance:'main',
 
@@ -15,21 +14,6 @@ dep.args.mailclient            =
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
 
-dep.args.oauthclient           =
-    oauth.client.id:'portal',
-    oauth.client.logout_url:'$(instance.param.portal.url)/logout',
-    oauth.client.redirect_url:'$(instance.param.portal.url)/restmachine/system/oauth/authorize',
-    oauth.client.scope:'user',
-    oauth.client.secret:'652994f8234c2969ac8d11bebf38ee7792447770',
-    oauth.client.url:'$(instance.param.portal.url)/login/oauth/authorize',
-    oauth.client.url2:'http://127.0.0.1:8010/login/oauth/access_token',
-    oauth.client.user_info_url:'http://127.0.0.1:8010/user',
-
-dep.args.oauthserver           =
-    grafana.url:'$(instance.param.grafana.url)',
-    oauth.url:'$(instance.param.oauth.url)',
-    ovs.url:'$(instance.param.ovs.url)',
-    portal.url:'$(instance.param.portal.url)',
 
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
@@ -91,16 +75,6 @@ dependencies.16                =
     domain:'openvcloud',
     name:'libvirtsizes',
 
-dependencies.18                =
-    args:'dep.args.oauthserver',
-    domain:'openvcloud',
-    name:'oauthserver',
-
-dependencies.19                =
-    args:'dep.args.oauthclient',
-    domain:'jumpscale',
-    instance:'oauth',
-    name:'oauth_client',
 
 dependencies.2                 =
     args:'dep.args.osis_client',

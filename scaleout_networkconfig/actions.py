@@ -25,13 +25,11 @@ class Actions(ActionsBase):
         #configure the package
         hrd = serviceObj.hrd
 
-        public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
         gw_mgmt_backplane = hrd.get('instance.netconfig.gw_mgmt_backplane.interfacename')
         vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
 
         gw_mgmt_vlan = hrd.get('instance.netconfig.gw_mgmt.vlanid')
         vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
-        public_vlan= hrd.get('instance.netconfig.public.vlanid')
 
         # removing existings ports and bridge
         ports = j.system.process.execute("ovs-appctl dpif/show | awk '/patch/{print $1}'")[1]
@@ -53,17 +51,8 @@ class Actions(ActionsBase):
                     mtu = None if network != 'vxbackend' else 2000
                     j.system.ovsnetconfig.configureStaticAddress(network, ip, mtu=mtu)
 
-        j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newVlanBridge('gw_mgmt', gw_mgmt_backplane, gw_mgmt_vlan)
         j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan,mtu=2000)
-
-        publicxml = '''
-     <network>
-            <name>public</name>
-            <forward mode="bridge"/>
-            <bridge name='public'/>
-            <virtualport type='openvswitch'/>
-        </network>'''
 
         gwmgmtxml = '''
      <network>
@@ -91,10 +80,6 @@ class Actions(ActionsBase):
                 net.undefine()
             except:
                 pass
-
-        public = conn.networkDefineXML(publicxml)
-        public.create()
-        public.setAutostart(True)
 
         private = conn.networkDefineXML(gwmgmtxml)
         private.create()

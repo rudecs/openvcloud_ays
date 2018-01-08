@@ -2,9 +2,6 @@ param.repo.path= @ASK default:'/opt/code/git/account/reponame' type:str descr:'p
 param.quiet = @ASK default:False type:bool descr:'quite mode'
 
 master.rootpasswd = @ASK type:str descr='CBAIO: Portal secret'
-publicip.gateway = @ASK type:str
-publicip.start = @ASK type:str
-publicip.end = @ASK type:str
 
 param.main.host = @ASK type:str descr='root hostname (environment name)'
 param.domain = @ASK type:str descr='root domain (eg: demo.greenitglobe.com)'
@@ -16,7 +13,6 @@ bootstrapp.port = @ASK type:int descr:'port bootstrapp is listenning on' default
 
 bootstrapp.servername = @ASK type:'str' default:'bootstrappenvironment.demo.greenitglobe.com' descr:'servername bootstrapp is exposed at (use auto to autodetect)'
 ovs.servername = @ASK type:str default:'ovsenvironment.demo.greenitglobe.com'  descr:'servername OVS is exposed at (use auto to autodetect)'
-defense.servername = @ASK type:str default:'defenseenvironment.demo.greenitglobe.com'  descr:'hostname the defenseshield (use auto to autodetect)'
 novnc.servername = @ASK type:str default:'novncenvironment.demo.greenitglobe.com'  descr:'hostname the novnc should be exposed at (use auto to autodetect)'
 grafana.servername = @ASK type:str default:'grafanaenvironment.demo.greenitglobe.com'  descr:'hostname the grafana should be access (use auto to autodetect)'
 

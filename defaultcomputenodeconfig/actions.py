@@ -29,11 +29,9 @@ class Actions(ActionsBase):
         # basenetwork = jpd.getInstance('main')
         hrd = basenetwork.hrd
 
-        public_backplane = hrd.get('instance.netconfig.public_backplane.interfacename')
         vxbackend_backplane = hrd.get('instance.netconfig.vxbackend.interfacename')
 
         vxbackend_vlan = hrd.get('instance.netconfig.vxbackend.vlanid')
-        public_vlan = hrd.get('instance.netconfig.public.vlanid')
 
         for network in ('mgmt', 'vxbackend', 'gw_mgmt'):
             key = 'instance.netconfig.%s.ipaddr' % network
@@ -42,17 +40,8 @@ class Actions(ActionsBase):
                 if ip:
                     j.system.ovsnetconfig.configureStaticAddress(network, ip)
 
-        j.system.ovsnetconfig.newVlanBridge('public', public_backplane, public_vlan)
         j.system.ovsnetconfig.newBridge('gw_mgmt')
         j.system.ovsnetconfig.newVlanBridge('vxbackend', vxbackend_backplane, vxbackend_vlan, mtu=2000)
-
-        publicxml = '''
-     <network>
-            <name>public</name>
-            <forward mode="bridge"/>
-            <bridge name='public'/>
-            <virtualport type='openvswitch'/>
-        </network>'''
 
         gwmgmtxml = '''
      <network>
@@ -73,9 +62,6 @@ class Actions(ActionsBase):
             except:
                 pass
 
-        public = conn.networkDefineXML(publicxml)
-        public.create()
-        public.setAutostart(True)
         private = conn.networkDefineXML(gwmgmtxml)
         private.create()
         private.setAutostart(True)

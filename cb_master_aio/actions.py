@@ -111,31 +111,6 @@ class Actions(ActionsBase):
         start = 201
         end = 250
         j.apps.libcloud.libvirt.registerNetworkIdRange(j.application.whoAmI.gid, start, end)
-        # sync images
-        j.apps.cloudbroker.iaas.syncAvailableImagesToCloudbroker()
-        j.apps.cloudbroker.iaas.syncAvailableSizesToCloudbroker()
-        # register public ips
-        import netaddr
-        netmask = serviceObj.hrd.get('instance.param.publicip.netmask')
-        start = serviceObj.hrd.get('instance.param.publicip.start')
-        end = serviceObj.hrd.get('instance.param.publicip.end')
-        gateway = serviceObj.hrd.get('instance.param.publicip.gateway')
-        netip = netaddr.IPNetwork('%s/%s' % (gateway, netmask))
-        if ccl.externalnetwork.count({'network': str(netip.network), 'subnetmask': str(netip.netmask)}) == 0:
-            pool = ccl.externalnetwork.new()
-            pool.gid = j.application.whoAmI.gid
-            pool.subnetmask = netmask
-            pool.gateway = gateway
-            ips = [str(ip) for ip in netaddr.IPRange(start, end)]
-            pool.ips = ips
-            pool.name = 'Default Network'
-            pool.network = str(netip.network)
-            ccl.externalnetwork.set(pool)
-
-        oauthServerHRD = j.atyourservice.get(name='oauthserver').hrd
-        oauthClientHRD = j.atyourservice.get(name='oauth_client', instance='oauth').hrd
-        portalSecret = oauthServerHRD.get('instance.oauth.clients.portal.secret')
-        oauthClientHRD.set('instance.oauth.client.secret', portalSecret)
 
         # configure grafana for oauth
         parsed_url = urlparse(portalurl)
