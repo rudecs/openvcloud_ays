@@ -40,8 +40,10 @@ class Actions(ActionsBase):
             for port in ports:
                 j.system.process.execute("ovs-vsctl del-port %s" % port)
 
+            nics = j.system.net.getNics()
             for network in ('public', 'vxbackend', 'gw_mgmt'):
-                j.system.process.execute("ovs-vsctl del-br %s" % network)
+                if network in nics:
+                    j.system.process.execute("ovs-vsctl del-br %s" % network)
 
         for network in ('vxbackend', 'gw_mgmt'):
             key = 'instance.netconfig.%s.ipaddr' % network
