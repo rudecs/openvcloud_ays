@@ -35,7 +35,6 @@ dep.args.vfwnode               =
 
 dep.args.vncproxy              =
     param.portal.connection:'main',
-    param.vncproxy.publichostport:'$(instance.vnc.url)',
 
 dependencies.1                 =
     args:'dep.args.redis',
