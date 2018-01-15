@@ -61,7 +61,7 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         callbackURL = serviceObj.hrd.get('instance.param.callbackurl')
         environment = serviceObj.hrd.get('instance.param.environment')
-        groups = ['admin', 'level1', 'level2', 'level3', 'ovs_admin', 'user']
+        groups = ['admin', 'level1', 'level2', 'level3', 'ovs_admin', 'user', '0-access']
 
         # register api key
         apikeyname = 'openvcloud-{}'.format(environment)
@@ -72,7 +72,7 @@ class Actions(ActionsBase):
         apikey = self.configure_api_key(apikey)
 
         # install oauth_client
-        scopes = ['user:name', 'user:email']
+        scopes = ['user:name', 'user:email', 'user:publickey:ssh']
         for group in groups:
             scopes.append('user:memberof:{}.{}'.format(self.client_id, group))
 
