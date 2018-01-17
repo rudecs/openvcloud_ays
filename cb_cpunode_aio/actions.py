@@ -13,5 +13,6 @@ class Actions(ActionsBase):
         if change:
             j.application.config.set('grid.node.roles', roles)
             j.atyourservice.get(name='jsagent', instance='main').restart()
+        j.atyourservice.get(name='nginx', instance='main').restart()
 
 
