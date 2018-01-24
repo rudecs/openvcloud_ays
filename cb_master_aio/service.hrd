@@ -14,7 +14,6 @@ dep.args.mailclient            =
     smtp.sender:'$(instance.param.smtp.sender)',
     smtp.server:'$(instance.param.smtp.server)',
 
-
 dep.args.osis_client           =
     param.osis.client.addr:'localhost',
     param.osis.client.login:'root',
@@ -74,7 +73,6 @@ dependencies.15                =
 dependencies.16                =
     domain:'openvcloud',
     name:'libvirtsizes',
-
 
 dependencies.2                 =
     args:'dep.args.osis_client',

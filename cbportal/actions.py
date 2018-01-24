@@ -36,7 +36,7 @@ class Actions(ActionsBase):
         j.application.loadConfig()
         import JumpScale.grid
         scl = j.clients.osis.getNamespace('system')
-        for groupname in ('level1', 'level2', 'level3'):
+        for groupname in ('level1', 'level2', 'level3', '0-access'):
             if not scl.group.search({'id': groupname})[0]:
                 group = scl.group.new()
                 group.gid = j.application.whoAmI.gid

@@ -23,11 +23,11 @@ dep.args.portal_client         =
 
 dep.args.redis                 =
     param.disk:'0',
+    param.ip:'0.0.0.0',
     param.mem:'100',
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
-    param.ip:'0.0.0.0',
 
 dep.args.vfwnode               =
     param.gw_mgmt_ip:'$(instance.param.network.gw_mgmt_ip)',
