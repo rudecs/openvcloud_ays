@@ -1,8 +1,8 @@
 git.export.1                   =
-    branch:'staging',
     dest:'/opt/jumpscale7/apps/libvirtlistener/',
     link:'True',
     source:'apps/libvirtlistener/*',
+    tag:'v2.2.6',
     url:'https://github.com/0-complexity/openvcloud/',
 
 platform.supported             = 'generic'
