@@ -112,7 +112,7 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'staging',
+    branch:'production',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',

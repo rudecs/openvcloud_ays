@@ -1,5 +1,5 @@
 git.export.1                   =
-    branch:'staging',
+    branch:'production',
     dest:'$(system.paths.base)/apps/g8vdc/',
     link:'True',
     source:'*',
