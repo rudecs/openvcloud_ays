@@ -1,5 +1,5 @@
 git.export.1                   =
-    branch:'2.2.6',
+    branch:'staging',
     dest:'/opt/jumpscale7/apps/libvirtlistener/',
     link:'True',
     source:'apps/libvirtlistener/*',

@@ -1,5 +1,5 @@
 git.export.1                   =
-    branch:'2.2.6',
+    branch:'staging',
     dest:'$(system.paths.python.lib.ext)/CloudscalerLibcloud/',
     link:'True',
     source:'libs/CloudscalerLibcloud/CloudscalerLibcloud',
