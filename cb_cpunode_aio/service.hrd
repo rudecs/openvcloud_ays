@@ -126,3 +126,4 @@ platform.supported             =
 
 ubuntu.packages                =
     'python-pexpect',
+    'ovmf',
