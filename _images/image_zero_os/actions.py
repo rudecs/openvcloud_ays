@@ -22,7 +22,7 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
-        name = 'ZERO OS'
+        name = 'Zero-OS'
         registerImage(serviceObj, name, 'Linux', 10)
 
 
