@@ -6,6 +6,6 @@ git.export.1                   =
     dest:'$(system.paths.base)/apps/agentcontroller/jumpscripts/',
     link:'True',
     source:'jumpscripts/*',
-    url:'https://github.com/0-complexity/selfhealing.git',
+    url:'git@github.com:0-complexity/selfhealing.git',
 
 platform.supported             = 'generic'
