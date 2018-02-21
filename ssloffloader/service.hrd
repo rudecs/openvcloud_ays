@@ -5,21 +5,21 @@ dependencies.1                 =
     domain:'jumpscale',
     name:'nginx',
 
-git.certurl                    = 'https://git.aydo.com/protected/certificates_$(instance.domain)'
+git.certurl                    = 'ssh://git@docs.greenitglobe.com:10022/binary/certificates_$(instance.domain)'
 git.export.1                   =
     branch:'2.1',
     dest:'/opt/nginx/cfg/sites-enabled/ovc',
     link:'False',
     source:'ovc',
-    url:'https://git.aydo.com/binary/openvcloud_ssloffloader/',
+    url:'ssh://git@docs.greenitglobe.com:10022/binary/openvcloud_ssloffloader.git',
 
 git.export.2                   =
     dest:'/opt/nginx/cfg/ssl',
     link:'True',
     source:'certs',
-    url:'https://git.aydo.com/protected/certificates_$(instance.domain)',
+    url:'ssh://git@docs.greenitglobe.com:10022/binary/certificates_$(instance.domain)',
 
-git.url                        = 'https://git.aydo.com/binary/openvcloud_ssloffloader/'
+git.url                        = 'ssh://git@docs.greenitglobe.com:10022/binary/openvcloud_ssloffloader.git'
 
 #how many instances can be installed of this package, if 1 the instance name is always 'main'
 instances.maxnr                = '1'

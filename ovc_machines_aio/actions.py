@@ -102,7 +102,7 @@ class Actions(ActionsBase):
             cl.run('git config --global user.email "%s"' % 'GIG Setup')
             cl.run('git config --global user.name "%s"' % 'setup@greenitglobe.com')
 
-        allowhosts = ["github.com", "git.aydo.com"]
+        allowhosts = ["github.com", "git.aydo.com", 'docs.greenitglobe.com']
 
         for host in allowhosts:
             cl.run('echo "Host %s" >> /root/.ssh/config' % host)

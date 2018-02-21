@@ -3,7 +3,7 @@ git.export.1                   =
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:'False',
     source:'root/routeros-small-NETWORK-ID.qcow2',
-    url:'http://git.aydo.com/binary/routeros.git',
+    url:'ssh://git@docs.greenitglobe.com:10022/binary/routeros.git',
 
 git.export.2                   =
     branch:'master',

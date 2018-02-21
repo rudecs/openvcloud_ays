@@ -5,29 +5,29 @@ git.export.1                   =
     link:'False',
     merge:'True',
     source:'images/*',
-    url:'http://git.aydo.com/binary/ovs_branding',
+    url:'https://docs.greenitglobe.com/binary/ovs_branding',
 
 git.export.2                   =
     dest:'/opt/OpenvStorage/webapps/frontend/css/',
     link:'False',
     overwrite:'True',
     source:'css/*',
-    url:'http://git.aydo.com/binary/ovs_branding',
+    url:'https://docs.greenitglobe.com/binary/ovs_branding',
 
 git.export.3                   =
     dest:'/opt/OpenvStorage/webapps/frontend/app/views/site/',
     link:'False',
     overwrite:'True',
     source:'app/views/site/login.html',
-    url:'http://git.aydo.com/binary/ovs_branding',
+    url:'https://docs.greenitglobe.com/binary/ovs_branding',
 
 git.export.4                   =
     dest:'/opt/OpenvStorage/webapps/frontend/app/views/',
     link:'False',
     merge:'True',
     source:'app/views/index.html',
-    url:'http://git.aydo.com/binary/ovs_branding',
+    url:'https://docs.greenitglobe.com/binary/ovs_branding',
 
 platform.supported             = 'generic'
 
-url                            = 'http://git.aydo.com/binary/ovs_branding'
+url                            = 'https://docs.greenitglobe.com/binary/ovs_branding'
