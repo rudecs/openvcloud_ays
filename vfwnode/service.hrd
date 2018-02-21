@@ -1,7 +1,3 @@
-dependencies.1                 =
-    domain:'openvcloud',
-    name:'openwrt-remote-manager',
-
 git.export.1                   =
     branch:'2.1',
     dest:'$(system.paths.base)/apps/routeros/template/',
@@ -22,20 +18,6 @@ git.export.3                   =
     link:'True',
     source:'apps/routeros/template/*',
     url:'https://github.com/0-complexity/openvcloud.git',
-
-git.export.4                   =
-    branch:'master',
-    dest:'$(system.paths.base)/apps/openwrt/template/',
-    link:'True',
-    source:'apps/openwrt/template/*',
-    url:'https://github.com/0-complexity/openvcloud.git',
-
-git.export.5                   =
-    branch:'master',
-    dest:'$(system.paths.base)/apps/openwrt/template/',
-    link:'False',
-    source:'vfw_openwrt.qcow2',
-    url:'http://git.aydo.com/binary/openwrt.git',
 
 platform.supported             =
     'generic',
