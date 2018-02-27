@@ -33,5 +33,5 @@ class Actions(ActionsBase):
             j.system.fs.createDir(basepath)
         if not j.system.fs.exists(j.system.fs.joinPaths(basepath, 'template')):
             j.system.btrfs.subvolumeCreate(basepath, 'template')
-        j.system.fs.copyFile('/opt/code/git/binary/routeros/root/routeros-small-NETWORK-ID.qcow2',
+        j.system.fs.copyFile('/opt/code/docs/binary/routeros/root/routeros-small-NETWORK-ID.qcow2',
                              j.system.fs.joinPaths(basepath, 'template', 'routeros.qcow2'))
