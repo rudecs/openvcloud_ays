@@ -54,10 +54,6 @@ dependencies.12                =
     domain:'openvcloud',
     name:'libcloudlibvirt',
 
-dependencies.14                =
-    domain:'openvcloud',
-    name:'ovs_branding',
-
 dependencies.15                =
     domain:'jumpscale',
     name:'nginx',
