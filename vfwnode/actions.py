@@ -20,10 +20,6 @@ class Actions(ActionsBase):
 
     """
 
-    def prepare(self, serviceObj):
-        openwrt_manager = j.atyourservice.get('openvcloud', 'openwrt-remote-manager')
-        openwrt_manager.build()
-
     def configure(self, serviceObj):
         roles = j.application.config.getList('grid.node.roles')
         if 'fw' not in roles:
