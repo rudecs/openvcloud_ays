@@ -23,6 +23,6 @@ class Actions(ActionsBase):
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
         name = 'IPXE Boot'
-        registerImage(serviceObj, name, 'Linux', 1, 'Unknown', 'uefi')
+        registerImage(serviceObj, name, 'Linux', 1, 'Unknown')
 
 
