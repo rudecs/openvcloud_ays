@@ -28,10 +28,7 @@ class Actions(ActionsBase):
             j.atyourservice.get(name='jsagent', instance='main').restart()
 
         # configure vfwnode
-        basepath = '/var/lib/libvirt/images/routeros/'
-        if not j.system.fs.exists(basepath):
-            j.system.fs.createDir(basepath)
-        if not j.system.fs.exists(j.system.fs.joinPaths(basepath, 'template')):
-            j.system.btrfs.subvolumeCreate(basepath, 'template')
+        basepath = '/var/lib/libvirt/images/routeros/template'
+        j.system.fs.createDir(basepath)
         j.system.fs.copyFile('/opt/code/docs/binary/routeros/root/routeros-small-NETWORK-ID.qcow2',
-                             j.system.fs.joinPaths(basepath, 'template', 'routeros.qcow2'))
+                             j.system.fs.joinPaths(basepath, 'routeros.qcow2'))
