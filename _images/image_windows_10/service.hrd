@@ -2,7 +2,7 @@ platform.supported             = 'generic'
 
 web.export.1                   =
     checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/windows10.qcow2',
-    source:'/Windows/windows10.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/windows-2010-final.qcow2',
+    source:'/Windows/windows-2010-final.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
 
