@@ -1,8 +1,8 @@
 git.export.1                   =
-    branch:'master',
     dest:'/opt/jumpscale7/apps/libvirtlistener/',
     link:'True',
     source:'apps/libvirtlistener/*',
+    tag:'v2.4.0',
     url:'https://github.com/0-complexity/openvcloud/',
 
 platform.supported             = 'generic'
@@ -17,3 +17,4 @@ process.1                      =
     startupmanager:'tmux',
     timeout_start:'20',
     timeout_stop:'20',
+

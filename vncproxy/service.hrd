@@ -32,10 +32,10 @@ git.export.3                   =
     url:'http://github.com/0-complexity/noVNC',
 
 git.export.4                   =
-    branch:'master',
     dest:'$(system.paths.app)/vncproxy/utils/',
     link:'True',
     source:'/apps/vncproxy/utils/*',
+    tag:'v2.4.0',
     url:'http://github.com/0-complexity/openvcloud',
 
 platform.supported             = 'generic'
@@ -50,3 +50,4 @@ process.1                      =
     startupmanager:'tmux',
     timeout_start:'20',
     timeout_stop:'20',
+
