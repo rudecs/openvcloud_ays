@@ -6,17 +6,17 @@ git.export.1                   =
     url:'ssh://git@docs.greenitglobe.com:10022/binary/routeros.git',
 
 git.export.2                   =
-    branch:'master',
     dest:'$(system.paths.base)/apps/routeros/configs',
     link:'True',
     source:'apps/routeros/configs/',
+    tag:'v2.4.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.3                   =
-    branch:'master',
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:'True',
     source:'apps/routeros/template/*',
+    tag:'v2.4.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 platform.supported             =

@@ -86,11 +86,11 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'master',
     dest:'/opt/nginx/cfg/sites-enabled/storagedriver_aio',
     link:'False',
     overwrite:'True',
     source:'apps/nginx/storagedriver_aio',
+    tag:'v2.4.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 platform.supported             =
@@ -99,3 +99,4 @@ platform.supported             =
 ubuntu.packages                =
     'genisoimage',
     'qemu-utils',
+
