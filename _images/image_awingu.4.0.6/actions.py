@@ -22,5 +22,5 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
-        name = 'Desktop Environment'
-        registerImage(serviceObj, name, 'vDesktop', 80)
+        name = 'Desktop Environment 4.0.6'
+        registerImage(serviceObj, name, 'vDesktop 4.0.6', 80)
