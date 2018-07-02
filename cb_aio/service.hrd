@@ -67,11 +67,7 @@ dependencies.19                =
 dependencies.2                 =
     domain:'openvcloud',
     name:'compute_kvm_base',
-
-dependencies.20                =
-    domain:'openvcloud',
-    name:'libvirtsizes',
-
+    
 dependencies.21                =
     args:'dep.args.vncproxy',
     domain:'openvcloud',
