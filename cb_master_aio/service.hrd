@@ -70,10 +70,6 @@ dependencies.15                =
     domain:'jumpscale',
     name:'gridportal',
 
-dependencies.16                =
-    domain:'openvcloud',
-    name:'libvirtsizes',
-
 dependencies.2                 =
     args:'dep.args.osis_client',
     domain:'jumpscale',
