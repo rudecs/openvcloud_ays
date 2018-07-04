@@ -35,6 +35,9 @@ class Actions(ActionsBase):
         ipaddress = j.system.net.getIpAddress(oob_interface)[0][0]
 
         # create a new stack:
+        # reload whoAmI
+        j.application.loadConfig()
+        j.application.initWhoAmI(True) 
         if not ccl.stack.search({'referenceId': str(j.application.whoAmI.nid), 'gid': j.application.whoAmI.gid})[0]:
             stack = dict()
             stack['id'] = None
