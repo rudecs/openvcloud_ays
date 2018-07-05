@@ -5,17 +5,17 @@ dependencies.2                 =
     name:'python-cloudlibs',
 
 git.export.1                   =
-    branch:'master',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/base/',
     link:'True',
     source:'apps/cloudbroker/base/*',
+    tag:'v2.4.3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.2                   =
-    branch:'master',
     dest:'$(system.paths.base)/apps/portals/$(instance.portal.instance)/templates/',
     link:'True',
     source:'apps/cloudbroker/templates/*',
+    tag:'v2.4.3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'

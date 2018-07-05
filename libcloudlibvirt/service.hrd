@@ -1,8 +1,8 @@
 git.export.1                   =
-    branch:'master',
     dest:'$(system.paths.python.lib.ext)/CloudscalerLibcloud/',
     link:'True',
     source:'libs/CloudscalerLibcloud/CloudscalerLibcloud',
+    tag:'v2.4.3',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
