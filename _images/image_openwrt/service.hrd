@@ -2,6 +2,6 @@ platform.supported             = 'generic'
 
 web.export.1                   =
     checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/openwrt1407.qcow2',
-    source:'/Linux/openwrt/openwrt1407.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/openwrt1806rc1.qcow2',
+    source:'/Linux/openwrt/openwrt-18.06-rc1.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
