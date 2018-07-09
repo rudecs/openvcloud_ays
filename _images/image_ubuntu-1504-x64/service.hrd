@@ -1,8 +1,0 @@
-platform.supported             = 'generic'
-
-web.export.1                   =
-    checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/Ubuntu.15.04.qcow2',
-    source:'/images_ms1/linux/ubuntu/Ubuntu.15.04.qcow2',
-    url:'ftp://pub:pub1234@ftp.aydo.com',
-
