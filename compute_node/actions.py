@@ -39,7 +39,7 @@ class Actions(ActionsBase):
         # reload whoAmI and wait till nid is set agent might stil lbe starting itself
         start = time.time()
         timeout = 60
-        while j.application.whoAmI.nid == 0 or time.time() < start + timeout:
+        while j.application.whoAmI.nid == 0 or time.time() > start + timeout:
             time.sleep(3)
             j.application.loadConfig()
             j.application.initWhoAmI(True) 
