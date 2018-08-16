@@ -67,7 +67,7 @@ dependencies.19                =
 dependencies.2                 =
     domain:'openvcloud',
     name:'compute_kvm_base',
-    
+
 dependencies.21                =
     args:'dep.args.vncproxy',
     domain:'openvcloud',
@@ -98,3 +98,4 @@ git.url                        = 'https://github.com/0-complexity/openvcloud.git
 
 platform.supported             =
     'generic',
+

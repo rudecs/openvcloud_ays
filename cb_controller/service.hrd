@@ -23,16 +23,25 @@ dep.args.portal_client         =
 
 dep.args.redis                 =
     param.disk:'0',
+    param.ip:'0.0.0.0',
     param.mem:'100',
     param.passwd:,
     param.port:'9999',
     param.unixsocket:'0',
-    param.ip:'0.0.0.0',
 
 dependencies.1                 =
     args:'dep.args.redis',
     instance:'system',
     name:'redis',
+
+dependencies.10                =
+    domain:'jumpscale',
+    instance:'main',
+    name:'pycapnp',
+
+dependencies.11                =
+    domain:'openvcloud',
+    name:'libcloudlibvirt',
 
 dependencies.3                 =
     args:'dep.args.portal_client',
@@ -69,14 +78,6 @@ dependencies.9                 =
     instance:'main',
     name:'jsagent',
 
-dependencies.10                 =
-    domain:'jumpscale',
-    name:'pycapnp',
-    instance:'main',
-
-dependencies.11                 =
-    domain:'openvcloud',
-    name:'libcloudlibvirt',
-
 platform.supported             =
     'generic',
+
