@@ -2,7 +2,7 @@ platform.supported             = 'generic'
 
 web.export.1                   =
     checkmd5:'true',
-    dest:'/opt/jumpscale7/var/tmp/templates/CentOS-7-x86_64-GenericCloud.qcow2',
-    source:'/Linux/centos/CentOS-7-x86_64-GenericCloud.qcow2',
+    dest:'/opt/jumpscale7/var/tmp/templates/CentOS-7.qcow2',
+    source:'/CentOS/CentOS-7.qcow2',
     url:'ftp://pub:pub1234@ftp.aydo.com',
 
