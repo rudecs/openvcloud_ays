@@ -22,7 +22,7 @@ class Actions(ActionsBase):
 
     def configure(self, serviceObj):
         from CloudscalerLibcloud.imageutil import registerImage
-        name = 'Redhat 7.2 x64'
+        name = 'Redhat 7.2'
         registerImage(serviceObj, name, 'Linux', 10)
 
 
