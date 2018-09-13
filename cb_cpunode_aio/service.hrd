@@ -107,12 +107,11 @@ dependencies.9                 =
     name:'jsagent',
 
 git.export.1                   =
-    branch:'master',
     dest:'/opt/nginx/cfg/sites-enabled/cpunode_aio',
     link:'False',
     overwrite:'True',
-    revision:,
     source:'apps/nginx/cpunode_aio',
+    tag:'v2.4.5',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'
@@ -123,3 +122,4 @@ platform.supported             =
 ubuntu.packages                =
     'python-pexpect',
     'ovmf',
+
