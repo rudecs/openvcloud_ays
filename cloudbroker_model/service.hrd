@@ -5,7 +5,7 @@ git.export.1                   =
     dest:'$(system.paths.base)/apps/osis/logic/',
     link:'True',
     source:'apps/osis/logic/*',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.url                        = 'https://github.com/0-complexity/openvcloud.git'

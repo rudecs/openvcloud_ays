@@ -35,7 +35,7 @@ git.export.4                   =
     dest:'$(system.paths.app)/vncproxy/utils/',
     link:'True',
     source:'/apps/vncproxy/utils/*',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'http://github.com/0-complexity/openvcloud',
 
 platform.supported             = 'generic'

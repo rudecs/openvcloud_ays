@@ -2,7 +2,7 @@ git.export.1                   =
     dest:'/opt/jumpscale7/apps/libvirtlistener/',
     link:'True',
     source:'apps/libvirtlistener/*',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'https://github.com/0-complexity/openvcloud/',
 
 platform.supported             = 'generic'

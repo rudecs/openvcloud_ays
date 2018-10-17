@@ -9,14 +9,14 @@ git.export.2                   =
     dest:'$(system.paths.base)/apps/routeros/configs',
     link:'True',
     source:'apps/routeros/configs/',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.3                   =
     dest:'$(system.paths.base)/apps/routeros/template/',
     link:'True',
     source:'apps/routeros/template/*',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 platform.supported             =

@@ -127,7 +127,7 @@ git.export.1                   =
     link:'False',
     overwrite:'True',
     source:'apps/nginx/ms1_fe',
-    tag:'v2.4.5',
+    tag:'v2.4.5.2',
     url:'https://github.com/0-complexity/openvcloud.git',
 
 git.export.3                   =
